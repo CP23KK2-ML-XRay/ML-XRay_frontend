@@ -71,7 +71,7 @@ jobs:
           script: |
             cd ~/KK2-final-project/frontend
             git fetch
-            git pull https://github.com/CP23KK2-ML-XRay/ML-XRay_frontend.git main
+            git pull https://thatphum:${{ secrets.GITHUB_TOKEN }}@github.com/CP23KK2-ML-XRay/ML-XRay_frontend.git main
             cd ~/KK2-final-project
             docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io 
             docker pull ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
