@@ -74,5 +74,9 @@ jobs:
             git pull origin main
             cd ~/KK2-final-project
             docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io 
+<<<<<<< HEAD
             docker pull ghcr.io/cp23tt1-mod-campaign/modcampaign-frontend-web-images:latest
+=======
+            docker pull ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
+>>>>>>> 6e47019ab8c1b5d5e331995c00a12f3d3d1049ce
             docker-compose up -d
