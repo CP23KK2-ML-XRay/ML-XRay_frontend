@@ -70,7 +70,7 @@ jobs:
           port: ${{ secrets.SSH_PORT }}
           script: |
             cd ~/KK2-final-project/frontend
-            git pull 
+            git pull origin main
             docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io 
             docker pull ghcr.io/cp23tt1-mod-campaign/modcampaign-frontend-web-images:latest
             cd ../
