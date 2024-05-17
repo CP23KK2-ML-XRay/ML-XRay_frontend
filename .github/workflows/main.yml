@@ -76,10 +76,8 @@ jobs:
             docker-compose stop frontend
             docker-compose stop proxy_nginx_frontend
             docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io 
-            docker-compose rm frontend
-            y
-            docker-compose rm proxy_nginx_frontend
-            y
+            docker-compose rm -f frontend
+            docker-compose rm -f proxy_nginx_frontend
             docker rmi nginx
             docker rmi ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
             docker pull ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images
