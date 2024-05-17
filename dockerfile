@@ -1,19 +1,15 @@
-FROM node:latest AS builder
+FROM node:lts-alpine AS build
 
-WORKDIR /app
+WORKDIR /ML-XRay_frontend
 
-COPY package.json yarn.lock ./
+COPY package*.json ./
 
-RUN yarn install
+RUN npm install
 
 COPY . .
 
-RUN yarn build
+RUN npm run build
 
-FROM nginx:latest
-
-COPY --from=builder /app/dist /usr/share/nginx/html
+FROM nginx:stable-alpine as production-stage
 
 EXPOSE 3000
-
-CMD ["nginx", "-g", "daemon off;"]
