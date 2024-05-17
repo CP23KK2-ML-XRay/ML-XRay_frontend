@@ -33,6 +33,12 @@ FROM nginx:alpine
 
 COPY --from=builder /frontend/dist /usr/share/nginx/html
 
-EXPOSE 3000
+# EXPOSE 3000
 
-# CMD ["nginx", "-g", "daemon off;"]
+# # CMD ["nginx", "-g", "daemon off;"]
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
