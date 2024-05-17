@@ -1,6 +1,25 @@
-FROM node:lts-alpine AS build
+# FROM node:lts-alpine AS build
 
-WORKDIR /ML-XRay_frontend
+# WORKDIR /ML-XRay_frontend
+
+# COPY package*.json ./
+
+# RUN npm install
+
+# COPY . .
+
+# RUN npm run build
+
+# FROM nginx:stable-alpine as production-stage
+
+# EXPOSE 3000
+
+
+
+
+FROM node:latest as builder
+
+WORKDIR /frontend
 
 COPY package*.json ./
 
@@ -10,6 +29,10 @@ COPY . .
 
 RUN npm run build
 
-FROM nginx:stable-alpine as production-stage
+FROM nginx:alpine
 
-EXPOSE 3000
+COPY --from=builder /frontend/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
