@@ -73,6 +73,5 @@ jobs:
             git fetch
             git pull origin main
             docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io 
-            docker pull ghcr.io/cp23tt1-mod-campaign/modcampaign-frontend-web-images:latest
-            cd ../
+            docker pull ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
             docker-compose up -d
