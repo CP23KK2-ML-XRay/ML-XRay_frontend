@@ -1,8 +1,8 @@
-FROM node:18-alpine
+FROM node:lts-alpine AS build
 
-WORKDIR /app
+WORKDIR /modcampaign-frontend-web
 
-COPY package.json .
+COPY package*.json ./
 
 RUN npm install
 
@@ -10,6 +10,6 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 3000
+FROM nginx:stable-alpine as production-stage
 
-CMD [ "npm", "run", "preview" ]
+EXPOSE 3000
