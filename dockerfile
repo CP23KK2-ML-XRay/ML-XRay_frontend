@@ -1,6 +1,6 @@
 FROM node:lts-alpine AS build
 
-WORKDIR /modcampaign-frontend-web
+WORKDIR /ML-XRay_frontend
 
 COPY package*.json ./
 
