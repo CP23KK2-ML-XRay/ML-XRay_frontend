@@ -44,38 +44,77 @@ jobs:
 
       - name: Set output
         run: echo "::set-output name={name}::{value}"
-
   deploy:
     needs: build-push
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install OpenVPN
-        run: |
-          sudo apt update
-          sudo apt install -y openvpn openvpn-systemd-resolved
-      - name: Connect to VPN
-        uses: "kota65535/github-openvpn-connect-action@v2"
-        with:
-          config_file: ./sitst-client.ovpn
-          username: ${{ secrets.OVPN_USERNAME }}
-          password: ${{ secrets.OVPN_PASSWORD }}
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            cd ~/KK2-final-project/frontend
-            git fetch
-            git pull https://thatphum:${{ secrets.GITHUB_TOKEN }}@github.com/CP23KK2-ML-XRay/ML-XRay_frontend.git main
-            cd ~/KK2-final-project
-            docker-compose down
-            docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io 
-            docker rmi nginx:1.19.1
-            docker rmi ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
-            docker pull ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
-            docker-compose up -d
+      - name: down frontend
+        run: docker-compose down frontend
+      - name: down enginx
+        run: docker-compose down proxy_nginx_frontend
+      - name: login docker
+        run: docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io 
+      - name: pull docker
+        run: docker pull ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
+      - name: build 
+        run: docker-compose up -d frontend
+      - name: build 
+        run: docker-compose up -d proxy_nginx_frontend
+        
+      
+        
+      # - name: executing remote ssh commands using password
+      #   uses: appleboy/ssh-action@master
+      #   with:
+      #     host: ${{ secrets.SSH_HOST }}
+      #     username: ${{ secrets.SSH_USERNAME }}
+      #     password: ${{ secrets.SSH_PASSWORD }}
+      #     port: ${{ secrets.SSH_PORT }}
+      #     script: |
+      #       cd ~/KK2-final-project/frontend
+      #       git fetch
+      #       git pull https://thatphum:${{ secrets.GITHUB_TOKEN }}@github.com/CP23KK2-ML-XRay/ML-XRay_frontend.git main
+      #       cd ~/KK2-final-project
+      #       docker-compose down
+      #       docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io 
+      #       docker rmi nginx:1.19.1
+      #       docker rmi ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
+      #       docker pull ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
+      #       docker-compose up -d
+            
+  # deploy:
+  #   needs: build-push
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Install OpenVPN
+  #       run: |
+  #         sudo apt update
+  #         sudo apt install -y openvpn openvpn-systemd-resolved
+  #     - name: Connect to VPN
+  #       uses: "kota65535/github-openvpn-connect-action@v2"
+  #       with:
+  #         config_file: ./sitst-client.ovpn
+  #         username: ${{ secrets.OVPN_USERNAME }}
+  #         password: ${{ secrets.OVPN_PASSWORD }}
+  #     - name: executing remote ssh commands using password
+  #       uses: appleboy/ssh-action@master
+  #       with:
+  #         host: ${{ secrets.SSH_HOST }}
+  #         username: ${{ secrets.SSH_USERNAME }}
+  #         password: ${{ secrets.SSH_PASSWORD }}
+  #         port: ${{ secrets.SSH_PORT }}
+  #         script: |
+  #           cd ~/KK2-final-project/frontend
+  #           git fetch
+  #           git pull https://thatphum:${{ secrets.GITHUB_TOKEN }}@github.com/CP23KK2-ML-XRay/ML-XRay_frontend.git main
+  #           cd ~/KK2-final-project
+  #           docker-compose down
+  #           docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io 
+  #           docker rmi nginx:1.19.1
+  #           docker rmi ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
+  #           docker pull ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
+  #           docker-compose up -d
