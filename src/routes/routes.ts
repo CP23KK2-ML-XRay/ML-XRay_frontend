@@ -9,4 +9,4 @@ export const routes = createBrowserRouter([
         Component: Layout,
         children: []
     }
-],{ basename: "/kk2/" });
+]);
