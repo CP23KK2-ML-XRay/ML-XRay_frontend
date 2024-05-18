@@ -58,10 +58,15 @@ jobs:
         run: docker login --username ${{ github.actor }} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io 
       - name: pull docker
         run: docker pull ghcr.io/cp23kk2-ml-xray/ml-xray_frontend-images:latest
-      - name: build 
-        run: docker-compose up -d frontend
-      - name: build 
-        run: docker-compose up -d proxy_nginx_frontend
+      - name: cd to root
+        run: cd ../
+      - name: create dir
+        run: mkdir kkk
+        
+      # - name: build 
+      #   run: docker-compose up -d frontend
+      # - name: build 
+      #   run: docker-compose up -d proxy_nginx_frontend
         
       
         
