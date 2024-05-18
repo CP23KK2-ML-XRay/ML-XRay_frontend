@@ -2,7 +2,7 @@
   "name": "frontend",
   "private": true,
   "version": "0.0.0",
-  "homepage": "/kk2",
+  "homepage": "/kk2/",
   "type": "module",
   "scripts": {
     "dev": "vite",
