@@ -19,6 +19,14 @@ jobs:
         
       - name: Save state
         run: echo "dsakldklksal;dk;"
+        
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT }}
+          repository: CP23KK2-ML-XRay/ML-XRay_infra
+          event-type: build-frontend
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
 
   #     - name: Login to GitHub Container Registry
   #       uses: docker/login-action@v2
