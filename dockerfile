@@ -38,7 +38,7 @@ COPY --from=builder /frontend/dist /usr/share/nginx/html
 # # CMD ["nginx", "-g", "daemon off;"]
 
 # Expose port 80
-EXPOSE 80
+EXPOSE 3000
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
