@@ -1,12 +1,15 @@
+import SignIn from "@/views/SignIn/SignIn";
+import SignUp from "@/views/SignUp/SignUp";
+
 import { createBrowserRouter } from "react-router-dom";
-import { Layout } from "@/components/_Layout";
+
 
 
 
 export const routes = createBrowserRouter([
     {
         path: "/",
-        Component: Layout,
+        Component: SignUp,
         children: []
-    }
+    },
 ],{ basename: "/kk2/" });
