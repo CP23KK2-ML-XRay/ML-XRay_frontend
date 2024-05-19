@@ -1,4 +1,7 @@
 import React from "react";
+import Sidebar from "./Sidebar/Sidebar";
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./Navbar/Navbar";
 
 interface LayoutProps {
   // Define your component props here
@@ -9,23 +12,17 @@ export const Layout: React.FC<LayoutProps> = ({}) => {
 
   return (
     <div className="flex flex-col h-screen w-screen">
-      <nav className="flex bg-pink-500 h-20 items-center">
-        {/* Full Width Header */}
-        fdskjfkdsjkfjkdsjfljsdlfjlsdjlk
-        <div className="">
-          <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-            ML-XRAY
-          </span>
-        </div>
-      </nav>
+      <Navbar />
 
       <div className="flex flex-1 overflow-hidden">
-        <aside className="hidden sm:block bg-green-300 w-1/6 overflow-y-auto">
-          {/* Sidebar content  */}
-        </aside>
-        <main className="flex flex-1 bg-blue-300 overflow-y-auto paragraph px-4">
-          {/* main content */}
-          dsla;dklsaldkak;ldk;ksa;l
+        <Sidebar />
+        <main className="flex flex-1 bg-gray-300 overflow-y-auto paragraph px-4">
+          <Routes>
+            <Route path="/" element={<h1>Home</h1>} />
+            <Route path="/patients" element={<h1>Patients</h1>} />
+            <Route path="/models" element={<h1>Models</h1>} />
+            <Route path="/settings" element={<h1>Settings</h1>} />
+          </Routes>
         </main>
       </div>
       {/* <div className="flex bg-yellow-300">Footer</div> */}
