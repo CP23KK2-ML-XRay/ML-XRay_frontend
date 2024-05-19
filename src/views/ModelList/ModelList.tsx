@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ModelList = () => {
   return (
     <section className="h-screen w-screen bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
@@ -71,9 +69,15 @@ const ModelList = () => {
                   <th scope="col" className="px-4 py-3">
                     Category
                   </th>
-                  <th scope="col" className="px-4 py-3">Class 0</th>
-                  <th scope="col" className="px-4 py-3">Class 1</th>
-                  <th scope="col" className="px-4 py-3">Class 2</th>
+                  <th scope="col" className="px-4 py-3">
+                    Class 0
+                  </th>
+                  <th scope="col" className="px-4 py-3">
+                    Class 1
+                  </th>
+                  <th scope="col" className="px-4 py-3">
+                    Class 2
+                  </th>
                   <th scope="col" className="px-4 py-3"></th>
                 </tr>
               </thead>
@@ -248,7 +252,7 @@ const ModelList = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ModelList
+export default ModelList;

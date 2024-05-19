@@ -1,8 +1,6 @@
 import React from "react";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 
 interface SidebarProps {
