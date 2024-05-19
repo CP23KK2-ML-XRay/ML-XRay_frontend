@@ -3,6 +3,7 @@
 // import UserInfo from "@/views/UserInfo/UserInfo"
 import PatientsRecord from "@/views/PatientsRecord/PatientsRecord";
 import PatientDetail from "@/views/PatientsRecord/PatientDetail";
+import ModelList from "@/views/ModelList/ModelList";
 import { createBrowserRouter } from "react-router-dom";
 
 
@@ -11,7 +12,7 @@ import { createBrowserRouter } from "react-router-dom";
 export const routes = createBrowserRouter([
     {
         path: "/",
-        Component: PatientDetail,
+        Component: ModelList,
         children: []
     },
 ],{ basename: "/kk2/" });
