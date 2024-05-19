@@ -71,7 +71,9 @@ const ModelList = () => {
                   <th scope="col" className="px-4 py-3">
                     Category
                   </th>
-                  <th scope="col" className="px-4 py-3"></th>
+                  <th scope="col" className="px-4 py-3">Class 0</th>
+                  <th scope="col" className="px-4 py-3">Class 1</th>
+                  <th scope="col" className="px-4 py-3">Class 2</th>
                   <th scope="col" className="px-4 py-3"></th>
                 </tr>
               </thead>
@@ -85,7 +87,10 @@ const ModelList = () => {
                   </th>
                   <td className="px-4 py-3">Lorlem</td>
                   <td className="px-4 py-3">Image</td>
-                  <td className="px-4 py-3 flex items-center justify-center">
+                  <td className="px-4 py-3">Dogs</td>
+                  <td className="px-4 py-3">Cats</td>
+                  <td className="px-4 py-3">Pigs</td>
+                  <td className="pr-4 py-3 flex items-center justify-center">
                     <button
                       id="apple-imac-27-dropdown-button"
                       data-dropdown-toggle="apple-imac-27-dropdown"
