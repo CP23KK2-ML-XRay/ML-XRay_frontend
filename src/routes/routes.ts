@@ -4,6 +4,8 @@
 import PatientsRecord from "@/views/PatientsRecord/PatientsRecord";
 import PatientDetail from "@/views/PatientsRecord/PatientDetail";
 import ModelList from "@/views/ModelList/ModelList";
+import SignUp from "@/views/SignUp/SignUp"
+import NotFound from "@/views/PageNotFound/PageNotFound"
 import { createBrowserRouter } from "react-router-dom";
 
 
