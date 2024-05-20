@@ -9,7 +9,7 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import React, { useState, FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const SignIn: React.FC = () => {
@@ -61,7 +61,7 @@ const SignIn: React.FC = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (validate()) {
       // Proceed with form submission or further processing
@@ -70,17 +70,32 @@ const SignIn: React.FC = () => {
         email: email,
         password: password,
       };
-      const authService = new AuthenticationService();
-      authService.signIn(data).then((response) => {
-        if (response.status === 200) {
-          console.log(response);
-          // localStorage.setItem("userData", JSON.stringify(response.data));
+
+      const authenservice = new AuthenticationService();
+      authenservice.signIn(data).then((response) => {
+        console.log(response);
+        if (response.status == 200) {
+          response.json().then((data: any) => {
+            console.log(data);
+            localStorage.setItem("accessToken", data.accessToken);
+            localStorage.setItem("accessTokenExp", data.accessTokenExp);
+            localStorage.setItem("refreshToken", data.refreshToken);
+            localStorage.setItem("refreshTokenExp", data.refreshTokenExp);
+            localStorage.setItem("email", data.email);
+            localStorage.setItem("role", data.role);
+          });
           Swal.fire({
             title: "Good job!",
-            text: "Login Successful!",
+            text: "Login sussece",
             icon: "success",
           });
-          navigate("/");
+          location.href = "/";
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
         }
       });
     }

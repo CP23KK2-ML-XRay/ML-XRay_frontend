@@ -2,6 +2,8 @@ import React from "react";
 import Sidebar from "./Sidebar/Sidebar";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./Navbar/Navbar";
+import { ListPatient } from "@/views/Patiant/ListPatiant";
+import { DetailPatient } from "@/views/Patiant/DetailPatient";
 
 interface LayoutProps {
   // Define your component props here
@@ -16,12 +18,10 @@ export const Layout: React.FC<LayoutProps> = ({}) => {
 
       <div className="flex flex-1 overflow-hidden">
         <Sidebar />
-        <main className="flex flex-1 bg-gray-300 overflow-y-auto paragraph px-4">
+        <main className="flex flex-1 bg-gray-300 overflow-y-auto px-4">
           <Routes>
-            <Route path="/" element={<h1>Home</h1>} />
-            <Route path="/patients" element={<h1>Patients</h1>} />
-            <Route path="/models" element={<h1>Models</h1>} />
-            <Route path="/settings" element={<h1>Settings</h1>} />
+            <Route path="/" element={<ListPatient />} />
+            <Route path="/detail/:id" element={<DetailPatient />} />
           </Routes>
         </main>
       </div>
