@@ -1,8 +1,10 @@
 import axios from "axios";
 
+const API_URL = "https://ml-xray.org";
+
 export default class AuthenticationService {
   signIn(data: any) {
-    return fetch("http://localhost:8080/api/auth/signin", {
+    return fetch(`${API_URL}/api/auth/signin`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
