@@ -9,11 +9,15 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import React, { useState, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = React.useState(false);
+
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -68,7 +72,16 @@ const SignIn: React.FC = () => {
       };
       const authService = new AuthenticationService();
       authService.signIn(data).then((response) => {
-        console.log(response);
+        if (response.status === 200) {
+          console.log(response);
+          // localStorage.setItem("userData", JSON.stringify(response.data));
+          Swal.fire({
+            title: "Good job!",
+            text: "Login Successful!",
+            icon: "success",
+          });
+          navigate("/");
+        }
       });
     }
   };

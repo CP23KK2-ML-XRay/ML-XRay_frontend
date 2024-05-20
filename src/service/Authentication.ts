@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = "https://ml-xray.org";
-
 export default class AuthenticationService {
   signIn(data: any) {
     return fetch(`${API_URL}/api/auth/signin`, {
@@ -15,7 +14,7 @@ export default class AuthenticationService {
 
   signUp(data: any) {
     return axios
-      .post("http://localhost:8080/api/auth/signup", data)
+      .post("http://localhost:8081/api/auth/signup", data)
       .then((response) => {
         console.log(response);
       });
@@ -23,6 +22,6 @@ export default class AuthenticationService {
 
   retrieveRefreshtoken() {
     return axios
-      .get("http://localhost:8080/api/auth/refreshToken")
+      .get("http://localhost:8081/api/auth/refreshToken")
   }
 }

@@ -3,7 +3,6 @@ import { Layout } from "@/components/_Layout";
 import SignIn from "@/views/SignIn/SignIn";
 import SignUp from "@/views/SignUp/SignUp";
 import { isAuthentication } from "@/utils/AuthenticationUtils";
-import { PageNotFound } from "@/views/PageNotFound/PageNotFound";
 
 const requireAuth = (element: React.ReactElement) => {
   return isAuthentication() ? element : <Navigate to="/signin" />;
@@ -22,9 +21,5 @@ export const routes = createBrowserRouter([
   {
     path: "/signup",
     element: <SignUp />,
-  },
-  {
-    path: "/404",
-    element: <PageNotFound />,
   },
 ]);
