@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const API_URL = "https://ml-xray.org";
-const API_URL = "https://ml-xray.org/api/";
+const API_URL = "http://localhost:8080/api";
+// const API_URL = "https://ml-xray.org/api/";
 export default class AuthenticationService {
   signIn(data: any) {
     return fetch(`${API_URL}/auth/signin`, {
