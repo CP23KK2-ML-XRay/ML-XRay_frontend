@@ -9,4 +9,14 @@ export default defineConfig({
       '@': "/src",
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5173',
+        changeOrigin: true,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  }
 })

@@ -11,7 +11,10 @@ const Navbar: React.FC<NavbarProps> = () => {
     <nav className="flex componenbg h-20 items-center shadow-lg ">
       <div className="flex justify-center sm:justify-between w-full px-20">
         <div className="font-bold text-2xl">ML-XRay</div>
-        <div className="hidden sm:block">dsajdljslkal</div>
+        <div className="hidden sm:block">
+          {" "}
+          <br></br>
+        </div>
       </div>
     </nav>
   );

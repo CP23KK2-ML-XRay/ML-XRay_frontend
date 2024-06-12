@@ -1,4 +1,6 @@
+import axios from "axios";
 import React, { useState } from "react";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState<string>("");
@@ -50,7 +52,7 @@ const SignUp = () => {
     return re.test(email);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const validationErrors = validate();
@@ -58,6 +60,38 @@ const SignUp = () => {
 
     if (Object.keys(validationErrors).length === 0) {
       console.log("Form is valid");
+      var data = {
+        firstname: firstName,
+        lastname: lastName,
+        position: position,
+        email: email,
+        password: password,
+        role: "User",
+      };
+
+      try {
+        await axios.post("http://localhost:8080/api/auth/signup", data, {
+          headers: {
+            "Content-Type": "application/json", // Optional: Content-Type header
+            email: localStorage.getItem("email") as string,
+          },
+        });
+        Swal.fire({
+          title: "Added!",
+          text: "You can see your patient in patients record.",
+          icon: "success",
+        });
+        location.reload();
+        // window.location.reload();
+      } catch (error) {
+        Swal.fire({
+          title: "error",
+          text: "Can't add patient. Please try again.",
+          icon: "error",
+        });
+        //   console.error("Error submitting data:", error);
+      }
+
       // Proceed with form submission
     } else {
       console.log("Form has errors:", validationErrors);

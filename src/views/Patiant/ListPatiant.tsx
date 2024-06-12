@@ -77,6 +77,7 @@ export const ListPatient = () => {
         text: "You can see your patient in patients record.",
         icon: "success",
       });
+
       setIsHidden(true);
       // console.log('Data submitted successfully:', response.data);
       // Optionally, you can reset the form data after successful submission
@@ -91,13 +92,15 @@ export const ListPatient = () => {
         blood_type: "A+",
         medic_person: 1, // Default value
       });
-      location.reload();
+      setTimeout(() => {
+        location.reload();
+      }, 2000);
       // window.location.reload();
     } catch (error) {
       Swal.fire({
         title: "error!",
         text: "Can't add patient. Please try again.",
-        icon: "success",
+        icon: "error",
       });
       //   console.error("Error submitting data:", error);
     }

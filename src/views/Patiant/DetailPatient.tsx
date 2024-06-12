@@ -70,7 +70,7 @@ export const DetailPatient = () => {
       }
 
       const formData = new FormData();
-      formData.append("image_file", selectedFile);
+      formData.append("image_path", selectedFile);
       formData.append("patient_id", patientId);
 
       // Use an API endpoint to handle file upload on the server
