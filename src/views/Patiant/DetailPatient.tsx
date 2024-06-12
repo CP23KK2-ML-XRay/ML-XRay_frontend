@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Patient } from "./types";
 import Swal from "sweetalert2";
 

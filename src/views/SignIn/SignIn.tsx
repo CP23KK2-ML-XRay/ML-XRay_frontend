@@ -9,7 +9,7 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import React, { useState, FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+// import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const SignIn: React.FC = () => {
@@ -17,7 +17,7 @@ const SignIn: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = React.useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
