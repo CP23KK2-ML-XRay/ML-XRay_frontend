@@ -70,7 +70,7 @@ const SignUp = () => {
       };
 
       try {
-        await axios.post("http://localhost:8080/api/auth/signup", data, {
+        await axios.post("https://ml-xray.org/api/auth/signup", data, {
           headers: {
             "Content-Type": "application/json", // Optional: Content-Type header
             email: localStorage.getItem("email") as string,

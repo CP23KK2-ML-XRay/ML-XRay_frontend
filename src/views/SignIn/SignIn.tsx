@@ -91,6 +91,9 @@ const SignIn: React.FC = () => {
           });
           location.href = "/";
         } else {
+          response.json().then((data: any) => {
+            console.log(data);
+          });
           Swal.fire({
             icon: "error",
             title: "Oops...",

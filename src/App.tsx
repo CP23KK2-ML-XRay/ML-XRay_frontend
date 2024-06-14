@@ -1,18 +1,13 @@
-import { Route, Routes } from "react-router";
+// import { Route, Routes } from "react-router";
 import "./App.css";
-import { Layout } from "./components/_Layout";
-import SignIn from "./views/SignIn/SignIn";
-import SignUp from "./views/SignUp/SignUp";
+import { RouterProvider } from "react-router-dom";
+import { routes } from "@/routes/routes";
 
 function App() {
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Layout />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-      </Routes>
-    </>
+    <div className="App">
+      <RouterProvider router={routes} />
+    </div>
   );
 }
 

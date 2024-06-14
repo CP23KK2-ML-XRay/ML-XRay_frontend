@@ -11,7 +11,7 @@ export const ListPatient = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8082/api/hos/patients/",
+          "https://ml-xray.org/api/hos/patients/",
           {
             headers: {
               Authorization: ("Bearer " +
@@ -66,7 +66,7 @@ export const ListPatient = () => {
     e.preventDefault();
     console.log("Data submitted successfully:", formData);
     try {
-      await axios.post("http://localhost:8082/api/hos/patients/", formData, {
+      await axios.post("https://ml-xray.org/api/hos/patients/", formData, {
         headers: {
           "Content-Type": "application/json", // Optional: Content-Type header
           email: localStorage.getItem("email") as string,
