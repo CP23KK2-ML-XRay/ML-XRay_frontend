@@ -1,17 +1,13 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { PageNotFound } from "@/views/PageNotFound/PageNotFound";
+// import { Route, Routes } from "react-router";
 import "./App.css";
+import { RouterProvider } from "react-router-dom";
+import { routes } from "@/routes/routes";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="*" element={<PageNotFound />} />
-        {/* <Route path="/" element={<Home />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />} /> */}
-      </Routes>
-    </BrowserRouter>
+    <div className="App">
+      <RouterProvider router={routes} />
+    </div>
   );
 }
 

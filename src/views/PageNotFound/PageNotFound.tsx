@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const PageNotFound = () => {
   return (
     <>
@@ -15,6 +17,13 @@ export const PageNotFound = () => {
             <p className="mb-4 text-center text-gray-500 md:text-lg">
               The page you’re looking for doesn’t exist.
             </p>
+
+            <Link
+              to="/"
+              className="px-5 py-2 rounded-md text-blue-100 bg-blue-600 hover:bg-blue-700"
+            >
+              Go home
+            </Link>
           </div>
         </div>
       </div>

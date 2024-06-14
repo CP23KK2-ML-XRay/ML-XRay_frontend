@@ -1,68 +1,102 @@
-import React, { useState } from 'react'
+import axios from "axios";
+import React, { useState } from "react";
+import Swal from "sweetalert2";
 
 const SignUp = () => {
-  const [firstName, setFirstName] = useState<string>('')
-  const [lastName, setLastName] = useState<string>('')
-  const [position, setPosition] = useState<string>('')
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const [confirmPassword, setConfirmPassword] = useState<string>('')
-  const [errors, setErrors] = useState<{ [key: string]: string }>({})
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [position, setPosition] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const validate = (): { [key: string]: string } => {
-    const newErrors: { [key: string]: string } = {}
+    const newErrors: { [key: string]: string } = {};
 
     if (!firstName.trim()) {
-      newErrors.firstName = 'First name is required'
+      newErrors.firstName = "First name is required";
     }
 
     if (!lastName.trim()) {
-      newErrors.lastName = 'Last name is required'
+      newErrors.lastName = "Last name is required";
     }
 
     if (!position.trim()) {
-      newErrors.position = 'Position is required'
+      newErrors.position = "Position is required";
     }
 
     if (!email.trim()) {
-      newErrors.email = 'Email is required'
+      newErrors.email = "Email is required";
     } else if (!isValidEmail(email)) {
-      newErrors.email = 'Invalid email address'
+      newErrors.email = "Invalid email address";
     }
 
     if (!password.trim()) {
-      newErrors.password = 'Password is required'
+      newErrors.password = "Password is required";
     } else if (password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters'
+      newErrors.password = "Password must be at least 8 characters";
     }
 
     if (!confirmPassword.trim()) {
-      newErrors.confirmPassword = 'Confirm password is required'
+      newErrors.confirmPassword = "Confirm password is required";
     } else if (confirmPassword !== password) {
-      newErrors.confirmPassword = 'Passwords do not match'
+      newErrors.confirmPassword = "Passwords do not match";
     }
 
-    return newErrors
-  }
+    return newErrors;
+  };
 
   const isValidEmail = (email: string): boolean => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return re.test(email)
-  }
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    const validationErrors = validate()
-    setErrors(validationErrors)
+    const validationErrors = validate();
+    setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      console.log('Form is valid')
+      console.log("Form is valid");
+      var data = {
+        firstname: firstName,
+        lastname: lastName,
+        position: position,
+        email: email,
+        password: password,
+        role: "User",
+      };
+
+      try {
+        await axios.post("https://ml-xray.org/api/auth/signup", data, {
+          headers: {
+            "Content-Type": "application/json", // Optional: Content-Type header
+            email: localStorage.getItem("email") as string,
+          },
+        });
+        Swal.fire({
+          title: "Added!",
+          text: "You can see your patient in patients record.",
+          icon: "success",
+        });
+        location.reload();
+        // window.location.reload();
+      } catch (error) {
+        Swal.fire({
+          title: "error",
+          text: "Can't add patient. Please try again.",
+          icon: "error",
+        });
+        //   console.error("Error submitting data:", error);
+      }
+
       // Proceed with form submission
     } else {
-      console.log('Form has errors:', validationErrors)
+      console.log("Form has errors:", validationErrors);
     }
-  }
+  };
 
   return (
     <section className="h-screen w-screen bg-gray-50 dark:bg-gray-900">
@@ -88,7 +122,7 @@ const SignUp = () => {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.firstName ? 'border-red-500' : ''
+                      errors.firstName ? "border-red-500" : ""
                     }`}
                     placeholder="Jack"
                   />
@@ -110,7 +144,7 @@ const SignUp = () => {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.lastName ? 'border-red-500' : ''
+                      errors.lastName ? "border-red-500" : ""
                     }`}
                     placeholder="Dawson"
                   />
@@ -130,7 +164,7 @@ const SignUp = () => {
                     value={position}
                     onChange={(e) => setPosition(e.target.value)}
                     className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.position ? 'border-red-500' : ''
+                      errors.position ? "border-red-500" : ""
                     }`}
                   >
                     <option value="" disabled selected>
@@ -157,7 +191,7 @@ const SignUp = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.email ? 'border-red-500' : ''
+                      errors.email ? "border-red-500" : ""
                     }`}
                     placeholder="dawson@mail.com"
                   />
@@ -179,7 +213,7 @@ const SignUp = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.password ? 'border-red-500' : ''
+                      errors.password ? "border-red-500" : ""
                     }`}
                     placeholder="••••••••"
                   />
@@ -201,7 +235,7 @@ const SignUp = () => {
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.confirmPassword ? 'border-red-500' : ''
+                      errors.confirmPassword ? "border-red-500" : ""
                     }`}
                     placeholder="••••••••"
                   />
@@ -219,9 +253,9 @@ const SignUp = () => {
                 Create an account
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                Already have an account?{' '}
+                Already have an account?{" "}
                 <a
-                  href=""
+                  href="/signin"
                   className="font-medium text-blue-600 hover:underline dark:text-blue-500"
                 >
                   Login here
@@ -232,7 +266,7 @@ const SignUp = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;

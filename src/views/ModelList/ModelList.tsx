@@ -1,6 +1,4 @@
-
-
-const PatientsRecord = () => {
+const ModelList = () => {
   return (
     <section className="h-screen w-screen bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
       <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
@@ -54,7 +52,7 @@ const PatientsRecord = () => {
                     d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
                   />
                 </svg>
-                Add patient
+                Add model
               </button>
             </div>
           </div>
@@ -66,17 +64,21 @@ const PatientsRecord = () => {
                     #ID
                   </th>
                   <th scope="col" className="px-4 py-3">
-                    Name
+                    Model Name
                   </th>
                   <th scope="col" className="px-4 py-3">
-                    Gender
+                    Category
                   </th>
                   <th scope="col" className="px-4 py-3">
-                    Date of Birth
+                    Class 0
                   </th>
                   <th scope="col" className="px-4 py-3">
-                    
+                    Class 1
                   </th>
+                  <th scope="col" className="px-4 py-3">
+                    Class 2
+                  </th>
+                  <th scope="col" className="px-4 py-3"></th>
                 </tr>
               </thead>
               <tbody>
@@ -87,10 +89,12 @@ const PatientsRecord = () => {
                   >
                     1
                   </th>
-                  <td className="px-4 py-3">Jack Dawson</td>
-                  <td className="px-4 py-3">Male</td>
-                  <td className="px-4 py-3">15-04-1912</td>
-                  <td className="px-4 py-3 flex items-center justify-center">
+                  <td className="px-4 py-3">Lorlem</td>
+                  <td className="px-4 py-3">Image</td>
+                  <td className="px-4 py-3">Dogs</td>
+                  <td className="px-4 py-3">Cats</td>
+                  <td className="px-4 py-3">Pigs</td>
+                  <td className="pr-4 py-3 flex items-center justify-center">
                     <button
                       id="apple-imac-27-dropdown-button"
                       data-dropdown-toggle="apple-imac-27-dropdown"
@@ -248,7 +252,7 @@ const PatientsRecord = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default PatientsRecord
+export default ModelList;
