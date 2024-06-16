@@ -99,7 +99,7 @@ export const DetailPatient = () => {
             src="https://cdn-icons-png.flaticon.com/512/219/219983.png"
             alt=""
             className="h-40 w-40 mt-5 mr-10"
-          />
+          />          
           <div className="information">
             <div className="pa_name m-4 text-lg flex justify-between">
               <div>
@@ -132,8 +132,14 @@ export const DetailPatient = () => {
               <div className="p-4 border-dashed border-2 border-gray-500 m-4 rounded-lg flex flex-col">
                 <div>{userData?.blood_type}</div>
                 <div>Blood pressure</div>
-              </div>
-            </div>
+              </div>  
+              <button
+              type="submit"
+              className="absolute right-20 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded text-sm h-1/10"
+            >
+              Edit patient detail
+            </button>            
+            </div>            
           </div>
         </div>
 
