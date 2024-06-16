@@ -1,37 +1,35 @@
 import React, { useState } from 'react'
 
 const ModelList = () => {
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const openModal = () => {
-    setIsModalOpen(true);
+    setIsModalOpen(true)
   }
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsModalOpen(false)
   }
 
-  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false)
 
   const openEdit = () => {
-    setIsEditOpen(true);
+    setIsEditOpen(true)
   }
 
   const closeEdit = () => {
-    setIsEditOpen(false);
+    setIsEditOpen(false)
   }
 
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
   const openDelete = () => {
-    setIsDeleteOpen(true);
+    setIsDeleteOpen(true)
   }
 
   const closeDelete = () => {
-    setIsDeleteOpen(false);
+    setIsDeleteOpen(false)
   }
-
 
   return (
     <section className="h-screen w-screen bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
@@ -104,9 +102,15 @@ const ModelList = () => {
                   <th scope="col" className="px-4 py-3">
                     Category
                   </th>
-                  <th scope="col" className="px-4 py-3">Class 0</th>
-                  <th scope="col" className="px-4 py-3">Class 1</th>
-                  <th scope="col" className="px-4 py-3">Class 2</th>
+                  <th scope="col" className="px-4 py-3">
+                    Class 0
+                  </th>
+                  <th scope="col" className="px-4 py-3">
+                    Class 1
+                  </th>
+                  <th scope="col" className="px-4 py-3">
+                    Class 2
+                  </th>
                   <th scope="col" className="px-4 py-3"></th>
                 </tr>
               </thead>
@@ -287,15 +291,25 @@ const ModelList = () => {
       {isEditOpen && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div
+              className="fixed inset-0 transition-opacity"
+              aria-hidden="true"
+            >
               <div className="absolute inset-0 bg-gray-400 opacity-25"></div>
             </div>
 
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
             <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               {/* Header */}
               <div className="bg-primary-500 px-4 py-3 sm:px-6">
-                <h3 className="text-2xl font-medium leading-6 text-black">Edit Model Name</h3>
+                <h3 className="text-2xl font-medium leading-6 text-black">
+                  Edit Model Name
+                </h3>
               </div>
 
               {/* Modal body */}
@@ -322,7 +336,7 @@ const ModelList = () => {
                 <div className="bg-white dark:bg-gray-400 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                   <button
                     type="button"
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-black hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-slate-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm"
                     onClick={closeEdit}
                   >
                     Cancel
@@ -340,19 +354,29 @@ const ModelList = () => {
         </div>
       )}
 
-{/*Modal for Create new model ------------------------------------------------------------------------------------------------ */}
+      {/*Modal for Create new model ------------------------------------------------------------------------------------------------ */}
       {isModalOpen && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div
+              className="fixed inset-0 transition-opacity"
+              aria-hidden="true"
+            >
               <div className="absolute inset-0 bg-gray-400 opacity-25"></div>
             </div>
 
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
             <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               {/* Header */}
               <div className="bg-primary-500 px-4 py-3 sm:px-6">
-                <h3 className="text-2xl font-medium leading-6 text-black">Create Model</h3>
+                <h3 className="text-2xl font-medium leading-6 text-black">
+                  Create Model
+                </h3>
               </div>
 
               {/* Modal body */}
@@ -367,8 +391,8 @@ const ModelList = () => {
                     </label>
                     <input
                       type="text"
-                      id='name'
-                      name='name'
+                      id="name"
+                      name="name"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     />
                     <label
@@ -377,13 +401,18 @@ const ModelList = () => {
                     >
                       Model Category
                     </label>
-                    <select id='category'
-                      name='category'
+                    <select
+                      id="category"
+                      name="category"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     >
-                      <option value="" selected disabled hidden>Choose here</option>
+                      <option value="" selected disabled hidden>
+                        Choose here
+                      </option>
                       <option value="image">Images classifying model</option>
-                      <option value="numeric">Numeric and categorical features model</option>
+                      <option value="numeric">
+                        Numeric and categorical features model
+                      </option>
                     </select>
                     <label
                       htmlFor="class0"
@@ -393,8 +422,8 @@ const ModelList = () => {
                     </label>
                     <input
                       type="text"
-                      id='class0'
-                      name='class0'
+                      id="class0"
+                      name="class0"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     />
                     <label
@@ -405,8 +434,8 @@ const ModelList = () => {
                     </label>
                     <input
                       type="text"
-                      id='class1'
-                      name='class1'
+                      id="class1"
+                      name="class1"
                       className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     />
                     <label
@@ -417,8 +446,8 @@ const ModelList = () => {
                     </label>
                     <input
                       type="text"
-                      id='class2'
-                      name='class2'
+                      id="class2"
+                      name="class2"
                       className="bg-white-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     />
                   </div>
@@ -448,48 +477,56 @@ const ModelList = () => {
 
       {/*Modal for delete-----------------------------------------------------------------------------------------------------------------------*/}
       {isDeleteOpen && (
-  <div className="fixed z-10 inset-0 overflow-y-auto">
-    <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-      <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-        <div className="absolute inset-0 bg-gray-400 opacity-25"></div>
-      </div>
+        <div className="fixed z-10 inset-0 overflow-y-auto">
+          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div
+              className="fixed inset-0 transition-opacity"
+              aria-hidden="true"
+            >
+              <div className="absolute inset-0 bg-gray-400 opacity-25"></div>
+            </div>
 
-      <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-      <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-        {/* Header */}
-        <div className="bg-primary-500 px-4 py-3 sm:px-6">
-          <h3 className="text-2xl font-medium leading-6 text-black">Confirm Deletion</h3>
+            <span
+              className="hidden sm:inline-block sm:align-middle sm:h-screen"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+              {/* Header */}
+              <div className="bg-primary-500 px-4 py-3 sm:px-6">
+                <h3 className="text-2xl font-medium leading-6 text-black">
+                  Confirm Deletion
+                </h3>
+              </div>
+
+              {/* Modal body */}
+              <div className="px-4 py-4 sm:p-6">
+                <p className="text-sm font-medium text-gray-900 dark:text-white">
+                  Are you sure you want to delete this model?
+                </p>
+              </div>
+
+              {/* Modal footer */}
+              <div className="bg-white dark:bg-gray-400 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={closeDelete}
+                >
+                  No
+                </button>
+                <button
+                  type="button"
+                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                >
+                  Yes
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-
-        {/* Modal body */}
-        <div className="px-4 py-4 sm:p-6">
-          <p className="text-sm font-medium text-gray-900 dark:text-white">
-            Are you sure you want to delete this model?
-          </p>
-        </div>
-
-        {/* Modal footer */}
-        <div className="bg-white dark:bg-gray-400 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-          <button
-            type="button"
-            className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
-            onClick={closeDelete}
-          >
-            No
-          </button>
-          <button
-            type="button"
-            className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
-            
-          >
-            Yes
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
-
+      )}
     </section>
   )
 }
