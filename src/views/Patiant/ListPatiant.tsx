@@ -60,10 +60,30 @@ export const ListPatient = () => {
       ...prevData,
       [name]: value,
     }));
+
+    if (name === "phone_number" && value.length > 10) {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "Phone number cannot exceed 10 characters",
+      }));
+    } else {
+      setFormErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "",
+      }));
+    }
+    
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const errors = validateForm(formData);
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
     console.log("Data submitted successfully:", formData);
     try {
       await axios.post("https://ml-xray.org/api/hos/patients/", formData, {
@@ -104,6 +124,19 @@ export const ListPatient = () => {
       });
       //   console.error("Error submitting data:", error);
     }
+  };
+
+  const validateForm = (data: typeof formData) => {
+    const errors: any = {};
+    if (!data.firstname) errors.firstname = "First name is required";
+    if (!data.lastname) errors.lastname = "Last name is required";
+    if (!data.dateOfBirth) errors.dateOfBirth = "Date of birth is required";
+    if (!data.phone_number) {
+      errors.phone_number = "Phone number is required";
+    } else if (data.phone_number.length > 10) {
+      errors.phone_number = "Phone number cannot exceed 10 characters";
+    }
+    return errors;
   };
 
   const [isHidden, setIsHidden] = useState(true);
