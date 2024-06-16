@@ -9,15 +9,12 @@ import {
   OutlinedInput,
 } from "@mui/material";
 import React, { useState, FormEvent } from "react";
-// import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [showPassword, setShowPassword] = React.useState(false);
-
-  // const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -27,9 +24,7 @@ const SignIn: React.FC = () => {
     event.preventDefault();
   };
 
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
-  );
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
   const validateEmail = (email: string): boolean => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -57,50 +52,59 @@ const SignIn: React.FC = () => {
 
     setErrors(newErrors);
 
-    // Return true if there are no errors
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (validate()) {
-      // Proceed with form submission or further processing
-      console.log("Form is valid");
-      var data = {
+      const data = {
         email: email,
         password: password,
       };
 
       const authenservice = new AuthenticationService();
-      authenservice.signIn(data).then((response) => {
-        console.log(response);
-        if (response.status == 200) {
-          response.json().then((data: any) => {
-            console.log(data);
-            localStorage.setItem("accessToken", data.accessToken);
-            localStorage.setItem("accessTokenExp", data.accessTokenExp);
-            localStorage.setItem("refreshToken", data.refreshToken);
-            localStorage.setItem("refreshTokenExp", data.refreshTokenExp);
-            localStorage.setItem("email", data.email);
-            localStorage.setItem("role", data.role);
+      try {
+        const response = await authenservice.signIn(data);
+        const responseData = await response.json();
+
+        if (response.status === 200) {
+          const mappedData = {
+            accessToken: responseData.accessToken,
+            accessTokenExp: responseData.accessTokenExp,
+            refreshToken: responseData.refreshToken,
+            refreshTokenExp: responseData.refreshTokenExp,
+            email: responseData.email,
+            role: responseData.role
+          };
+
+          Object.keys(mappedData).forEach(key => {
+            localStorage.setItem(key, mappedData[key as keyof typeof mappedData]);
           });
+
           Swal.fire({
             title: "Good job!",
-            text: "Login sussece",
+            text: "Login successful",
             icon: "success",
+          }).then(() => {
+            location.href = "/";
           });
-          location.href = "/";
         } else {
-          response.json().then((data: any) => {
-            console.log(data);
-          });
+          console.log(responseData);
           Swal.fire({
             icon: "error",
             title: "Oops...",
             text: "Something went wrong!",
           });
         }
-      });
+      } catch (error) {
+        console.error("Error during sign in:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      }
     }
   };
 
