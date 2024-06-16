@@ -1,4 +1,4 @@
-import axios from "axios";
+import HospitalService from "@/service/HospitalService";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -8,35 +8,23 @@ export const ListPatient = () => {
 
   useEffect(() => {
     // Fetch data when the component mounts
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://ml-xray.org/api/hos/patients/", // api shooter pew pew pew
-          {
-            headers: {
-              Authorization: ("Bearer " +
-                localStorage.getItem("token")) as string,
-              "Content-Type": "application/json", // Optional: Content-Type header
-              email: localStorage.getItem("email") as string,
-            },
-          }
-        );
-        if (response.status === 200) {
-          setUsersData(response.data);
-        }
-        console.log(usersData);
-      } catch (error: any) {
-        if (error.response && error.response.status === 404) {
-          // Handle 404 error here
-          console.error("Patients not found:", error);
-        } else {
-          // Handle other errors
-          console.error("Error fetching data:", error);
-        }
-      }
-    };
 
-    fetchData();
+    try {
+      const hospitalService = new HospitalService();
+      hospitalService.retrieveListPatients().then((data) => {
+        console.log(data);
+        setUsersData(data);
+      });
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
+    console.log("i fire once");
+    // fetchData();
   }, []);
 
   const [formData, setFormData] = useState({
@@ -66,12 +54,11 @@ export const ListPatient = () => {
     e.preventDefault();
     console.log("Data submitted successfully:", formData);
     try {
-      await axios.post("https://ml-xray.org/api/hos/patients/", formData, {
-        headers: {
-          "Content-Type": "application/json", // Optional: Content-Type header
-          email: localStorage.getItem("email") as string,
-        },
-      });
+      const hospitalService = new HospitalService();
+      const response = await hospitalService.createPatient(formData);
+      console.log(response);
+      if (response) {
+      }
       Swal.fire({
         title: "Added!",
         text: "You can see your patient in patients record.",
@@ -125,12 +112,11 @@ export const ListPatient = () => {
         confirmButtonText: "Yes, delete it!",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          await axios.delete(`http://localhost:8082/api/hos/patients/${id}`, {
-            headers: {
-              "Content-Type": "application/json", // Optional: Content-Type header
-              email: localStorage.getItem("email") as string,
-            },
-          });
+          const hospitalService = new HospitalService();
+          const response = await hospitalService.deletePatient(id);
+          if (response) {
+            console.log(response);
+          }
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",
