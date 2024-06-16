@@ -15,7 +15,7 @@ export const ListPatient = () => {
           {
             headers: {
               Authorization: ("Bearer " +
-                localStorage.getItem("token")) as string,
+                localStorage.getItem("accessToken")) as string,
               "Content-Type": "application/json", // Optional: Content-Type header
               email: localStorage.getItem("email") as string,
             },

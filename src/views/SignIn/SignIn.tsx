@@ -1,5 +1,5 @@
-import AuthenticationService from '@/service/Authentication'
-import { Visibility, VisibilityOff } from '@mui/icons-material'
+import AuthenticationService from "@/service/Authentication";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   FormControl,
   FormHelperText,
@@ -7,109 +7,110 @@ import {
   InputAdornment,
   InputLabel,
   OutlinedInput,
-} from '@mui/material'
-import React, { useState, FormEvent } from 'react'
+} from "@mui/material";
+import React, { useState, FormEvent } from "react";
 // import { Link, useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const SignIn: React.FC = () => {
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const [showPassword, setShowPassword] = React.useState(false)
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = React.useState(false);
 
   // const navigate = useNavigate();
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show)
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
-    event.preventDefault()
-  }
+    event.preventDefault();
+  };
 
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
-  )
+  );
 
   const validateEmail = (email: string): boolean => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    return re.test(String(email).toLowerCase())
-  }
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+  };
 
   const validatePassword = (password: string): boolean => {
-    return password.length >= 8
-  }
+    return password.length >= 8;
+  };
 
   const validate = (): boolean => {
-    const newErrors: { email?: string; password?: string } = {}
+    const newErrors: { email?: string; password?: string } = {};
 
     if (!email) {
-      newErrors.email = 'Email is required'
+      newErrors.email = "Email is required";
     } else if (!validateEmail(email)) {
-      newErrors.email = 'Please enter a valid email address.'
+      newErrors.email = "Please enter a valid email address.";
     }
 
     if (!password) {
-      newErrors.password = 'Please enter your password.'
+      newErrors.password = "Please enter your password.";
     } else if (!validatePassword(password)) {
-      newErrors.password = 'Password must be at least 8 characters'
+      newErrors.password = "Password must be at least 8 characters";
     }
 
-    setErrors(newErrors)
+    setErrors(newErrors);
 
     // Return true if there are no errors
-    return Object.keys(newErrors).length === 0
-  }
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
     if (validate()) {
       // Proceed with form submission or further processing
-      console.log('Form is valid')
+      console.log("Form is valid");
       var data = {
         email: email,
         password: password,
-      }
+      };
 
-      const authenservice = new AuthenticationService()
+      const authenservice = new AuthenticationService();
       authenservice
         .signIn(data)
         .then((response) => {
           if (response.status === 200) {
-            return response.json() // ส่งต่อ Promise ไปยังการดึงข้อมูล JSON
+            return response.json(); // ส่งต่อ Promise ไปยังการดึงข้อมูล JSON
           } else {
-            throw new Error('Authentication failed') // กรณีไม่ใช่ 200 OK
+            throw new Error("Authentication failed"); // กรณีไม่ใช่ 200 OK
           }
         })
         .then((data) => {
           // ตั้งค่า localStorage ก่อน
-          localStorage.setItem('accessToken', data.accessToken)
-          localStorage.setItem('accessTokenExp', data.accessTokenExp)
-          localStorage.setItem('refreshToken', data.refreshToken)
-          localStorage.setItem('refreshTokenExp', data.refreshTokenExp)
-          localStorage.setItem('email', data.email)
-          localStorage.setItem('role', data.role)
+          console.log(data);
+          localStorage.setItem("accessToken", data.accessToken);
+          localStorage.setItem("accessTokenExp", data.accessTokenExp);
+          localStorage.setItem("refreshToken", data.refreshToken);
+          localStorage.setItem("refreshTokenExp", data.refreshTokenExp);
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("role", data.role);
 
           // แสดง SweetAlert หลังจากที่ตั้งค่า localStorage เสร็จสิ้น
           Swal.fire({
-            title: 'Good job!',
-            text: 'Login success',
-            icon: 'success',
+            title: "Good job!",
+            text: "Login success",
+            icon: "success",
           }).then(() => {
             // Redirect ไปยังหน้าหลักหรือที่ต้องการหลังจากที่ SweetAlert ถูกแสดง
-            location.href = '/'
-          })
+            location.href = "/";
+          });
         })
         .catch((error) => {
-          console.error(error)
+          console.error(error);
           Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-          })
-        })
+            icon: "error",
+            title: "Oops...",
+            text: "Something went wrong!",
+          });
+        });
     }
-  }
+  };
 
   return (
     <section className="h-screen w-screen flex flex-col md:flex-row justify-center md:space-x-16 items-center bg-white">
@@ -182,7 +183,7 @@ const SignIn: React.FC = () => {
               </InputLabel>
               <OutlinedInput
                 id="outlined-adornment-password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -215,7 +216,7 @@ const SignIn: React.FC = () => {
           </div>
         </form>
         <div className="mt-4 font-semibold text-sm text-slate-500 text-center md:text-left">
-          Don't have an account?{' '}
+          Don't have an account?{" "}
           <a
             className="text-red-600 hover:underline hover:underline-offset-4"
             href="/signup"
@@ -225,7 +226,7 @@ const SignIn: React.FC = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default SignIn
+export default SignIn;
