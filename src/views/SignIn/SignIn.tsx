@@ -9,15 +9,12 @@ import {
   OutlinedInput,
 } from '@mui/material'
 import React, { useState, FormEvent } from 'react'
-// import { Link, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [showPassword, setShowPassword] = React.useState(false)
-
-  // const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false)
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
@@ -27,10 +24,8 @@ const SignIn: React.FC = () => {
     event.preventDefault()
   }
 
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
-  )
-
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
+  
   const validateEmail = (email: string): boolean => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     return re.test(String(email).toLowerCase())
@@ -57,32 +52,25 @@ const SignIn: React.FC = () => {
 
     setErrors(newErrors)
 
-    // Return true if there are no errors
     return Object.keys(newErrors).length === 0
   }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (validate()) {
-      // Proceed with form submission or further processing
       console.log('Form is valid')
-      var data = {
+      const data = {
         email: email,
         password: password,
       }
 
       const authenservice = new AuthenticationService()
-      authenservice
-        .signIn(data)
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json() // ส่งต่อ Promise ไปยังการดึงข้อมูล JSON
-          } else {
-            throw new Error('Authentication failed') // กรณีไม่ใช่ 200 OK
-          }
-        })
-        .then((data) => {
-          // ตั้งค่า localStorage ก่อน
+      try {
+        const response = await authenservice.signIn(data)
+        if (response.status === 200) {
+          const data = await response.json() // Await the JSON data
+
+          // Set localStorage items
           localStorage.setItem('accessToken', data.accessToken)
           localStorage.setItem('accessTokenExp', data.accessTokenExp)
           localStorage.setItem('refreshToken', data.refreshToken)
@@ -90,24 +78,26 @@ const SignIn: React.FC = () => {
           localStorage.setItem('email', data.email)
           localStorage.setItem('role', data.role)
 
-          // แสดง SweetAlert หลังจากที่ตั้งค่า localStorage เสร็จสิ้น
+          // Display SweetAlert
           Swal.fire({
             title: 'Good job!',
             text: 'Login success',
             icon: 'success',
           })
 
-          // Optional: สามารถ redirect ไปยังหน้าหลักหรือที่ต้องการได้ตามความเหมาะสม
+          // Redirect to home page
           location.href = '/'
+        } else {
+          throw new Error('Authentication failed')
+        }
+      } catch (error) {
+        console.error(error)
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
         })
-        .catch((error) => {
-          console.error(error)
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-          })
-        })
+      }
     }
   }
 
