@@ -72,35 +72,42 @@ const SignIn: React.FC = () => {
       };
 
       const authenservice = new AuthenticationService();
-      authenservice.signIn(data).then((response) => {
-        console.log(response);
-        if (response.status == 200) {
-          response.json().then((data: any) => {
-            console.log(data);
-            localStorage.setItem("accessToken", data.accessToken);
-            localStorage.setItem("accessTokenExp", data.accessTokenExp);
-            localStorage.setItem("refreshToken", data.refreshToken);
-            localStorage.setItem("refreshTokenExp", data.refreshTokenExp);
-            localStorage.setItem("email", data.email);
-            localStorage.setItem("role", data.role);
-          });
+      authenservice
+        .signIn(data)
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json(); // ส่งต่อ Promise ไปยังการดึงข้อมูล JSON
+          } else {
+            throw new Error("Authentication failed"); // กรณีไม่ใช่ 200 OK
+          }
+        })
+        .then((data) => {
+          // ตั้งค่า localStorage ก่อน
+          localStorage.setItem("accessToken", data.accessToken);
+          localStorage.setItem("accessTokenExp", data.accessTokenExp);
+          localStorage.setItem("refreshToken", data.refreshToken);
+          localStorage.setItem("refreshTokenExp", data.refreshTokenExp);
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("role", data.role);
+
+          // แสดง SweetAlert หลังจากที่ตั้งค่า localStorage เสร็จสิ้น
           Swal.fire({
             title: "Good job!",
-            text: "Login sussece",
+            text: "Login success",
             icon: "success",
           });
+
+          // Optional: สามารถ redirect ไปยังหน้าหลักหรือที่ต้องการได้ตามความเหมาะสม
           location.href = "/";
-        } else {
-          response.json().then((data: any) => {
-            console.log(data);
-          });
+        })
+        .catch((error) => {
+          console.error(error);
           Swal.fire({
             icon: "error",
             title: "Oops...",
             text: "Something went wrong!",
           });
-        }
-      });
+        });
     }
   };
 
