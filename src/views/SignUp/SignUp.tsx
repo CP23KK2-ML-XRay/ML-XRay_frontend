@@ -86,7 +86,7 @@ const SignUp = () => {
       } catch (error) {
         Swal.fire({
           title: "error",
-          text: "Can't add patient. Please try again.",
+          text: "Can't create account. Please try again.",
           icon: "error",
         });
         //   console.error("Error submitting data:", error);

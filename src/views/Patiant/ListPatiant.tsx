@@ -11,7 +11,7 @@ export const ListPatient = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://ml-xray.org/api/hos/patients/",
+          "https://ml-xray.org/api/hos/patients/", // api shooter pew pew pew
           {
             headers: {
               Authorization: ("Bearer " +
