@@ -51,6 +51,15 @@ export const ListPatient = () => {
     medic_person: 1,
   });
 
+  const [formErrors, setFormErrors] = useState({
+    firstname: "",
+    lastname: "",
+    dateOfBirth: "",
+    phone_number: "",
+    weight:"",
+    height:""
+  });
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -72,7 +81,6 @@ export const ListPatient = () => {
         [name]: "",
       }));
     }
-    
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -99,8 +107,6 @@ export const ListPatient = () => {
       });
 
       setIsHidden(true);
-      // console.log('Data submitted successfully:', response.data);
-      // Optionally, you can reset the form data after successful submission
       setFormData({
         firstname: "",
         lastname: "",
@@ -115,14 +121,12 @@ export const ListPatient = () => {
       setTimeout(() => {
         location.reload();
       }, 2000);
-      // window.location.reload();
     } catch (error) {
       Swal.fire({
         title: "error!",
         text: "Can't add patient. Please try again.",
         icon: "error",
       });
-      //   console.error("Error submitting data:", error);
     }
   };
 
@@ -133,17 +137,15 @@ export const ListPatient = () => {
     if (!data.dateOfBirth) errors.dateOfBirth = "Date of birth is required";
     if (!data.phone_number) {
       errors.phone_number = "Phone number is required";
-    } else if (data.phone_number.length > 10) {
+    } else if (data.phone_number.length != 10) {
       errors.phone_number = "Phone number cannot exceed 10 characters";
     }
+    if (!data.weight) errors.weight = "Weight is required";
+    if (!data.height) errors.height = "Height is required";
     return errors;
   };
 
   const [isHidden, setIsHidden] = useState(true);
-
-  // const toggleVisibility = () => {
-  //     setIsHidden(!isHidden);
-  // };
 
   const handleDelete = async (id: any) => {
     console.log(id);
@@ -291,7 +293,12 @@ export const ListPatient = () => {
                   </svg>
                 </div>
               </div>
-              {/* Form Content */}
+              {/* Form Content 
+              Form down here
+              | | | | | | | | |
+              V V V V V V V V V
+              
+              */}
 
               <form className="w-full" onSubmit={handleSubmit}>
                 <div className="flex flex-wrap mx-3 mb-6">
@@ -330,6 +337,11 @@ export const ListPatient = () => {
                       value={formData.firstname}
                       onChange={handleChange}
                     />
+                    {formErrors.firstname && (
+                      <p className="text-red-500 text-xs italic">
+                        {formErrors.firstname}
+                      </p>
+                    )}
                   </div>
                   <div className="w-full md:w-1/2 px-3">
                     <label
@@ -347,6 +359,11 @@ export const ListPatient = () => {
                       value={formData.lastname}
                       onChange={handleChange}
                     />
+                    {formErrors.dateOfBirth && (
+                      <p className="text-red-500 text-xs italic">
+                        {formErrors.dateOfBirth}
+                      </p>
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-wrap mx-3 mb-6">
@@ -366,6 +383,11 @@ export const ListPatient = () => {
                       value={formData.dateOfBirth}
                       onChange={handleChange}
                     />
+                    {formErrors.dateOfBirth && (
+                      <p className="text-red-500 text-xs italic">
+                        {formErrors.dateOfBirth}
+                      </p>
+                    )}
                   </div>
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                     <label
@@ -377,12 +399,16 @@ export const ListPatient = () => {
                     <input
                       className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="phone"
-                      type="text"
+                      type="number"
                       placeholder="(+66)"
                       name="phone_number"
                       value={formData.phone_number}
                       onChange={handleChange}
                     />
+                    {formErrors.phone_number && (
+                      <p className="text-red-500 text-xs italic">
+                        {formErrors.phone_number}
+                      </p>)}
                   </div>
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                     <label
@@ -427,12 +453,17 @@ export const ListPatient = () => {
                     <input
                       className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="weight"
-                      type="text"
+                      type="number"
                       placeholder="kg."
                       name="weight"
                       value={formData.weight}
                       onChange={handleChange}
                     />
+                    {formErrors.weight && (
+                      <p className="text-red-500 text-xs italic">
+                        {formErrors.weight}
+                      </p>
+                    )}
                   </div>
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                     <label
@@ -444,12 +475,17 @@ export const ListPatient = () => {
                     <input
                       className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="height"
-                      type="text"
+                      type="number"
                       placeholder="cm."
                       name="height"
                       value={formData.height}
                       onChange={handleChange}
                     />
+                    {formErrors.height && (
+                      <p className="text-red-500 text-xs italic">
+                        {formErrors.height}
+                      </p>
+                    )}
                   </div>
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                     <label
@@ -465,7 +501,9 @@ export const ListPatient = () => {
                         name="blood_type"
                         value={formData.blood_type}
                         onChange={handleChange}
+
                       >
+                        <option selected hidden>Select patient blood type</option>
                         <option>A positive (A+)</option>
                         <option>A negative (A-)</option>
                         <option>B positive (B+)</option>
