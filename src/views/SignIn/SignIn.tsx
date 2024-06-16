@@ -1,8 +1,32 @@
+import AuthenticationService from '@/service/Authentication'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
+import {
+  FormControl,
+  FormHelperText,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+} from '@mui/material'
 import React, { useState, FormEvent } from 'react'
+// import { Link, useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [showPassword, setShowPassword] = React.useState(false)
+
+  // const navigate = useNavigate();
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault()
+  }
+
   const [errors, setErrors] = useState<{ email?: string; password?: string }>(
     {}
   )
@@ -37,22 +61,64 @@ const SignIn: React.FC = () => {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (validate()) {
       // Proceed with form submission or further processing
       console.log('Form is valid')
+      var data = {
+        email: email,
+        password: password,
+      }
+
+      const authenservice = new AuthenticationService()
+      authenservice
+        .signIn(data)
+        .then((response) => {
+          if (response.status === 200) {
+            return response.json() // ส่งต่อ Promise ไปยังการดึงข้อมูล JSON
+          } else {
+            throw new Error('Authentication failed') // กรณีไม่ใช่ 200 OK
+          }
+        })
+        .then((data) => {
+          // ตั้งค่า localStorage ก่อน
+          localStorage.setItem('accessToken', data.accessToken)
+          localStorage.setItem('accessTokenExp', data.accessTokenExp)
+          localStorage.setItem('refreshToken', data.refreshToken)
+          localStorage.setItem('refreshTokenExp', data.refreshTokenExp)
+          localStorage.setItem('email', data.email)
+          localStorage.setItem('role', data.role)
+
+          // แสดง SweetAlert หลังจากที่ตั้งค่า localStorage เสร็จสิ้น
+          Swal.fire({
+            title: 'Good job!',
+            text: 'Login success',
+            icon: 'success',
+          })
+
+          // Optional: สามารถ redirect ไปยังหน้าหลักหรือที่ต้องการได้ตามความเหมาะสม
+          location.href = '/'
+        })
+        .catch((error) => {
+          console.error(error)
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Something went wrong!',
+          })
+        })
     }
   }
 
   return (
-    <section className="h-screen w-screen flex flex-col md:flex-row justify-center md:space-x-16 items-center bg-gray-50 dark:bg-gray-900">
+    <section className="h-screen w-screen flex flex-col md:flex-row justify-center md:space-x-16 items-center bg-white">
       <div className="absolute md:relative md:w-1/3 max-w-sm invisible md:visible">
-        <label className="pl-10 text-blue-900 text-xl font-bold dark:text-white">
+        <label className="pl-10 text-blue-900 text-xl font-bold ">
           Machine Learning for Diagnosis
         </label>
-        <p className="mt-2 font-bold dark:text-white">Empowering Healthcare: </p>
-        <p className="text-gray-500 dark:text-white">
+        <p className="mt-2 font-bold text-black">Empowering Healthcare: </p>
+        <p className="text-gray-500 ">
           Machine Learning technology helps healthcare professionals provide
           faster, more accurate diagnoses.
         </p>
@@ -82,75 +148,62 @@ const SignIn: React.FC = () => {
 
       <div className="md:w-1/3 max-w-sm">
         <div className="text-center md:text-left py-6">
-          <label className="mr-1 text-blue-900 text-4xl font-bold dark:text-white">
+          <label className="mr-1 text-blue-900 text-4xl font-bold ">
             Sign in
           </label>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="relative text-gray-400 block dark:text-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="pointer-events-none w-8 h-8 absolute top-1/2 transform -translate-y-1/2 right-3"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-              <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-            </svg>
-            <input
+          <FormControl
+            className="w-full"
+            variant="outlined"
+            error={errors.email ? true : false}
+          >
+            <InputLabel htmlFor="outlined-adornment-password">Email</InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-text"
               type="text"
-              id="email"
-              className="block rounded-t-lg px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-gray-50 border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
+              label="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <label
-              htmlFor="email"
-              className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4"
-            >
-              Email
-            </label>
-            {errors.email && (
-              <p className="text-red-500 text-sm">{errors.email}</p>
-            )}
-          </div>
-
+            <FormHelperText id="component-error-text">
+              {errors.email}
+            </FormHelperText>
+          </FormControl>
           <div className="pt-6 mb-2"></div>
           <div className="relative block fill-white">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="pointer-events-none w-7 h-7 absolute top-1/2 transform -translate-y-1/2 right-4"
-              viewBox="0 1.5 21 20"
+            <FormControl
+              className="w-full"
+              variant="outlined"
+              error={errors.password ? true : false}
             >
-              <path
-                xmlns="http://www.w3.org/2000/svg"
-                d="M12 14.5V16.5M7 10.0288C7.47142 10 8.05259 10 8.8 10H15.2C15.9474 10 16.5286 10 17 10.0288M7 10.0288C6.41168 10.0647 5.99429 10.1455 5.63803 10.327C5.07354 10.6146 4.6146 11.0735 4.32698 11.638C4 12.2798 4 13.1198 4 14.8V16.2C4 17.8802 4 18.7202 4.32698 19.362C4.6146 19.9265 5.07354 20.3854 5.63803 20.673C6.27976 21 7.11984 21 8.8 21H15.2C16.8802 21 17.7202 21 18.362 20.673C18.9265 20.3854 19.3854 19.9265 19.673 19.362C20 18.7202 20 17.8802 20 16.2V14.8C20 13.1198 20 12.2798 19.673 11.638C19.3854 11.0735 18.9265 10.6146 18.362 10.327C18.0057 10.1455 17.5883 10.0647 17 10.0288M7 10.0288V8C7 5.23858 9.23858 3 12 3C14.7614 3 17 5.23858 17 8V10.0288"
-                stroke="#9ca3af"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={showPassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
-            </svg>
-            <input
-              type="password"
-              id="password"
-              className="block rounded-t-lg px-2.5 pb-2.5 pt-4 w-full text-sm text-gray-900 bg-gray-50 border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-              placeholder=" "
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <label
-              htmlFor="password"
-              className="absolute text-sm text-gray-500 duration-300 transform -translate-y-4 scale-75 top-4 z-10 origin-[0] start-2.5 peer-focus:text-blue-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4"
-            >
-              Password
-            </label>
-            {errors.password && (
-              <p className="text-red-500 text-sm">{errors.password}</p>
-            )}
+              <FormHelperText id="component-error-text">
+                {errors.password}
+              </FormHelperText>
+            </FormControl>
           </div>
-
           <div className="mt-4 flex justify-between font-semibold text-sm"></div>
           <div className="text-center md:text-left">
             <button
@@ -165,7 +218,7 @@ const SignIn: React.FC = () => {
           Don't have an account?{' '}
           <a
             className="text-red-600 hover:underline hover:underline-offset-4"
-            href="/register"
+            href="/signup"
           >
             Create Account
           </a>
