@@ -9,27 +9,19 @@ import {
   OutlinedInput,
 } from '@mui/material'
 import React, { useState, FormEvent } from 'react'
-// import { Link, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 const SignIn: React.FC = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [showPassword, setShowPassword] = React.useState(false)
-
-  // const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false)
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
   }
-
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
-    {}
-  )
 
   const validateEmail = (email: string): boolean => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -64,7 +56,6 @@ const SignIn: React.FC = () => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (validate()) {
-      // Proceed with form submission or further processing
       console.log('Form is valid')
       const data = {
         email: email,
@@ -72,41 +63,45 @@ const SignIn: React.FC = () => {
       }
 
       const authenservice = new AuthenticationService()
-      authenservice
-        .signIn(data)
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json() // ส่งต่อ Promise ไปยังการดึงข้อมูล JSON
-          } else {
-            throw new Error('Authentication failed') // กรณีไม่ใช่ 200 OK
-          }
-        })
-        .then((data) => {
-          // ตั้งค่า localStorage ก่อน
-          localStorage.setItem('accessToken', data.accessToken)
-          localStorage.setItem('accessTokenExp', data.accessTokenExp)
-          localStorage.setItem('refreshToken', data.refreshToken)
-          localStorage.setItem('refreshTokenExp', data.refreshTokenExp)
-          localStorage.setItem('email', data.email)
-          localStorage.setItem('role', data.role)
+      try {
+        const response = await authenservice.signIn(data)
+        console.log('Response:', response) // Debugging line
 
-          // แสดง SweetAlert หลังจากที่ตั้งค่า localStorage เสร็จสิ้น
-          Swal.fire({
-            title: 'Good job!',
-            text: 'Login success',
-            icon: 'success',
-          })
+        if (response.status === 200) {
+          const data = await response.json()
+          console.log('Response Data:', data) // Debugging line
+
+          if (data.accessToken) { // Ensure tokens are in the response data
+            await Promise.all([
+              localStorage.setItem('accessToken', data.accessToken),
+              localStorage.setItem('accessTokenExp', data.accessTokenExp),
+              localStorage.setItem('refreshToken', data.refreshToken),
+              localStorage.setItem('refreshTokenExp', data.refreshTokenExp),
+              localStorage.setItem('email', data.email),
+              localStorage.setItem('role', data.role)
+            ])
+
+            Swal.fire({
+              title: 'Good job!',
+              text: 'Login success',
+              icon: 'success',
+            }).then(() => {
+              window.location.href = '/'
+            })
+          } else {
+            throw new Error('Authentication failed: Token not found in response')
+          }
+        } else {
+          throw new Error('Authentication failed')
+        }
+      } catch (error) {
+        console.error('Error:', error) // Debugging line
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
         })
-        .catch((error) => {
-          console.error(error)
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Something went wrong!',
-          })
-        })
-      // Optional: สามารถ redirect ไปยังหน้าหลักหรือที่ต้องการได้ตามความเหมาะสม
-      location.href = '/'
+      }
     }
   }
 
