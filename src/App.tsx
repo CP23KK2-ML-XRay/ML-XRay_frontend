@@ -1,10 +1,4 @@
-import {
-  BrowserRouter,
-  Route,
-  Routes,
-  useNavigate,
-  useLocation,
-} from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { useEffect } from 'react'
 import PageNotFound from './views/PageNotFound/PageNotFound'
 import UserInfo from './views/UserInfo/UserInfo'
