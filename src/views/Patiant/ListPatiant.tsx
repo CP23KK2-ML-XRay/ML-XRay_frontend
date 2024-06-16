@@ -1,4 +1,4 @@
-import axios from "axios";
+import HospitalService from "@/service/HospitalService";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -8,35 +8,23 @@ export const ListPatient = () => {
 
   useEffect(() => {
     // Fetch data when the component mounts
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "https://ml-xray.org/api/hos/patients/",
-          {
-            headers: {
-              Authorization: ("Bearer " +
-                localStorage.getItem("token")) as string,
-              "Content-Type": "application/json", // Optional: Content-Type header
-              email: localStorage.getItem("email") as string,
-            },
-          }
-        );
-        if (response.status === 200) {
-          setUsersData(response.data);
-        }
-        console.log(usersData);
-      } catch (error: any) {
-        if (error.response && error.response.status === 404) {
-          // Handle 404 error here
-          console.error("Patients not found:", error);
-        } else {
-          // Handle other errors
-          console.error("Error fetching data:", error);
-        }
-      }
-    };
 
-    fetchData();
+    try {
+      const hospitalService = new HospitalService();
+      hospitalService.retrieveListPatients().then((data) => {
+        console.log(data);
+        setUsersData(data);
+      });
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
+    }
+    console.log("i fire once");
+    // fetchData();
   }, []);
 
   const [formData, setFormData] = useState({
@@ -47,8 +35,8 @@ export const ListPatient = () => {
     gender: "M", // Default value
     weight: "",
     height: "",
-    blood_type: "A+",
-    medic_person: 1,
+    bloodType: "A+",
+    medic_person: "",
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -94,12 +82,11 @@ export const ListPatient = () => {
 
     console.log("Data submitted successfully:", formData);
     try {
-      await axios.post("https://ml-xray.org/api/hos/patients/", formData, {
-        headers: {
-          "Content-Type": "application/json", // Optional: Content-Type header
-          email: localStorage.getItem("email") as string,
-        },
-      });
+      const hospitalService = new HospitalService();
+      const response = await hospitalService.createPatient(formData);
+      console.log(response);
+      if (response) {
+      }
       Swal.fire({
         title: "Added!",
         text: "You can see your patient in patients record.",
@@ -115,7 +102,7 @@ export const ListPatient = () => {
         gender: "Male", // Default value
         weight: "",
         height: "",
-        blood_type: "A+",
+        bloodType: "A+",
         medic_person: 1, // Default value
       });
       setTimeout(() => {
@@ -160,12 +147,11 @@ export const ListPatient = () => {
         confirmButtonText: "Yes, delete it!",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          await axios.delete(`http://localhost:8082/api/hos/patients/${id}`, {
-            headers: {
-              "Content-Type": "application/json", // Optional: Content-Type header
-              email: localStorage.getItem("email") as string,
-            },
-          });
+          const hospitalService = new HospitalService();
+          const response = await hospitalService.deletePatient(id);
+          if (response) {
+            console.log(response);
+          }
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",
@@ -490,28 +476,27 @@ export const ListPatient = () => {
                   <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="blood-type"
+                      htmlFor="bloodType"
                     >
                       Blood type
                     </label>
                     <div className="relative">
                       <select
                         className="appearance-none w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        id="blood-type"
-                        name="blood_type"
-                        value={formData.blood_type}
+                        id="bloodType"
+                        name="bloodType"
+                        value={formData.bloodType}
                         onChange={handleChange}
 
                       >
-                        <option selected hidden>Select patient blood type</option>
-                        <option>A positive (A+)</option>
-                        <option>A negative (A-)</option>
-                        <option>B positive (B+)</option>
-                        <option>B negative (B-)</option>
-                        <option>AB positive (AB+)</option>
-                        <option>AB positive (AB+)</option>
-                        <option>O positive (O+)</option>
-                        <option>O negative (O-)</option>
+                      <option selected hidden>Select patient blood type</option>
+                      <option value="A+">A positive (A+)</option>
+                      <option value="A-">A negative (A-)</option>
+                      <option value="B+">B positive (B+)</option>
+                      <option value="B-">B negative (B-)</option>
+                      <option value="AB+">AB positive (AB+)</option>
+                      <option value="O+">O positive (O+)</option>
+                      <option value="O-">O negative (O-)</option>
                       </select>
                       <div className="absolute inset-y-0 right-1 pointer-events-none flex items-center text-gray-700">
                         <svg

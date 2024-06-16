@@ -1,4 +1,4 @@
-import AuthenticationService from "@/service/Authentication";
+import AuthenticationService from "@/service/AuthenticationService";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   FormControl,
@@ -64,47 +64,36 @@ const SignIn: React.FC = () => {
       };
 
       const authenservice = new AuthenticationService();
-      try {
-        const response = await authenservice.signIn(data);
-        const responseData = await response.json();
+      authenservice
+        .signIn(data)
+        .then((data) => {
+          // ตั้งค่า localStorage ก่อน
+          // console.log(data);
+          localStorage.setItem("accessToken", data.accessToken);
+          localStorage.setItem("accessTokenExp", data.accessTokenExp);
+          localStorage.setItem("refreshToken", data.refreshToken);
+          localStorage.setItem("refreshTokenExp", data.refreshTokenExp);
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("role", data.role);
 
-        if (response.status === 200) {
-          const mappedData = {
-            accessToken: responseData.accessToken,
-            accessTokenExp: responseData.accessTokenExp,
-            refreshToken: responseData.refreshToken,
-            refreshTokenExp: responseData.refreshTokenExp,
-            email: responseData.email,
-            role: responseData.role
-          };
-
-          Object.keys(mappedData).forEach(key => {
-            localStorage.setItem(key, mappedData[key as keyof typeof mappedData]);
-          });
-
+          // แสดง SweetAlert หลังจากที่ตั้งค่า localStorage เสร็จสิ้น
           Swal.fire({
             title: "Good job!",
-            text: "Login successful",
+            text: "Login success",
             icon: "success",
           }).then(() => {
+            // Redirect ไปยังหน้าหลักหรือที่ต้องการหลังจากที่ SweetAlert ถูกแสดง
             location.href = "/";
           });
-        } else {
-          console.log(responseData);
+        })
+        .catch((error) => {
+          console.error(error);
           Swal.fire({
             icon: "error",
             title: "Oops...",
             text: "Something went wrong!",
-          });
-        }
-      } catch (error) {
-        console.error("Error during sign in:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong!",
+          })
         });
-      }
     }
   };
 
