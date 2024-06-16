@@ -10,6 +10,19 @@ export const DetailPatient = () => {
   const patientId = id ? id : "0";
 
   const [userData, setUserData] = useState<Patient>();
+  const [isEdit, setIsEdit] = useState(false);
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    dateOfBirth: "",
+    phone_number: "",
+    gender: "M",
+    weight: "",
+    height: "",
+    blood_type: "A+",
+    medic_person: "",
+  });
+  const [formErrors, setFormErrors] = useState<any>({});
 
   useEffect(() => {
     // Fetch data when the component mounts
@@ -26,6 +39,7 @@ export const DetailPatient = () => {
         );
         console.log("response", response);
         setUserData(response.data);
+        setFormData(response.data); // Set the form data with the fetched user data
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -33,6 +47,55 @@ export const DetailPatient = () => {
 
     fetchData();
   }, []);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const validateForm = () => {
+    let errors: any = {};
+    if (!formData.firstname) errors.firstname = "First Name is required";
+    if (!formData.lastname) errors.lastname = "Last Name is required";
+    if (!formData.dateOfBirth) errors.dateOfBirth = "Date of Birth is required";
+    if (!formData.phone_number) errors.phone_number = "Phone Number is required";
+    if (formData.phone_number && formData.phone_number.length > 10)
+      errors.phone_number = "Phone Number cannot exceed 10 characters";
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      try {
+        const response = await axios.put(
+          `http://localhost:8082/api/hos/patients/${patientId}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              email: localStorage.getItem("email") as string,
+            },
+          }
+        );
+        console.log("Update response", response);
+        setUserData(response.data);
+        setIsEdit(false);
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Patient details updated successfully.",
+        });
+      } catch (error) {
+        console.error("Error updating patient details", error);
+      }
+    }
+  };
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -105,19 +168,15 @@ export const DetailPatient = () => {
               <div>
                 Name: {userData?.firstname} {userData?.lastname}
               </div>
-              {/* <button className="font-medium text-blue-600 hover:underline" onClick={()=>{setIsHidden(false)}}>
+              <button className="font-medium text-blue-600 hover:underline" onClick={() => setIsEdit(true)}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="M7.127 22.562l-7.127 1.438 1.438-7.128 5.689 5.69zm1.414-1.414l11.228-11.225-5.69-5.692-11.227 11.227 5.689 5.69zm9.768-21.148l-2.816 2.817 5.691 5.691 2.816-2.819-5.691-5.689z"/></svg>
-              </button> */}
+              </button>
             </div>
             <div className="pa_normal flex">
               <p className="m-4">Gender: {userData?.gender}</p>
-              {/* <p className="m-4">Age: 21</p> */}
               <p className="m-4">Date of Birth: {userData?.date_of_birth}</p>
             </div>
             <div className="pa_medic flex">
-              {/* <div className="p-4 border-dashed border-2 border-gray-500 m-4 rounded-lg">
-                {userData?.date_of_birth} BMI
-              </div> */}
               <div className="p-4 border-dashed border-2 border-gray-500 m-4 rounded-lg flex flex-col">
                 <div>{userData?.weight}</div>
                 <div>Weight</div>
@@ -126,22 +185,173 @@ export const DetailPatient = () => {
                 <div>{userData?.height}</div>
                 <div>Height</div>
               </div>
-              {/* <div className="p-4 border-dashed border-2 border-gray-500 m-4 rounded-lg">
-                124/80
-              </div> */}
               <div className="p-4 border-dashed border-2 border-gray-500 m-4 rounded-lg flex flex-col">
                 <div>{userData?.blood_type}</div>
-                <div>Blood pressure</div>
-              </div>  
-              <button
-              type="submit"
-              className="absolute right-20 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-2 rounded text-sm h-1/10"
-            >
-              Edit patient detail
-            </button>            
-            </div>            
+                <div>Blood Type</div>
+              </div>
+            </div>
           </div>
         </div>
+
+        {isEdit && (
+          <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
+            <div className="bg-white rounded-lg p-8 relative w-2/3">
+              <div className="flex justify-end mb-4">
+                <div
+                  className="cursor-pointer"
+                  onClick={() => setIsEdit(false)}
+                >
+                  <svg
+                    className="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+
+              <form
+                className="w-full max-w-2xl bg-white p-6 rounded-lg shadow-md"
+                onSubmit={handleSubmit}
+              >
+                <div className="grid gap-6 mb-6 md:grid-cols-2">
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">
+                      First Name
+                    </label>
+                    <input
+                      type="text"
+                      name="firstname"
+                      value={formData.firstname}
+                      onChange={handleChange}
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    />
+                    {formErrors.firstname && (
+                      <div className="text-red-500 text-sm mt-2">
+                        {formErrors.firstname}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">
+                      Last Name
+                    </label>
+                    <input
+                      type="text"
+                      name="lastname"
+                      value={formData.lastname}
+                      onChange={handleChange}
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    />
+                    {formErrors.lastname && (
+                      <div className="text-red-500 text-sm mt-2">
+                        {formErrors.lastname}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">
+                      Date of Birth
+                    </label>
+                    <input
+                      type="date"
+                      name="dateOfBirth"
+                      value={formData.dateOfBirth}
+                      onChange={handleChange}
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    />
+                    {formErrors.dateOfBirth && (
+                      <div className="text-red-500 text-sm mt-2">
+                        {formErrors.dateOfBirth}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">
+                      Phone Number
+                    </label>
+                    <input
+                      type="text"
+                      name="phone_number"
+                      value={formData.phone_number}
+                      onChange={handleChange}
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    />
+                    {formErrors.phone_number && (
+                      <div className="text-red-500 text-sm mt-2">
+                        {formErrors.phone_number}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">
+                      Gender
+                    </label>
+                    <select
+                      name="gender"
+                      value={formData.gender}
+                      onChange={handleChange}
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    >
+                      <option value="M">Male</option>
+                      <option value="F">Female</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">
+                      Weight
+                    </label>
+                    <input
+                      type="text"
+                      name="weight"
+                      value={formData.weight}
+                      onChange={handleChange}
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">
+                      Height
+                    </label>
+                    <input
+                      type="text"
+                      name="height"
+                      value={formData.height}
+                      onChange={handleChange}
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    />
+                  </div>
+                  <div>
+                    <label className="block mb-2 text-sm font-medium text-gray-900">
+                      Blood Type
+                    </label>
+                    <input
+                      type="text"
+                      name="blood_type"
+                      value={formData.blood_type}
+                      onChange={handleChange}
+                      className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                >
+                  Save
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
 
         <div className="w-full p-4 rounded-md shadow-2xl  bg-white">
           <div className="text-3xl text-center p-4">Diagnose</div>
