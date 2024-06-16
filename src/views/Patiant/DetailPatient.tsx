@@ -3,6 +3,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Patient } from "./types";
 import Swal from "sweetalert2";
+import HospitalService from "@/service/HospitalService";
 
 export const DetailPatient = () => {
   const { id } = useParams<{ id: string }>();
@@ -15,17 +16,14 @@ export const DetailPatient = () => {
     // Fetch data when the component mounts
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:8082/api/hos/patients/${patientId}`,
-          {
-            headers: {
-              "Content-Type": "application/json", // Optional: Content-Type header
-              email: localStorage.getItem("email") as string,
-            },
-          }
-        );
-        console.log("response", response);
-        setUserData(response.data);
+        const hospitalService = new HospitalService();
+        const data = await hospitalService.retrievePatient(patientId);
+        if (data) {
+          console.log(data);
+          setUserData(data);
+        } else {
+          // Navigate("/404");
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       }

@@ -1,4 +1,4 @@
-import AuthenticationService from "@/service/Authentication";
+import AuthenticationService from "@/service/AuthenticationService";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   FormControl,
@@ -74,16 +74,9 @@ const SignIn: React.FC = () => {
       const authenservice = new AuthenticationService();
       authenservice
         .signIn(data)
-        .then((response) => {
-          if (response.status === 200) {
-            return response.json(); // ส่งต่อ Promise ไปยังการดึงข้อมูล JSON
-          } else {
-            throw new Error("Authentication failed"); // กรณีไม่ใช่ 200 OK
-          }
-        })
         .then((data) => {
           // ตั้งค่า localStorage ก่อน
-          console.log(data);
+          // console.log(data);
           localStorage.setItem("accessToken", data.accessToken);
           localStorage.setItem("accessTokenExp", data.accessTokenExp);
           localStorage.setItem("refreshToken", data.refreshToken);
