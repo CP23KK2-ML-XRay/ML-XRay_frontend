@@ -1,148 +1,155 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 export const ListPatient = () => {
-  const [usersData, setUsersData] = useState<any[]>([]);
+  const [usersData, setUsersData] = useState<any[]>([])
+  const [formData, setFormData] = useState({
+    firstname: '',
+    lastname: '',
+    dateOfBirth: '',
+    phone_number: '',
+    gender: 'M', // Default value
+    weight: '',
+    height: '',
+    blood_type: 'A+',
+    medic_person: 1,
+  })
+  const [errors, setErrors] = useState<any>({})
 
   useEffect(() => {
     // Fetch data when the component mounts
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://ml-xray.org/api/hos/patients/",
+          'https://ml-xray.org/api/hos/patients/',
           {
             headers: {
-              Authorization: ("Bearer " +
-                localStorage.getItem("accessToken")) as string,
-              "Content-Type": "application/json", // Optional: Content-Type header
-              email: localStorage.getItem("email") as string,
+              Authorization: ('Bearer ' +
+                localStorage.getItem('accessToken')) as string,
+              'Content-Type': 'application/json',
+              email: localStorage.getItem('email') as string,
             },
           }
-        );
+        )
         if (response.status === 200) {
-          setUsersData(response.data);
+          setUsersData(response.data)
         }
-        console.log(usersData);
+        console.log(usersData)
       } catch (error: any) {
         if (error.response && error.response.status === 404) {
-          // Handle 404 error here
-          console.error("Patients not found:", error);
+          console.error('Patients not found:', error)
         } else {
-          // Handle other errors
-          console.error("Error fetching data:", error);
+          console.error('Error fetching data:', error)
         }
       }
-    };
+    }
 
-    fetchData();
-  }, []);
-
-  const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
-    dateOfBirth: "",
-    phone_number: "",
-    gender: "M", // Default value
-    weight: "",
-    height: "",
-    blood_type: "A+",
-    medic_person: 1,
-  });
+    fetchData()
+  }, [])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    console.log(name);
+    const { name, value } = e.target
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }));
-  };
+    }))
+  }
+
+  const validateForm = () => {
+    const newErrors: any = {}
+
+    if (!formData.firstname) newErrors.firstname = 'First name is required'
+    if (!formData.lastname) newErrors.lastname = 'Last name is required'
+    if (!formData.dateOfBirth)
+      newErrors.dateOfBirth = 'Date of birth is required'
+    if (!formData.phone_number)
+      newErrors.phone_number = 'Phone number is required'
+    if (!formData.weight) newErrors.weight = 'Weight is required'
+    if (!formData.height) newErrors.height = 'Height is required'
+
+    setErrors(newErrors)
+
+    return Object.keys(newErrors).length === 0
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Data submitted successfully:", formData);
-    try {
-      await axios.post("https://ml-xray.org/api/hos/patients/", formData, {
-        headers: {
-          "Content-Type": "application/json", // Optional: Content-Type header
-          email: localStorage.getItem("email") as string,
-        },
-      });
-      Swal.fire({
-        title: "Added!",
-        text: "You can see your patient in patients record.",
-        icon: "success",
-      });
+    e.preventDefault()
+    if (!validateForm()) return
 
-      setIsHidden(true);
-      // console.log('Data submitted successfully:', response.data);
-      // Optionally, you can reset the form data after successful submission
+    try {
+      await axios.post('https://ml-xray.org/api/hos/patients/', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+          email: localStorage.getItem('email') as string,
+        },
+      })
+      Swal.fire({
+        title: 'Added!',
+        text: 'You can see your patient in patients record.',
+        icon: 'success',
+      })
+
+      setIsHidden(true)
       setFormData({
-        firstname: "",
-        lastname: "",
-        dateOfBirth: "",
-        phone_number: "",
-        gender: "Male", // Default value
-        weight: "",
-        height: "",
-        blood_type: "A+",
+        firstname: '',
+        lastname: '',
+        dateOfBirth: '',
+        phone_number: '',
+        gender: 'M', // Default value
+        weight: '',
+        height: '',
+        blood_type: 'A+',
         medic_person: 1, // Default value
-      });
+      })
       setTimeout(() => {
-        location.reload();
-      }, 2000);
-      // window.location.reload();
+        location.reload()
+      }, 2000)
     } catch (error) {
       Swal.fire({
-        title: "error!",
+        title: 'error!',
         text: "Can't add patient. Please try again.",
-        icon: "error",
-      });
-      //   console.error("Error submitting data:", error);
+        icon: 'error',
+      })
     }
-  };
+  }
 
-  const [isHidden, setIsHidden] = useState(true);
-
-  // const toggleVisibility = () => {
-  //     setIsHidden(!isHidden);
-  // };
+  const [isHidden, setIsHidden] = useState(true)
 
   const handleDelete = async (id: any) => {
-    console.log(id);
+    console.log(id)
     try {
       Swal.fire({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text: "You won't be able to revert this!",
-        icon: "warning",
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
       }).then(async (result) => {
         if (result.isConfirmed) {
           await axios.delete(`http://localhost:8082/api/hos/patients/${id}`, {
             headers: {
-              "Content-Type": "application/json", // Optional: Content-Type header
-              email: localStorage.getItem("email") as string,
+              'Content-Type': 'application/json',
+              email: localStorage.getItem('email') as string,
             },
-          });
+          })
           Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            icon: "success",
-          });
-          window.location.reload();
+            title: 'Deleted!',
+            text: 'Your file has been deleted.',
+            icon: 'success',
+          })
+          window.location.reload()
         }
-      });
+      })
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error)
     }
-  };
+  }
 
   return (
     <div className="w-full pt-4">
@@ -166,9 +173,6 @@ export const ListPatient = () => {
                 <th scope="col" className="px-6 py-3">
                   Date of Birth
                 </th>
-                {/* <th scope="col" className="px-6 py-3">
-                                    Status
-                                </th> */}
                 <th scope="col" className="px-6 py-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -185,11 +189,10 @@ export const ListPatient = () => {
                       {index + 1}
                     </th>
                     <td className="px-6 py-4">
-                      {user.firstname + "  " + user.lastname}
+                      {user.firstname + ' ' + user.lastname}
                     </td>
                     <td className="px-6 py-4">{user.gender}</td>
                     <td className="px-6 py-4">{user.dateOfBirth}</td>
-                    {/* <td className="px-6 py-4"></td> */}
                     <td className="px-6 py-4 text-center hover:cursor-pointer">
                       <button
                         className="font-medium text-blue-600 hover:underline mr-1"
@@ -211,9 +214,7 @@ export const ListPatient = () => {
                   <td
                     colSpan={6}
                     className="px-6 py-2 text-2xl"
-                    onClick={() => {
-                      setIsHidden(false);
-                    }}
+                    onClick={() => setIsHidden(false)}
                   >
                     ไม่มีคนไข้
                   </td>
@@ -223,9 +224,7 @@ export const ListPatient = () => {
                 <td
                   colSpan={6}
                   className="px-6 py-2 text-2xl"
-                  onClick={() => {
-                    setIsHidden(false);
-                  }}
+                  onClick={() => setIsHidden(false)}
                 >
                   +
                 </td>
@@ -238,7 +237,6 @@ export const ListPatient = () => {
       {isHidden ? null : (
         <div className="fixed inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen bg-gray-100/40">
-            {/* Modal Container */}
             <div className="bg-white p-6 rounded-lg w-2/3 ">
               <div className="flex justify-between items-center text-center text-blue-600 text-2xl font-bold py-6 px-6">
                 <div>Add new patients</div>
@@ -250,37 +248,15 @@ export const ListPatient = () => {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                     aria-hidden="true"
-                    onClick={() => {
-                      setIsHidden(true);
-                    }}
+                    onClick={() => setIsHidden(true)}
                   >
                     <path d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </div>
               </div>
-              {/* Form Content */}
 
               <form className="w-full" onSubmit={handleSubmit}>
                 <div className="flex flex-wrap mx-3 mb-6">
-                  <button
-                    type="button"
-                    className="right-0 top-0 absolute rounded-md p-2 text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                  >
-                    <span className="sr-only">Close menu</span>
-                    <svg
-                      className="h-6 w-6"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                      onClick={() => {
-                        console.log("modal closed ");
-                      }}
-                    >
-                      <path d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
                   <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase justify-center tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -297,10 +273,16 @@ export const ListPatient = () => {
                       value={formData.firstname}
                       onChange={handleChange}
                     />
+                    {errors.firstname && (
+                      <p className="text-red-500 text-xs italic">
+                        {errors.firstname}
+                      </p>
+                    )}
                   </div>
+
                   <div className="w-full md:w-1/2 px-3">
                     <label
-                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      className="block uppercase justify-center tracking-wide text-gray-700 text-xs font-bold mb-2"
                       htmlFor="lastname"
                     >
                       Last Name
@@ -309,165 +291,224 @@ export const ListPatient = () => {
                       className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="lastname"
                       type="text"
-                      placeholder="Sins"
+                      placeholder="Bone"
                       name="lastname"
                       value={formData.lastname}
                       onChange={handleChange}
                     />
+                    {errors.lastname && (
+                      <p className="text-red-500 text-xs italic">
+                        {errors.lastname}
+                      </p>
+                    )}
                   </div>
                 </div>
+
                 <div className="flex flex-wrap mx-3 mb-6">
-                  <div className="w-1/3 px-3">
+                  <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                     <label
-                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="dateofbirth"
+                      className="block uppercase justify-center tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="dateOfBirth"
                     >
-                      Date of birth
+                      Date of Birth
                     </label>
                     <input
                       className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="dateOfBirth"
                       type="date"
-                      placeholder="Please select a date"
-                      id="dateofbirth"
+                      placeholder="dd/mm/yyyy"
                       name="dateOfBirth"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
                     />
+                    {errors.dateOfBirth && (
+                      <p className="text-red-500 text-xs italic">
+                        {errors.dateOfBirth}
+                      </p>
+                    )}
                   </div>
-                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+
+                  <div className="w-full md:w-1/2 px-3">
                     <label
-                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="phone"
+                      className="block uppercase justify-center tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="phone_number"
                     >
                       Phone number
                     </label>
                     <input
                       className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="phone"
+                      id="phone_number"
                       type="text"
-                      placeholder="(+66)"
+                      placeholder="0801234567"
                       name="phone_number"
                       value={formData.phone_number}
                       onChange={handleChange}
                     />
+                    {errors.phone_number && (
+                      <p className="text-red-500 text-xs italic">
+                        {errors.phone_number}
+                      </p>
+                    )}
                   </div>
-                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                </div>
+
+                <div className="flex flex-wrap mx-3 mb-6">
+                  <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="gender"
+                      htmlFor="grid-gender"
                     >
                       Gender
                     </label>
                     <div className="relative">
                       <select
-                        className="appearance-none w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        id="gender"
+                        className="block appearance-none w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        id="grid-gender"
                         name="gender"
                         value={formData.gender}
                         onChange={handleChange}
                       >
-                        <option value="M" selected>
-                          Male
-                        </option>
+                        <option value="M">Male</option>
                         <option value="F">Female</option>
+                        <option value="O">Other</option>
                       </select>
-                      <div className="absolute inset-y-0 right-1 pointer-events-none flex items-center text-gray-700">
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <svg
                           className="fill-current h-4 w-4"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
                         >
-                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                          <path d="M7 10l5 5 5-5H7z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="w-full md:w-1/2 px-3">
+                    <label
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="blood_type"
+                    >
+                      Blood Type
+                    </label>
+                    <div className="relative">
+                      <select
+                        className="block appearance-none w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        id="blood_type"
+                        name="blood_type"
+                        value={formData.blood_type}
+                        onChange={handleChange}
+                      >
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                        <svg
+                          className="fill-current h-4 w-4"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M7 10l5 5 5-5H7z" />
                         </svg>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="flex flex-wrap mx-3 mb-8">
-                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+
+                <div className="flex flex-wrap mx-3 mb-6">
+                  <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                     <label
-                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      className="block uppercase justify-center tracking-wide text-gray-700 text-xs font-bold mb-2"
                       htmlFor="weight"
                     >
                       Weight
                     </label>
                     <input
-                      className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="weight"
                       type="text"
-                      placeholder="kg."
+                      placeholder="70"
                       name="weight"
                       value={formData.weight}
                       onChange={handleChange}
                     />
+                    {errors.weight && (
+                      <p className="text-red-500 text-xs italic">
+                        {errors.weight}
+                      </p>
+                    )}
                   </div>
-                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+
+                  <div className="w-full md:w-1/2 px-3">
                     <label
-                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      className="block uppercase justify-center tracking-wide text-gray-700 text-xs font-bold mb-2"
                       htmlFor="height"
                     >
                       Height
                     </label>
                     <input
-                      className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                       id="height"
                       type="text"
-                      placeholder="cm."
+                      placeholder="175"
                       name="height"
                       value={formData.height}
                       onChange={handleChange}
                     />
+                    {errors.height && (
+                      <p className="text-red-500 text-xs italic">
+                        {errors.height}
+                      </p>
+                    )}
                   </div>
-                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                </div>
+
+                <div className="flex flex-wrap mx-3 mb-6">
+                  <div className="w-full px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="blood-type"
+                      htmlFor="medic_person"
                     >
-                      Blood type
+                      Medic Person
                     </label>
-                    <div className="relative">
-                      <select
-                        className="appearance-none w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        id="blood-type"
-                        name="blood_type"
-                        value={formData.blood_type}
-                        onChange={handleChange}
-                      >
-                        <option>A positive (A+)</option>
-                        <option>A negative (A-)</option>
-                        <option>B positive (B+)</option>
-                        <option>B negative (B-)</option>
-                        <option>AB positive (AB+)</option>
-                        <option>AB positive (AB+)</option>
-                        <option>O positive (O+)</option>
-                        <option>O negative (O-)</option>
-                      </select>
-                      <div className="absolute inset-y-0 right-1 pointer-events-none flex items-center text-gray-700">
-                        <svg
-                          className="fill-current h-4 w-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                        </svg>
-                      </div>
-                    </div>
-                    <div className="flex justify-end mt-4">
-                      <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                      >
-                        Submit
-                      </button>
-                    </div>
+                    <input
+                      className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      id="medic_person"
+                      type="number"
+                      placeholder="1"
+                      name="medic_person"
+                      value={formData.medic_person}
+                      onChange={handleChange}
+                    />
+                    {errors.medic_person && (
+                      <p className="text-red-500 text-xs italic">
+                        {errors.medic_person}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap mx-3 mb-6">
+                  <div className="w-full px-3 mb-6 md:mb-0">
+                    <button
+                      className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                      type="submit"
+                    >
+                      Add Patient
+                    </button>
                   </div>
                 </div>
               </form>
-              {/* Action Buttons */}
             </div>
           </div>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
