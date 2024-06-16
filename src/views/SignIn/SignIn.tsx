@@ -90,17 +90,15 @@ const SignIn: React.FC = () => {
           localStorage.setItem('email', data.email)
           localStorage.setItem('role', data.role)
 
-          if (data.status === 200) {
-            // แสดง SweetAlert หลังจากที่ตั้งค่า localStorage เสร็จสิ้น
-            Swal.fire({
-              title: 'Good job!',
-              text: 'Login success',
-              icon: 'success',
-            })
-
-            // Optional: สามารถ redirect ไปยังหน้าหลักหรือที่ต้องการได้ตามความเหมาะสม
+          // แสดง SweetAlert หลังจากที่ตั้งค่า localStorage เสร็จสิ้น
+          Swal.fire({
+            title: 'Good job!',
+            text: 'Login success',
+            icon: 'success',
+          }).then(() => {
+            // Redirect ไปยังหน้าหลักหรือที่ต้องการหลังจากที่ SweetAlert ถูกแสดง
             location.href = '/'
-          }
+          })
         })
         .catch((error) => {
           console.error(error)
