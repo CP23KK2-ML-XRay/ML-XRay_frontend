@@ -1,93 +1,92 @@
-import axios from 'axios'
-import { ChangeEvent, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Patient } from './types'
-import Swal from 'sweetalert2'
-import HospitalService from '@/service/HospitalService'
-import MachineService from '@/service/ManchineService'
+import { ChangeEvent, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Patient } from "./types";
+import Swal from "sweetalert2";
+import HospitalService from "@/service/HospitalService";
+import MachineService from "@/service/ManchineService";
 
 export const DetailPatient = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams<{ id: string }>();
 
-  const patientId = id ? id : '0'
+  const patientId = id ? id : "0";
 
-  const [userData, setUserData] = useState<Patient>()
+  const [userData, setUserData] = useState<Patient>();
 
   useEffect(() => {
     // Fetch data when the component mounts
     const fetchData = async () => {
       try {
-        const hospitalService = new HospitalService()
-        const data = await hospitalService.retrievePatient(patientId)
+        const hospitalService = new HospitalService();
+        const data = await hospitalService.retrievePatient(patientId);
         if (data) {
-          console.log(data)
-          setUserData(data)
+          console.log(data);
+          setUserData(data);
         } else {
           // Navigate("/404");
         }
       } catch (error) {
-        console.error('Error fetching data:', error)
+        console.error("Error fetching data:", error);
       }
-    }
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    console.log()
+    const file = event.target.files?.[0];
+    console.log();
     if (file) {
-      const allowedTypes = ['image/jpeg', 'image/jpg']
+      const allowedTypes = ["image/jpeg", "image/jpg"];
 
       if (allowedTypes.includes(file.type)) {
-        setSelectedFile(file)
-        console.log(file)
+        setSelectedFile(file);
+        console.log(file);
       } else {
         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Invalid file type. Please select jpeg or jpg file.',
-        })
-        console.error('Invalid file type. Please select a valid image file.')
+          icon: "error",
+          title: "Oops...",
+          text: "Invalid file type. Please select jpeg or jpg file.",
+        });
+        console.error("Invalid file type. Please select a valid image file.");
       }
     }
-  }
+  };
 
   const handleFileUpload = async () => {
     try {
-      console.log(selectedFile)
+      console.log(selectedFile);
       if (!selectedFile) {
         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'No file selected. Please input file.',
-        })
+          icon: "error",
+          title: "Oops...",
+          text: "No file selected. Please input file.",
+        });
         // console.error('No file selected');
-        return
+        return;
       }
 
-      const formData = new FormData()
-      formData.append('file', selectedFile)
-      formData.append('model_id', selectedFile)
-      formData.append('patient_id', patientId)
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("model_id", selectedFile);
+      formData.append("patient_id", patientId);
 
       // Use an API endpoint to handle file upload on the server
-      const machineservice = new MachineService()
-      const data = await machineservice.getResultPrediction(formData)
+      const machineservice = new MachineService();
+      const data = await machineservice.getResultPrediction(formData);
       if (data.status == 200) {
-        if (data.data.predict == 0) Swal.fire('pneumonia risk')
-        else Swal.fire('Normal')
+        if (data.data.predict == 0) Swal.fire("pneumonia risk");
+        else Swal.fire("Normal");
         // Handle success, e.g., show a success message
       } else {
-        console.error('File upload failed')
+        console.error("File upload failed");
         // Handle failure, e.g., show an error message
       }
     } catch (error) {
-      console.error('Error uploading file', error)
+      console.error("Error uploading file", error);
     }
-  }
+  };
 
   return (
     <div className="w-full h-full">
@@ -157,5 +156,5 @@ export const DetailPatient = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

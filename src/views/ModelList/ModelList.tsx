@@ -1,57 +1,57 @@
-import React, { useEffect, useState } from 'react'
-import MachineService from '@/service/ManchineService'
-import Swal from 'sweetalert2'
+import { useEffect, useState } from "react";
+import MachineService from "@/service/ManchineService";
+import Swal from "sweetalert2";
 
 const ModelList = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
 
   const closeModal = () => {
-    setIsModalOpen(false)
-  }
+    setIsModalOpen(false);
+  };
 
-  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const openEdit = () => {
-    setIsEditOpen(true)
-  }
+    setIsEditOpen(true);
+  };
 
   const closeEdit = () => {
-    setIsEditOpen(false)
-  }
+    setIsEditOpen(false);
+  };
 
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const openDelete = () => {
-    setIsDeleteOpen(true)
-  }
+    setIsDeleteOpen(true);
+  };
 
   const closeDelete = () => {
-    setIsDeleteOpen(false)
-  }
+    setIsDeleteOpen(false);
+  };
 
-  const [modelsData, setModelsData] = useState<any[]>([])
+  const [modelsData, setModelsData] = useState<any[]>([]);
 
   useEffect(() => {
     try {
-      const machineService = new MachineService()
+      const machineService = new MachineService();
       machineService.retrieveListModel().then((data) => {
         // console.log(data);
-        setModelsData(data)
-      })
+        setModelsData(data);
+      });
     } catch (error) {
       // console.error(error);
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!',
-      })
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
     }
     // fetchData();
-  }, [])
+  }, []);
 
   return (
     <section className="h-screen w-screen bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
@@ -137,76 +137,76 @@ const ModelList = () => {
                 </tr>
               </thead>
               <tbody>
-                {modelsData.length > 0 ? (
-                  modelsData.map((model,index) => (
-                    <tr className="border-b dark:border-gray-700" key={index}>
-                  <th
-                    scope="row"
-                    className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  >
-                    {index + 1}
-                  </th>
-                  <td className="px-4 py-3">{model.model_name}</td>
-                  <td className="px-4 py-3">{model.model_category}</td>
-                  <td className="px-4 py-3">{model.class0}</td>
-                  <td className="px-4 py-3">{model.class1}</td>
-                  <td className="px-4 py-3">{model.class2}</td>
-                  <td className="pr-4 py-3 flex items-center justify-center">
-                    <button
-                      id="apple-imac-27-dropdown-button"
-                      data-dropdown-toggle="apple-imac-27-dropdown"
-                      className="inline-flex items-center mx-2 p-0.5 text-sm font-medium text-center bg-blue-600 text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
-                      type="button"
-                      onClick={openEdit}
-                    >
-                      <svg
-                        className="w-5 h-5 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
-                        />
-                      </svg>
-                    </button>
+                {modelsData.length > 0
+                  ? modelsData.map((model, index) => (
+                      <tr className="border-b dark:border-gray-700" key={index}>
+                        <th
+                          scope="row"
+                          className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          {index + 1}
+                        </th>
+                        <td className="px-4 py-3">{model.model_name}</td>
+                        <td className="px-4 py-3">{model.model_category}</td>
+                        <td className="px-4 py-3">{model.class0}</td>
+                        <td className="px-4 py-3">{model.class1}</td>
+                        <td className="px-4 py-3">{model.class2}</td>
+                        <td className="pr-4 py-3 flex items-center justify-center">
+                          <button
+                            id="apple-imac-27-dropdown-button"
+                            data-dropdown-toggle="apple-imac-27-dropdown"
+                            className="inline-flex items-center mx-2 p-0.5 text-sm font-medium text-center bg-blue-600 text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                            type="button"
+                            onClick={openEdit}
+                          >
+                            <svg
+                              className="w-5 h-5 text-gray-800 dark:text-white"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
+                              />
+                            </svg>
+                          </button>
 
-                    <button
-                      id="apple-imac-27-dropdown-button"
-                      data-dropdown-toggle="apple-imac-27-dropdown"
-                      className="inline-flex items-center mx-2 p-0.5 text-sm font-medium text-center bg-red-600 text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
-                      type="button"
-                      onClick={openDelete}
-                    >
-                      <svg
-                        className="w-5 h-5 text-gray-800 dark:text-white"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-                        />
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
-                  )) : ()} 
-                
+                          <button
+                            id="apple-imac-27-dropdown-button"
+                            data-dropdown-toggle="apple-imac-27-dropdown"
+                            className="inline-flex items-center mx-2 p-0.5 text-sm font-medium text-center bg-red-600 text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
+                            type="button"
+                            onClick={openDelete}
+                          >
+                            <svg
+                              className="w-5 h-5 text-gray-800 dark:text-white"
+                              aria-hidden="true"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+                              />
+                            </svg>
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  : ""}
               </tbody>
             </table>
           </div>
@@ -554,7 +554,7 @@ const ModelList = () => {
         </div>
       )}
     </section>
-  )
-}
+  );
+};
 
-export default ModelList
+export default ModelList;
