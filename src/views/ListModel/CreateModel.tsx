@@ -58,6 +58,9 @@ export const CreateModel = () => {
                 class2: "",
                 admin_id: ""
             });
+            setTimeout(() => {
+                location.reload();
+              }, 2000);
         } catch (error) {
             Swal.fire({
                 title: "Error!",
@@ -131,7 +134,7 @@ export const CreateModel = () => {
                             </span>
 
                             <h6 className="pt-4 font-medium">Class 0:</h6>
-                            {formErrors.model_category && (
+                            {formErrors.class0 && (
                                 <div className="text-red-500 text-sm flex absolute left-1/2 pt-8">
                                     {formErrors.class0}
                                 </div>
@@ -146,7 +149,7 @@ export const CreateModel = () => {
                             />
 
                             <h6 className="pt-4 font-medium">Class 1:</h6>
-                            {formErrors.model_category && (
+                            {formErrors.class1 && (
                                 <div className="text-red-500 text-sm flex absolute left-1/2 pt-8">
                                     {formErrors.class1}
                                 </div>
@@ -160,7 +163,7 @@ export const CreateModel = () => {
                                 placeholder="Enter your class 1 name"
                             />   
                             <h6 className="pt-4 font-medium">Class 2:</h6>
-                            {formErrors.model_category && (
+                            {formErrors.class2 && (
                                 <div className="text-red-500 text-sm flex absolute left-1/2 pt-8">
                                     {formErrors.class2}
                                 </div>
