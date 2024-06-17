@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { Patient } from "./types";
 import Swal from "sweetalert2";
 import HospitalService from "@/service/HospitalService";
+import MachineService from "@/service/ManchineService";
 
 export const DetailPatient = () => {
   const { id } = useParams<{ id: string }>();
@@ -182,16 +183,15 @@ export const DetailPatient = () => {
       }
 
       const formData = new FormData();
-      formData.append("image_path", selectedFile);
+      formData.append("file", selectedFile);
+      formData.append("model_id", selectedFile);
       formData.append("patient_id", patientId);
 
       // Use an API endpoint to handle file upload on the server
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/ml/upload",
-        formData
-      );
-      if (response.status == 200) {
-        if (response.data.predict == 0) Swal.fire("pneumonia risk");
+      const machineservice = new MachineService();
+      const data = await machineservice.getResultPrediction(formData);
+      if (data.status == 200) {
+        if (data.data.predict == 0) Swal.fire("pneumonia risk");
         else Swal.fire("Normal");
         // Handle success, e.g., show a success message
       } else {

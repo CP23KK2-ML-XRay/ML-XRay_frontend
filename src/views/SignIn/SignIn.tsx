@@ -74,7 +74,7 @@ const SignIn: React.FC = () => {
           localStorage.setItem("refreshToken", data.refreshToken);
           localStorage.setItem("refreshTokenExp", data.refreshTokenExp);
           localStorage.setItem("email", data.email);
-          localStorage.setItem("role", data.role);
+          localStorage.setItem("role", data.roles[0]);
 
           // แสดง SweetAlert หลังจากที่ตั้งค่า localStorage เสร็จสิ้น
           Swal.fire({
