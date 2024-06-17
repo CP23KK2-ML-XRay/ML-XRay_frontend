@@ -1,133 +1,133 @@
-import HospitalService from "@/service/HospitalService";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
+import HospitalService from '@/service/HospitalService'
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 export const ListPatient = () => {
-  const [usersData, setUsersData] = useState<any[]>([]);
+  const [usersData, setUsersData] = useState<any[]>([])
 
   useEffect(() => {
     // Fetch data when the component mounts
 
     try {
-      const hospitalService = new HospitalService();
+      const hospitalService = new HospitalService()
       hospitalService.retrieveListPatients().then((data) => {
         // console.log(data);
-        setUsersData(data);
-      });
+        setUsersData(data)
+      })
     } catch (error) {
       // console.error(error);
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-      });
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      })
     }
     // fetchData();
-  }, []);
+  }, [])
 
   const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
-    dateOfBirth: "",
-    phone_number: "",
-    gender: "M", // Default value
-    weight: "",
-    height: "",
-    blood_type: "A+",
+    firstname: '',
+    lastname: '',
+    dateOfBirth: '',
+    phone_number: '',
+    gender: 'M', // Default value
+    weight: '',
+    height: '',
+    blood_type: 'A+',
     medic_person: 1,
-  });
+  })
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target;
-    console.log(name);
+    const { name, value } = e.target
+    console.log(name)
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Data submitted successfully:", formData);
+    e.preventDefault()
+    console.log('Data submitted successfully:', formData)
     try {
-      const hospitalService = new HospitalService();
-      const response = await hospitalService.createPatient(formData);
-      console.log(response);
+      const hospitalService = new HospitalService()
+      const response = await hospitalService.createPatient(formData)
+      console.log(response)
       if (response) {
       }
       Swal.fire({
-        title: "Added!",
-        text: "You can see your patient in patients record.",
-        icon: "success",
-      });
+        title: 'Added!',
+        text: 'You can see your patient in patients record.',
+        icon: 'success',
+      })
 
-      setIsHidden(true);
+      setIsHidden(true)
       // console.log('Data submitted successfully:', response.data);
       // Optionally, you can reset the form data after successful submission
       setFormData({
-        firstname: "",
-        lastname: "",
-        dateOfBirth: "",
-        phone_number: "",
-        gender: "Male", // Default value
-        weight: "",
-        height: "",
-        blood_type: "A+",
+        firstname: '',
+        lastname: '',
+        dateOfBirth: '',
+        phone_number: '',
+        gender: 'Male', // Default value
+        weight: '',
+        height: '',
+        blood_type: 'A+',
         medic_person: 1, // Default value
-      });
+      })
       setTimeout(() => {
-        location.reload();
-      }, 2000);
+        location.reload()
+      }, 2000)
       // window.location.reload();
     } catch (error) {
       Swal.fire({
-        title: "error!",
+        title: 'error!',
         text: "Can't add patient. Please try again.",
-        icon: "error",
-      });
+        icon: 'error',
+      })
       //   console.error("Error submitting data:", error);
     }
-  };
+  }
 
-  const [isHidden, setIsHidden] = useState(true);
+  const [isHidden, setIsHidden] = useState(true)
 
   // const toggleVisibility = () => {
   //     setIsHidden(!isHidden);
   // };
 
   const handleDelete = async (id: any) => {
-    console.log(id);
+    console.log(id)
     try {
       Swal.fire({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text: "You won't be able to revert this!",
-        icon: "warning",
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const hospitalService = new HospitalService();
-          const response = await hospitalService.deletePatient(id);
+          const hospitalService = new HospitalService()
+          const response = await hospitalService.deletePatient(id)
           if (response) {
-            console.log(response);
+            console.log(response)
           }
           Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            icon: "success",
-          });
-          window.location.reload();
+            title: 'Deleted!',
+            text: 'Your file has been deleted.',
+            icon: 'success',
+          })
+          window.location.reload()
         }
-      });
+      })
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error('Error fetching data:', error)
     }
-  };
+  }
 
   return (
     <div className="w-full pt-4">
@@ -170,7 +170,7 @@ export const ListPatient = () => {
                       {index + 1}
                     </th>
                     <td className="px-6 py-4">
-                      {user.firstname + "  " + user.lastname}
+                      {user.firstname + '  ' + user.lastname}
                     </td>
                     <td className="px-6 py-4">{user.gender}</td>
                     <td className="px-6 py-4">{user.dateOfBirth}</td>
@@ -197,7 +197,7 @@ export const ListPatient = () => {
                     colSpan={6}
                     className="px-6 py-2 text-2xl"
                     onClick={() => {
-                      setIsHidden(false);
+                      setIsHidden(false)
                     }}
                   >
                     ไม่มีคนไข้
@@ -209,7 +209,7 @@ export const ListPatient = () => {
                   colSpan={6}
                   className="px-6 py-2 text-2xl"
                   onClick={() => {
-                    setIsHidden(false);
+                    setIsHidden(false)
                   }}
                 >
                   +
@@ -236,7 +236,7 @@ export const ListPatient = () => {
                     stroke="currentColor"
                     aria-hidden="true"
                     onClick={() => {
-                      setIsHidden(true);
+                      setIsHidden(true)
                     }}
                   >
                     <path d="M6 18L18 6M6 6l12 12" />
@@ -260,7 +260,7 @@ export const ListPatient = () => {
                       stroke="currentColor"
                       aria-hidden="true"
                       onClick={() => {
-                        console.log("modal closed ");
+                        console.log('modal closed ')
                       }}
                     >
                       <path d="M6 18L18 6M6 6l12 12" />
@@ -454,5 +454,5 @@ export const ListPatient = () => {
         </div>
       )}
     </div>
-  );
-};
+  )
+}

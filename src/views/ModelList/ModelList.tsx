@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import MachineService from '@/service/ManchineService'
+import Swal from 'sweetalert2'
 
 const ModelList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -30,6 +32,26 @@ const ModelList = () => {
   const closeDelete = () => {
     setIsDeleteOpen(false)
   }
+
+  const [modelsData, setModelsData] = useState<any[]>([])
+
+  useEffect(() => {
+    try {
+      const machineService = new MachineService()
+      machineService.retrieveListModel().then((data) => {
+        // console.log(data);
+        setModelsData(data)
+      })
+    } catch (error) {
+      // console.error(error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      })
+    }
+    // fetchData();
+  }, [])
 
   return (
     <section className="h-screen w-screen bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
@@ -115,14 +137,16 @@ const ModelList = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b dark:border-gray-700">
+                {modelsData.length > 0 ? (
+                  modelsData.map((model,index) => (
+                    <tr className="border-b dark:border-gray-700" key={index}>
                   <th
                     scope="row"
                     className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                   >
-                    1
+                    {index + 1}
                   </th>
-                  <td className="px-4 py-3">Lorlem</td>
+                  <td className="px-4 py-3">{model.}</td>
                   <td className="px-4 py-3">Image</td>
                   <td className="px-4 py-3">Dogs</td>
                   <td className="px-4 py-3">Cats</td>
@@ -181,6 +205,8 @@ const ModelList = () => {
                     </button>
                   </td>
                 </tr>
+                  )) : ()} 
+                
               </tbody>
             </table>
           </div>
