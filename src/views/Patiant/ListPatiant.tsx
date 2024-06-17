@@ -12,18 +12,17 @@ export const ListPatient = () => {
     try {
       const hospitalService = new HospitalService();
       hospitalService.retrieveListPatients().then((data) => {
-        console.log(data);
+        // console.log(data);
         setUsersData(data);
       });
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Something went wrong!",
       });
     }
-    console.log("i fire once");
     // fetchData();
   }, []);
 
