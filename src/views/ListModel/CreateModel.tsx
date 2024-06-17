@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import MachineService from "@/service/ManchineService";
 
 export const CreateModel = () => {
     const [formData, setFormData] = useState({
@@ -9,7 +10,11 @@ export const CreateModel = () => {
         class0: "",
         class1: "",
         class2: "",
-        admin_id: ""
+        admin_id: "",
+        model_path: "/folder/a",
+        train: null,
+        test: null,
+        val: null
     });
 
     const [formErrors, setFormErrors] = useState({
@@ -40,9 +45,9 @@ export const CreateModel = () => {
         console.log("SUBMIT", formData);
 
         try {
-            // for backend service
-            // for Thatphum
-            // pew pew shooting to backend
+            const machineService = new MachineService();
+            const response = await machineService.createModel(formData)
+            console.log(response)
 
             Swal.fire({
                 title: "Success!",
@@ -56,7 +61,11 @@ export const CreateModel = () => {
                 class0: "",
                 class1: "",
                 class2: "",
-                admin_id: ""
+                admin_id: "",
+                model_path: "/folder/a",
+                train: null,
+                test: null,
+                val: null
             });
             setTimeout(() => {
                 location.reload();
