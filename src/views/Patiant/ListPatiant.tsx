@@ -105,7 +105,7 @@ export const ListPatient = () => {
         weight: '',
         height: '',
         bloodType: 'A+',
-        medic_person: 1, // Default value
+        medic_person: '1', // Default value
       })
       setTimeout(() => {
         location.reload()
