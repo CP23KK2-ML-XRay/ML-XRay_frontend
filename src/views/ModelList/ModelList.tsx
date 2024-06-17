@@ -146,11 +146,11 @@ const ModelList = () => {
                   >
                     {index + 1}
                   </th>
-                  <td className="px-4 py-3">{model.}</td>
-                  <td className="px-4 py-3">Image</td>
-                  <td className="px-4 py-3">Dogs</td>
-                  <td className="px-4 py-3">Cats</td>
-                  <td className="px-4 py-3">UNKNOW</td>
+                  <td className="px-4 py-3">{model.model_name}</td>
+                  <td className="px-4 py-3">{model.model_category}</td>
+                  <td className="px-4 py-3">{model.class0}</td>
+                  <td className="px-4 py-3">{model.class1}</td>
+                  <td className="px-4 py-3">{model.class2}</td>
                   <td className="pr-4 py-3 flex items-center justify-center">
                     <button
                       id="apple-imac-27-dropdown-button"
