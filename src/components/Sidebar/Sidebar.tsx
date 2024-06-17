@@ -6,7 +6,7 @@ import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Link } from "react-router-dom";
 
 interface SidebarProps {
-  // Define the props for your sidebar component here
+  
 }
 
 const handleLogout = () => {
@@ -27,8 +27,38 @@ const handleLogout = () => {
 const Sidebar: React.FC<SidebarProps> = () => {  
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [userInfo, setUserInfo] = useState({ firstname: 'John', lastname: 'Doe' });
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formErrors, setFormErrors] = useState({
+    password: "",
+    confirmPassword: ""
+  });
 
+
+  const validateForm = () => {
+    const newErrors = { password: "", confirmPassword: "" };
+
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
+
+    if (!confirmPassword.trim()) {
+      newErrors.confirmPassword = "Confirm password is required";
+    } else if (confirmPassword !== password) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    setFormErrors(newErrors);
+
+    return !newErrors.password && !newErrors.confirmPassword;
+  };
+
+
+// | | | | | | | | | 
+// | | | | | | | | | 
+// V V V V V V V V V
   const handlePopupOpen = () => {
     setIsPopupOpen(true);
     setIsEditing(false);
@@ -42,22 +72,35 @@ const Sidebar: React.FC<SidebarProps> = () => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
-    setIsEditing(false);
+  const handleSubmit = async () => {
+    if (validateForm()) {
+      try {
+        //Update
+        console.log("Pass");
+        setIsEditing(false);
+        setIsPopupOpen(false);
+      } catch (error) {
+        console.error("Failed to update user info:", error);
+      }
+    }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserInfo({
-      ...userInfo,
-      [name]: value,
-    });
-  };
+
   // | | | | | | | | | | | |
   // | | | | | | | | | | | |
   // V V V V V V V V V V V V
   
+//   useEffect(() => {
 
+//     const fetchData = async () => {
+//       try {
+        
+//       } catch (error) {
+//         console.error("ERROR")
+//       }
+//     }
+//   }
+// )
 
   // UX UI Sidebar here 
   // | | | | | | | | | | | |
@@ -130,30 +173,36 @@ POP UP for USER INFO and EDIT USER INFO
               {isEditing ? (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Firstname</label>
+                    <label className="block text-sm font-medium text-gray-700">New Password</label>
                     <input
-                      type="text"
-                      name="firstname"
+                      type="password"
+                      name="password"
                       className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
-                      value={userInfo.firstname}
-                      onChange={handleChange}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
+                    {formErrors.password && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.password}</p>
+                    )}
                   </div>
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700">Lastname</label>
+                    <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
                     <input
-                      type="text"
-                      name="lastname"
+                      type="password"
+                      name="confirmPassword"
                       className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
-                      value={userInfo.lastname}
-                      onChange={handleChange}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
+                    {formErrors.confirmPassword && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.confirmPassword}</p>
+                    )}
                   </div>
                 </>
               ) : (
                 <>
-                  <p>Firstname: {userInfo.firstname}</p>
-                  <p>Lastname: {userInfo.lastname}</p>
+                  <p>Firstname: </p>
+                  <p>Lastname: </p>
                   <p>Email: </p>
                   <p>Role:</p>
                 </>
@@ -163,7 +212,7 @@ POP UP for USER INFO and EDIT USER INFO
               {isEditing ? (
                 <button
                   className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-700"
-                  onClick={handleSaveClick}
+                  onClick={handleSubmit}
                 >
                   Save
                 </button>
