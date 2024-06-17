@@ -4,7 +4,7 @@ import SignIn from "@/views/SignIn/SignIn";
 import SignUp from "@/views/SignUp/SignUp";
 import {CreateModel} from "@/views/ListModel/CreateModel";
 // import { isAuthentication } from "@/utils/AuthenticationUtils";
-import { ListPatient } from "@/views/Patiant/ListPatiant";
+import { ListPatient } from "@/views/Patiant/ListPatient";
 import { DetailPatient } from "@/views/Patiant/DetailPatient";
 import { isAuthentication } from "@/utils/AuthenticationUtils";
 

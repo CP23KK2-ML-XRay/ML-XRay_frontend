@@ -2,7 +2,7 @@ import React from "react";
 import Sidebar from "./Sidebar/Sidebar";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./Navbar/Navbar";
-import { ListPatient } from "@/views/Patiant/ListPatiant";
+import { ListPatient } from "@/views/Patiant/ListPatient";
 import { DetailPatient } from "@/views/Patiant/DetailPatient";
 
 interface LayoutProps {
