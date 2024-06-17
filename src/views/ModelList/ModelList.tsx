@@ -1,57 +1,58 @@
-import { useEffect, useState } from "react";
-import MachineService from "@/service/ManchineService";
-import Swal from "sweetalert2";
+import { useEffect, useState } from 'react'
+import MachineService from '@/service/ManchineService'
+import Swal from 'sweetalert2'
 
 const ModelList = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const openModal = () => {
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   const closeModal = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
-  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false)
 
   const openEdit = () => {
-    setIsEditOpen(true);
-  };
+    setIsEditOpen(true)
+  }
 
   const closeEdit = () => {
-    setIsEditOpen(false);
-  };
+    setIsEditOpen(false)
+  }
 
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
   const openDelete = () => {
-    setIsDeleteOpen(true);
-  };
+    setIsDeleteOpen(true)
+  }
 
   const closeDelete = () => {
-    setIsDeleteOpen(false);
-  };
+    setIsDeleteOpen(false)
+  }
 
-  const [modelsData, setModelsData] = useState<any[]>([]);
+  const [modelsData, setModelsData] = useState<any[]>([])
 
   useEffect(() => {
     try {
-      const machineService = new MachineService();
+      const machineService = new MachineService()
       machineService.retrieveListModel().then((data) => {
         // console.log(data);
-        setModelsData(data);
-      });
+        setModelsData(data)
+      })
     } catch (error) {
       // console.error(error);
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-      });
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      })
     }
-    // fetchData();
-  }, []);
+
+    // fetchData()
+  }, [])
 
   return (
     <section className="h-screen w-screen bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
@@ -206,7 +207,7 @@ const ModelList = () => {
                         </td>
                       </tr>
                     ))
-                  : ""}
+                  : ''}
               </tbody>
             </table>
           </div>
@@ -554,7 +555,7 @@ const ModelList = () => {
         </div>
       )}
     </section>
-  );
-};
+  )
+}
 
-export default ModelList;
+export default ModelList
