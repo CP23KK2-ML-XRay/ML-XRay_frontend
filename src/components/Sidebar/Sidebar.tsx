@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Link } from "react-router-dom";
 
 interface SidebarProps {
@@ -52,6 +53,11 @@ const Sidebar: React.FC<SidebarProps> = () => {
       [name]: value,
     });
   };
+  // | | | | | | | | | | | |
+  // | | | | | | | | | | | |
+  // V V V V V V V V V V V V
+  
+
 
   // UX UI Sidebar here 
   // | | | | | | | | | | | |
@@ -74,6 +80,13 @@ const Sidebar: React.FC<SidebarProps> = () => {
             >
               <GroupsOutlinedIcon fontSize="small" />
               <p>Patients</p>
+            </Link>
+            <Link
+              to={"/createmodel"}
+              className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
+            >
+              <AddBoxIcon fontSize="small" />
+              <p>Create Model</p>
             </Link>
             {/* <button className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300">
               <CalendarMonthOutlinedIcon fontSize="small" />
