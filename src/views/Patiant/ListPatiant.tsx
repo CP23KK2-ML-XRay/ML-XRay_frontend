@@ -132,18 +132,18 @@ export const ListPatient = () => {
     <div className="w-full pt-4">
       <div className="flex w-full justify-center">
         <div className="w-full overflow-x-auto shadow-2xl rounded-lg">
+          <caption className="w-full p-5 text-lg font-semibold text-left text-gray-900 bg-white flex justify-betwe">
+            Patients Record
+          </caption>
+          <input
+            type="search"
+            id="default-search"
+            className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search"
+            onChange={handleSearch}
+            value={searchQuery}
+          />
           <table className="w-full text-sm text-center text-gray-500">
-            <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white ">
-              Patients Record
-            </caption>
-            <input
-              type="search"
-              id="default-search"
-              className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="Search"
-              onChange={handleSearch}
-              value={searchQuery}
-            />
             <thead className="text-xs text-gray-700 uppercase bg-gray-200">
               <tr>
                 <th scope="col" className="px-6 py-3">
