@@ -137,11 +137,12 @@ export const ListPatient = () => {
               Patients Record
             </caption>
             <input
-              type="text"
+              type="search"
+              id="default-search"
+              className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Search"
-              value={searchQuery}
               onChange={handleSearch}
-              className="px-4 py-2 bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg focus:outline-none focus:ring focus:ring-zinc-400 dark:focus:ring-zinc-600"
+              value={searchQuery}
             />
             <thead className="text-xs text-gray-700 uppercase bg-gray-200">
               <tr>
