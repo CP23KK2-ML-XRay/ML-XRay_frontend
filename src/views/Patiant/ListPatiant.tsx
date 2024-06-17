@@ -5,25 +5,24 @@ import Swal from 'sweetalert2'
 
 export const ListPatient = () => {
   const [usersData, setUsersData] = useState<any[]>([])
+  const [filteredUsers, setFilteredUsers] = useState<any[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     // Fetch data when the component mounts
-
     try {
       const hospitalService = new HospitalService()
       hospitalService.retrieveListPatients().then((data) => {
-        // console.log(data);
         setUsersData(data)
+        setFilteredUsers(data) // Initialize filteredUsers with the full list
       })
     } catch (error) {
-      // console.error(error);
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Something went wrong!',
       })
     }
-    // fetchData();
   }, [])
 
   const [formData, setFormData] = useState({
@@ -42,64 +41,65 @@ export const ListPatient = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target
-    console.log(name)
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }))
   }
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value.toLowerCase()
+    setSearchQuery(query)
+    if (query === '') {
+      setFilteredUsers(usersData)
+    } else {
+      const filtered = usersData.filter((user) =>
+        `${user.firstname} ${user.lastname}`.toLowerCase().includes(query)
+      )
+      setFilteredUsers(filtered)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('Data submitted successfully:', formData)
     try {
       const hospitalService = new HospitalService()
       const response = await hospitalService.createPatient(formData)
-      console.log(response)
       if (response) {
-      }
-      Swal.fire({
-        title: 'Added!',
-        text: 'You can see your patient in patients record.',
-        icon: 'success',
-      })
+        Swal.fire({
+          title: 'Added!',
+          text: 'You can see your patient in patients record.',
+          icon: 'success',
+        })
 
-      setIsHidden(true)
-      // console.log('Data submitted successfully:', response.data);
-      // Optionally, you can reset the form data after successful submission
-      setFormData({
-        firstname: '',
-        lastname: '',
-        dateOfBirth: '',
-        phone_number: '',
-        gender: 'Male', // Default value
-        weight: '',
-        height: '',
-        blood_type: 'A+',
-        medic_person: 1, // Default value
-      })
-      setTimeout(() => {
-        location.reload()
-      }, 2000)
-      // window.location.reload();
+        setIsHidden(true)
+        setFormData({
+          firstname: '',
+          lastname: '',
+          dateOfBirth: '',
+          phone_number: '',
+          gender: 'Male', // Default value
+          weight: '',
+          height: '',
+          blood_type: 'A+',
+          medic_person: 1, // Default value
+        })
+        setTimeout(() => {
+          location.reload()
+        }, 2000)
+      }
     } catch (error) {
       Swal.fire({
         title: 'error!',
         text: "Can't add patient. Please try again.",
         icon: 'error',
       })
-      //   console.error("Error submitting data:", error);
     }
   }
 
   const [isHidden, setIsHidden] = useState(true)
 
-  // const toggleVisibility = () => {
-  //     setIsHidden(!isHidden);
-  // };
-
   const handleDelete = async (id: any) => {
-    console.log(id)
     try {
       Swal.fire({
         title: 'Are you sure?',
@@ -114,14 +114,13 @@ export const ListPatient = () => {
           const hospitalService = new HospitalService()
           const response = await hospitalService.deletePatient(id)
           if (response) {
-            console.log(response)
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'Your file has been deleted.',
+              icon: 'success',
+            })
+            window.location.reload()
           }
-          Swal.fire({
-            title: 'Deleted!',
-            text: 'Your file has been deleted.',
-            icon: 'success',
-          })
-          window.location.reload()
         }
       })
     } catch (error) {
@@ -134,9 +133,16 @@ export const ListPatient = () => {
       <div className="flex w-full justify-center">
         <div className="w-full overflow-x-auto shadow-2xl rounded-lg">
           <table className="w-full text-sm text-center text-gray-500">
-            <caption className="p-5 text-lg font-semibold text-left  text-gray-900 bg-white ">
+            <caption className="p-5 text-lg font-semibold text-left text-gray-900 bg-white ">
               Patients Record
             </caption>
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchQuery}
+              onChange={handleSearch}
+              className="px-4 py-2 bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-lg focus:outline-none focus:ring focus:ring-zinc-400 dark:focus:ring-zinc-600"
+            />
             <thead className="text-xs text-gray-700 uppercase bg-gray-200">
               <tr>
                 <th scope="col" className="px-6 py-3">
@@ -151,17 +157,14 @@ export const ListPatient = () => {
                 <th scope="col" className="px-6 py-3">
                   Date of Birth
                 </th>
-                {/* <th scope="col" className="px-6 py-3">
-                                    Status
-                                </th> */}
                 <th scope="col" className="px-6 py-3">
                   <span className="sr-only">Edit</span>
                 </th>
               </tr>
             </thead>
             <tbody>
-              {usersData.length > 0 ? (
-                usersData.map((user, index) => (
+              {filteredUsers.length > 0 ? (
+                filteredUsers.map((user, index) => (
                   <tr className="bg-white border-b" key={index}>
                     <th
                       scope="row"
@@ -174,7 +177,6 @@ export const ListPatient = () => {
                     </td>
                     <td className="px-6 py-4">{user.gender}</td>
                     <td className="px-6 py-4">{user.dateOfBirth}</td>
-                    {/* <td className="px-6 py-4"></td> */}
                     <td className="px-6 py-4 text-center hover:cursor-pointer">
                       <button
                         className="font-medium text-blue-600 hover:underline mr-1"
@@ -244,7 +246,6 @@ export const ListPatient = () => {
                 </div>
               </div>
               {/* Form Content */}
-
               <form className="w-full" onSubmit={handleSubmit}>
                 <div className="flex flex-wrap mx-3 mb-6">
                   <button
@@ -259,196 +260,218 @@ export const ListPatient = () => {
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                       aria-hidden="true"
-                      onClick={() => {
-                        console.log('modal closed ')
-                      }}
                     >
-                      <path d="M6 18L18 6M6 6l12 12" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
-                  <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                  {/* Form fields */}
+                  <div className="w-full px-3 mb-6 md:mb-0">
                     <label
-                      className="block uppercase justify-center tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="firstname"
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="grid-first-name"
                     >
                       First Name
                     </label>
                     <input
-                      className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="firstname"
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      id="grid-first-name"
                       type="text"
-                      placeholder="Johhny"
+                      placeholder="John"
                       name="firstname"
                       value={formData.firstname}
                       onChange={handleChange}
+                      required
                     />
                   </div>
-                  <div className="w-full md:w-1/2 px-3">
+                  <div className="w-full px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="lastname"
+                      htmlFor="grid-last-name"
                     >
                       Last Name
                     </label>
                     <input
-                      className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="lastname"
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      id="grid-last-name"
                       type="text"
-                      placeholder="Sins"
+                      placeholder="Doe"
                       name="lastname"
                       value={formData.lastname}
                       onChange={handleChange}
+                      required
                     />
                   </div>
-                </div>
-                <div className="flex flex-wrap mx-3 mb-6">
-                  <div className="w-1/3 px-3">
+                  <div className="w-full px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="dateofbirth"
+                      htmlFor="grid-dateOfBirth"
                     >
-                      Date of birth
+                      Date of Birth
                     </label>
                     <input
-                      className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      id="grid-dateOfBirth"
                       type="date"
-                      placeholder="Please select a date"
-                      id="dateofbirth"
+                      placeholder="yyyy-mm-dd"
                       name="dateOfBirth"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
+                      required
                     />
                   </div>
-                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                  <div className="w-full px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="phone"
+                      htmlFor="grid-phone_number"
                     >
-                      Phone number
+                      Phone Number
                     </label>
                     <input
-                      className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="phone"
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      id="grid-phone_number"
                       type="text"
-                      placeholder="(+66)"
+                      placeholder="Enter Phone Number"
                       name="phone_number"
                       value={formData.phone_number}
                       onChange={handleChange}
+                      required
                     />
                   </div>
-                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                  <div className="w-full px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="gender"
+                      htmlFor="grid-gender"
                     >
                       Gender
                     </label>
                     <div className="relative">
                       <select
-                        className="appearance-none w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        id="gender"
+                        className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        id="grid-gender"
                         name="gender"
                         value={formData.gender}
                         onChange={handleChange}
+                        required
                       >
-                        <option value="M" selected>
-                          Male
-                        </option>
+                        <option value="M">Male</option>
                         <option value="F">Female</option>
                       </select>
-                      <div className="absolute inset-y-0 right-1 pointer-events-none flex items-center text-gray-700">
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <svg
                           className="fill-current h-4 w-4"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
                         >
-                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                          <path d="M7 10l5 5 5-5H7z" />
                         </svg>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="flex flex-wrap mx-3 mb-8">
-                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                  <div className="w-full px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="weight"
+                      htmlFor="grid-weight"
                     >
                       Weight
                     </label>
                     <input
-                      className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="weight"
-                      type="text"
-                      placeholder="kg."
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      id="grid-weight"
+                      type="number"
+                      placeholder="Enter Weight in Kg"
                       name="weight"
                       value={formData.weight}
                       onChange={handleChange}
+                      required
                     />
                   </div>
-                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                  <div className="w-full px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="height"
+                      htmlFor="grid-height"
                     >
                       Height
                     </label>
                     <input
-                      className="appearance-none block w-full bg-gray-50 text-gray-700 border border-gray-200 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="height"
-                      type="text"
-                      placeholder="cm."
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      id="grid-height"
+                      type="number"
+                      placeholder="Enter Height in cm"
                       name="height"
                       value={formData.height}
                       onChange={handleChange}
+                      required
                     />
                   </div>
-                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                  <div className="w-full px-3 mb-6 md:mb-0">
                     <label
                       className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                      htmlFor="blood-type"
+                      htmlFor="grid-blood_type"
                     >
-                      Blood type
+                      Blood Type
                     </label>
                     <div className="relative">
                       <select
-                        className="appearance-none w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                        id="blood-type"
+                        className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                        id="grid-blood_type"
                         name="blood_type"
                         value={formData.blood_type}
                         onChange={handleChange}
+                        required
                       >
-                        <option>A positive (A+)</option>
-                        <option>A negative (A-)</option>
-                        <option>B positive (B+)</option>
-                        <option>B negative (B-)</option>
-                        <option>AB positive (AB+)</option>
-                        <option>AB positive (AB+)</option>
-                        <option>O positive (O+)</option>
-                        <option>O negative (O-)</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
                       </select>
-                      <div className="absolute inset-y-0 right-1 pointer-events-none flex items-center text-gray-700">
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                         <svg
                           className="fill-current h-4 w-4"
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 20 20"
                         >
-                          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                          <path d="M7 10l5 5 5-5H7z" />
                         </svg>
                       </div>
                     </div>
-                    <div className="flex justify-end mt-4">
-                      <button
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                      >
-                        Submit
-                      </button>
-                    </div>
+                  </div>
+                  <div className="w-full px-3 mb-6 md:mb-0">
+                    <label
+                      className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                      htmlFor="grid-medic_person"
+                    >
+                      Medic Person
+                    </label>
+                    <input
+                      className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                      id="grid-medic_person"
+                      type="number"
+                      placeholder="Enter Medic Person ID"
+                      name="medic_person"
+                      value={formData.medic_person}
+                      onChange={handleChange}
+                      required
+                    />
                   </div>
                 </div>
+                <div className="flex items-center justify-between mt-4">
+                  <button
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    type="submit"
+                  >
+                    Add Patient
+                  </button>
+                </div>
               </form>
-              {/* Action Buttons */}
             </div>
           </div>
         </div>
