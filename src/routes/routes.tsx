@@ -21,11 +21,7 @@ export const routes = createBrowserRouter([
     children: [
       { path: '/', element: <ListPatient /> },
       { path: '/detail/:id', element: <DetailPatient /> },
-      { path: '/model', element: <ModelList /> },
-      {
-        path: "/createmodel",
-        element: <CreateModel />,
-      }
+      { path: '/model', element: <ModelList /> },      
     ],
   },
   {
@@ -36,4 +32,8 @@ export const routes = createBrowserRouter([
     path: '/signup',
     element: <SignUp />,
   },
+  {
+    path: "/createmodel",
+    element: <CreateModel />,
+  }
 ]);
