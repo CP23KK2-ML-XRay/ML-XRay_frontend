@@ -6,6 +6,8 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Link, useParams } from "react-router-dom";
 import AuthenticationService from "@/service/AuthenticationService";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { IconButton, InputLabel, OutlinedInput } from "@mui/material";
 
 const handleLogout = () => {
   localStorage.removeItem("accessToken");
@@ -48,6 +50,9 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
   const [userData, setUserData] = useState<UserData | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validateForm = () => {
     const newErrors = { oldPassword: "", password: "", confirmPassword: "" };
@@ -67,6 +72,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
     } else if (confirmPassword !== password) {
       newErrors.confirmPassword = "Passwords do not match";
     }
+
 
     setFormErrors(newErrors);
 
@@ -208,16 +214,25 @@ POP UP for USER INFO and EDIT USER INFO
             <div className="mb-4">
               {isEditing ? (
                 <>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
+                  <div  className="mt-4">
+                    <InputLabel>
                       Old Password
-                    </label>
-                    <input
-                      type="password"
+                    </InputLabel>
+                    <OutlinedInput
+                      type={showOldPassword ? "text" : "password"}
                       name="oldPassword"
                       className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
                       value={oldPassword}
                       onChange={(e) => setOldPassword(e.target.value)}
+                      endAdornment={
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={() => setShowOldPassword((prev) => !prev)}
+                          edge="end">
+                             {showOldPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                      }
+                      sx={{width: '300px', height: '50px'}}
                     />
                     {formErrors.oldPassword && (
                       <p className="text-red-500 text-sm mt-1">
@@ -225,16 +240,25 @@ POP UP for USER INFO and EDIT USER INFO
                       </p>
                     )}
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700">
-                      New Password
-                    </label>
-                    <input
-                      type="password"
+                  <div  className="mt-4">
+                    <InputLabel>
+                      New Password                      
+                    </InputLabel>
+                    <OutlinedInput
+                      type={showNewPassword ? "text" : "password"}
                       name="password"
                       className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      endAdornment={
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={() => setShowNewPassword((prev) => !prev)}
+                          edge="end">
+                            {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                      }
+                      sx={{width: '300px', height: '50px'}}
                     />
                     {formErrors.password && (
                       <p className="text-red-500 text-sm mt-1">
@@ -243,15 +267,24 @@ POP UP for USER INFO and EDIT USER INFO
                     )}
                   </div>
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700">
+                    <InputLabel>
                       Confirm Password
-                    </label>
-                    <input
-                      type="password"
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-password"
+                      type={showConfirmPassword ? "text" : "password"}
                       name="confirmPassword"
-                      className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
+                      endAdornment={
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={() => setShowConfirmPassword((prev) => !prev)}
+                          edge="end">
+                            {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                      }
+                      sx={{width: '300px', height: '50px'}}
                     />
                     {formErrors.confirmPassword && (
                       <p className="text-red-500 text-sm mt-1">
