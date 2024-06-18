@@ -235,13 +235,13 @@ export const ListPatient = () => {
                     <td className="px-6 py-4">{user.gender}</td>
                     <td className="px-6 py-4">{user.dateOfBirth}</td>
                     {/* <td className="px-6 py-4"></td> */}
-                    <td className="px-6 py-4 text-center hover:cursor-pointer">
+                    <td className="px-6 py-4 text-center hover:cursor-pointer flex">
                       <button
-                        className="font-medium text-blue-600 hover:underline mr-1"
+                        className="font-medium text-blue-600 hover:underline mr-1 "
                         onClick={() => handleDelete(user.id)}
                       >
                         <svg
-                          className="w-5 h-5 text-gray-800 "
+                          className="w-5 h-5 text-red-600"
                           aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg"
                           width="24"
@@ -260,7 +260,7 @@ export const ListPatient = () => {
                       </button>
                       <Link
                         to={`/detail/${user.id}`}
-                        className="font-medium text-blue-600 hover:underline"
+                        className="font-medium text-blue-600 hover:underline flex items-center justify-center"
                       >
                         <svg
                           className="w-5 h-5 text-gray-800"
