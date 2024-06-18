@@ -31,6 +31,8 @@ const ModelList = () => {
     setIsDeleteOpen(false)
   }
 
+  
+
   return (
     <section className="h-screen w-screen bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
       <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
