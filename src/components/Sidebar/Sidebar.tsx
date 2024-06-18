@@ -37,6 +37,13 @@ const Sidebar: React.FC<SidebarProps> = () => {
               <GroupsOutlinedIcon fontSize="small" />
               <p>Patients</p>
             </Link>
+            <Link
+              to={"/model"}
+              className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
+            >
+              <GroupsOutlinedIcon fontSize="small" />
+              <p>Models</p>
+            </Link>
             {/* <button className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300">
               <CalendarMonthOutlinedIcon fontSize="small" />
               <p>Calendar</p>

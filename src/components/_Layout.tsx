@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Navbar from "./Navbar/Navbar";
 import { ListPatient } from "@/views/Patiant/ListPatiant";
 import { DetailPatient } from "@/views/Patiant/DetailPatient";
+import ModelList from "@/views/ModelList/ModelList";
 
 interface LayoutProps {
   // Define your component props here
@@ -22,6 +23,7 @@ export const Layout: React.FC<LayoutProps> = ({}) => {
           <Routes>
             <Route path="/" element={<ListPatient />} />
             <Route path="/detail/:id" element={<DetailPatient />} />
+            <Route path="/model" element={<ModelList />} />
           </Routes>
         </main>
       </div>

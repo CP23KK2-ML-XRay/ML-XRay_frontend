@@ -4,7 +4,7 @@ export type Patient = {
   // patient_id: string,
   firstname: string,
   lastname: string,
-  date_of_birth: string,
+  dateOfBirth: string,
   gender: string,
   phone_number: string,
   weight: string,
