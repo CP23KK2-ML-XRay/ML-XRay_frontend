@@ -14,7 +14,6 @@ export const ListPatient = () => {
     try {
       const hospitalService = new HospitalService();
       hospitalService.retrieveListPatients().then((data) => {
-        console.log(data);
         setUsersData(data);
         setFilteredUsers(data);
       });
@@ -26,7 +25,6 @@ export const ListPatient = () => {
         text: "Something went wrong!",
       });
     }
-    console.log("i fire once");
     // fetchData();
   }, []);
 
@@ -55,7 +53,6 @@ export const ListPatient = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    console.log(name);
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -83,11 +80,9 @@ export const ListPatient = () => {
       return;
     }
 
-    console.log("Data submitted successfully:", formData);
     try {
       const hospitalService = new HospitalService();
       const response = await hospitalService.createPatient(formData);
-      console.log(response);
       if (response) {
       }
       Swal.fire({
@@ -138,7 +133,6 @@ export const ListPatient = () => {
   const [isHidden, setIsHidden] = useState(true);
 
   const handleDelete = async (id: any) => {
-    console.log(id);
     try {
       Swal.fire({
         title: "Are you sure?",
@@ -152,9 +146,6 @@ export const ListPatient = () => {
         if (result.isConfirmed) {
           const hospitalService = new HospitalService();
           const response = await hospitalService.deletePatient(id);
-          if (response) {
-            console.log(response);
-          }
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",
@@ -169,16 +160,21 @@ export const ListPatient = () => {
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const hospitalService = new HospitalService();
+    const usersData = hospitalService.searchPatient(e.target.value);
+    if (usersData) {
+      console.log("handleSearch", usersData);
+    }
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
-    if (query === "") {
-      setFilteredUsers(usersData);
-    } else {
-      const filtered = usersData.filter((user) =>
-        `${user.firstname} ${user.lastname}`.toLowerCase().includes(query)
-      );
-      setFilteredUsers(filtered);
-    }
+    // if (query === "") {
+    //   setFilteredUsers(usersData);
+    // } else {
+    //   const filtered = usersData.filter((user) =>
+    //     `${user.firstname} ${user.lastname}`.toLowerCase().includes(query)
+    //   );
+    //   setFilteredUsers(filtered);
+    // }
   };
 
   return (
