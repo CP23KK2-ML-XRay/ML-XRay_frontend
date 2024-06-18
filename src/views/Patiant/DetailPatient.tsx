@@ -1,67 +1,83 @@
-import { ChangeEvent, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Patient } from './types'
-import Swal from 'sweetalert2'
-import HospitalService from '@/service/HospitalService'
-import MachineService from '@/service/MachineService'
+import { ChangeEvent, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Patient } from "./types";
+import Swal from "sweetalert2";
+import HospitalService from "@/service/HospitalService";
+import MachineService from "@/service/MachineService";
 
 export const DetailPatient = () => {
-  const { id } = useParams<{ id: string }>()
+  const { id } = useParams<{ id: string }>();
 
-  const patientId = id ? id : '0'
+  const patientId = id ? id : "0";
 
-  const [userData, setUserData] = useState<Patient>()
-  const [isEdit, setIsEdit] = useState(false)
+  const [userData, setUserData] = useState<Patient>();
+  const [isEdit, setIsEdit] = useState(false);
 
   const [formData, setFormData] = useState({
-    firstname: '',
-    lastname: '',
-    dateOfBirth: '',
-    phone_number: '',
-    gender: 'M',
-    weight: '',
-    height: '',
-    bloodType: 'A+',
-    medic_person: '',
-  })
+    firstname: "",
+    lastname: "",
+    dateOfBirth: "",
+    phone_number: "",
+    gender: "M",
+    weight: "",
+    height: "",
+    bloodType: "A+",
+    medic_person: "",
+  });
 
   const [formErrors, setFormErrors] = useState({
-    firstname: '',
-    lastname: '',
-    dateOfBirth: '',
-    phone_number: '',
-    weight: '',
-    height: '',
-  })
+    firstname: "",
+    lastname: "",
+    dateOfBirth: "",
+    phone_number: "",
+    weight: "",
+    height: "",
+  });
+
+  const [modelList, setModelList] = useState([]);
+  const [selectedModel, setSelectedModel] = useState(0);
 
   useEffect(() => {
     // Fetch data when the component mounts
     const fetchData = async () => {
       try {
-        const hospitalService = new HospitalService()
-        const data = await hospitalService.retrievePatient(patientId)
+        const hospitalService = new HospitalService();
+        const data = await hospitalService.retrievePatient(patientId);
         if (data) {
-          setUserData(data)
-          console.log(data)
+          setUserData(data);
+          // console.log(data);
         } else {
           // Navigate("/404");
         }
       } catch (error) {
-        console.error('Error fetching data:', error)
+        console.error("Error fetching data:", error);
       }
-    }
-    fetchData()
-  }, [])
+    };
+    const fetchDataModel = async () => {
+      try {
+        const machineservice = new MachineService();
+        await machineservice.retrieveListModel().then((data) => {
+          if (data) {
+            setModelList(data);
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+    fetchDataModel();
+  }, []);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   // const validateForm = () => {
   //   let errors: any = {};
@@ -77,46 +93,46 @@ export const DetailPatient = () => {
   // };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const errors = validateForm(formData)
+    const errors = validateForm(formData);
     if (Object.keys(errors).length > 0) {
-      setFormErrors(errors)
-      return
+      setFormErrors(errors);
+      return;
     }
 
-    console.log('Data submitted successfully:', formData)
+    console.log("Data submitted successfully:", formData);
     try {
-      const hospitalService = new HospitalService()
-      const response = await hospitalService.updatePatient(patientId, formData)
-      console.log(response)
+      const hospitalService = new HospitalService();
+      const response = await hospitalService.updatePatient(patientId, formData);
+      console.log(response);
       Swal.fire({
-        title: 'Updated!',
-        text: 'You patient has been updated.',
-        icon: 'success',
-      })
+        title: "Updated!",
+        text: "You patient has been updated.",
+        icon: "success",
+      });
 
       setFormData({
-        firstname: '',
-        lastname: '',
-        dateOfBirth: '',
-        phone_number: '',
-        gender: 'Male', // Default value
-        weight: '',
-        height: '',
-        bloodType: 'A+',
-        medic_person: '', // Default value
-      })
+        firstname: "",
+        lastname: "",
+        dateOfBirth: "",
+        phone_number: "",
+        gender: "Male", // Default value
+        weight: "",
+        height: "",
+        bloodType: "A+",
+        medic_person: "", // Default value
+      });
       setTimeout(() => {
-        location.reload()
-      }, 2000)
-      console.log('Data submitted successfully:', formData)
+        location.reload();
+      }, 2000);
+      console.log("Data submitted successfully:", formData);
     } catch (error) {
       Swal.fire({
-        title: 'error!',
+        title: "error!",
         text: "Can't edit patient. Please try again.",
-        icon: 'error',
-      })
+        icon: "error",
+      });
     }
 
     // if (validateForm()) {
@@ -143,79 +159,95 @@ export const DetailPatient = () => {
     //     console.error("Error updating patient details", error);
     //   }
     // }
-  }
+  };
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    console.log()
+    const file = event.target.files?.[0];
+    console.log();
     if (file) {
-      const allowedTypes = ['image/jpeg', 'image/jpg']
+      const allowedTypes = ["image/jpeg", "image/jpg"];
 
       if (allowedTypes.includes(file.type)) {
-        setSelectedFile(file)
-        console.log(file)
+        setSelectedFile(file);
+        console.log(file);
       } else {
         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Invalid file type. Please select jpeg or jpg file.',
-        })
-        console.error('Invalid file type. Please select a valid image file.')
+          icon: "error",
+          title: "Oops...",
+          text: "Invalid file type. Please select jpeg or jpg file.",
+        });
+        console.error("Invalid file type. Please select a valid image file.");
       }
     }
-  }
+  };
 
   const handleFileUpload = async () => {
     try {
-      console.log(selectedFile)
       if (!selectedFile) {
         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'No file selected. Please input file.',
-        })
+          icon: "error",
+          title: "Oops...",
+          text: "No file selected. Please input file.",
+        });
         // console.error('No file selected');
-        return
+        return;
+      } else if (selectedModel == 0) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "No model selected. Please input model.",
+        });
+        return;
       }
-
-      const formData = new FormData()
-      formData.append('file', selectedFile)
-      formData.append('model_id', selectedFile)
-      formData.append('patient_id', patientId)
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      formData.append("model_id", selectedModel.toString());
+      formData.append("patient_id", patientId);
 
       // Use an API endpoint to handle file upload on the server
-      const machineservice = new MachineService()
-      const data = await machineservice.getResultPrediction(formData)
-      if (data.status == 200) {
-        if (data.data.predict == 0) Swal.fire('pneumonia risk')
-        else Swal.fire('Normal')
-        // Handle success, e.g., show a success message
-      } else {
-        console.error('File upload failed')
-        // Handle failure, e.g., show an error message
-      }
+      const machineservice = new MachineService();
+      await machineservice.getResultPrediction(formData).then((data) => {
+        if (data) {
+          Swal.fire({
+            icon: "success",
+            title: "Success",
+            text: `${data.m_pred}`,
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Can't upload file",
+          });
+        }
+      });
     } catch (error) {
-      console.error('Error uploading file', error)
+      console.error("Error uploading file", error);
     }
-  }
+  };
 
   // ------------------------Validate Form in Edit popup
   const validateForm = (data: typeof formData) => {
-    const errors: any = {}
-    if (!data.firstname) errors.firstname = 'First name is required'
-    if (!data.lastname) errors.lastname = 'Last name is required'
-    if (!data.dateOfBirth) errors.dateOfBirth = 'Date of birth is required'
+    const errors: any = {};
+    if (!data.firstname) errors.firstname = "First name is required";
+    if (!data.lastname) errors.lastname = "Last name is required";
+    if (!data.dateOfBirth) errors.dateOfBirth = "Date of birth is required";
     if (!data.phone_number) {
-      errors.phone_number = 'Phone number is required'
+      errors.phone_number = "Phone number is required";
     } else if (data.phone_number.length != 10) {
-      errors.phone_number = 'Phone number cannot exceed 10 characters'
+      errors.phone_number = "Phone number cannot exceed 10 characters";
     }
-    if (!data.weight) errors.weight = 'Weight is required'
-    if (!data.height) errors.height = 'Height is required'
-    return errors
-  }
+    if (!data.weight) errors.weight = "Weight is required";
+    if (!data.height) errors.height = "Height is required";
+    return errors;
+  };
+
+  const handleChangeSelect = (event: any) => {
+    setSelectedModel(event.target.value);
+    console.log(event.target.value);
+  };
 
   return (
     <div className="w-full h-full">
@@ -449,17 +481,48 @@ export const DetailPatient = () => {
             </div>
           </div>
         )}
-
         <div className="w-full p-4 rounded-md shadow-2xl  bg-white">
           <div className="text-3xl text-center p-4">Diagnose</div>
           <div className="mb-3 flex justify-center items-center gap-3">
-            <form className="max-w-sm">
+            {modelList.length > 0 && (
+              <div className="flex justify-center items-center gap-3">
+                <select
+                  name="model_id"
+                  className="w-2/3 p-2 rounded-md border border-gray-300"
+                  onChange={handleChangeSelect}
+                  value={selectedModel}
+                >
+                  <option value="">Select Model</option>
+                  {modelList.map((model: any) => (
+                    <option key={model.model_id} value={model.model_id}>
+                      {model.model_name}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600  dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
+                  type="file"
+                  id="formFile"
+                  onChange={handleFileChange}
+                />
+                <button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded text-sm"
+                  onClick={handleFileUpload}
+                >
+                  Upload
+                </button>
+              </div>
+            )}
+            {/* <form className="max-w-sm">
               <select
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 id="modelName"
-                name='modelName'
+                name="modelName"
               >
-                <option value="" selected disabled>Select Model</option>
+                <option value="" selected disabled>
+                  Select Model
+                </option>
                 <option value="CA">2</option>
                 <option value="FR">3</option>
                 <option value="DE">4</option>
@@ -480,10 +543,10 @@ export const DetailPatient = () => {
               onClick={handleFileUpload}
             >
               Upload
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

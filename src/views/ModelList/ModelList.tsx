@@ -1,63 +1,82 @@
-import { FormEvent, useEffect, useState } from 'react'
-import MachineService from '@/service/MachineService'
-import Swal from 'sweetalert2'
+import { useEffect, useState } from "react";
+import MachineService from "@/service/MachineService";
+import Swal from "sweetalert2";
 
 const ModelList = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
 
   const closeModal = () => {
-    setIsModalOpen(false)
-  }
+    setFormData({
+      model_name: "",
+      model_category: "",
+      class0: "",
+      class1: "",
+      class2: "",
+      train: null,
+      test: null,
+      val: null,
+    });
+    setFormErrors({
+      model_name: "",
+      model_category: "",
+      class0: "",
+      class1: "",
+      class2: "",
+    });
+    setIsModalOpen(false);
+  };
 
-  const [isEditOpen, setIsEditOpen] = useState(false)
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const openEdit = () => {
-    setIsEditOpen(true)
-  }
+    setIsEditOpen(true);
+  };
 
   const closeEdit = () => {
-    setIsEditOpen(false)
-  }
+    setIsEditOpen(false);
+  };
 
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const openDelete = () => {
-    setIsDeleteOpen(true)
-  }
+    setIsDeleteOpen(true);
+  };
 
   const closeDelete = () => {
-    setIsDeleteOpen(false)
-  }
+    setIsDeleteOpen(false);
+  };
 
-  const [modelsData, setModelsData] = useState<any[]>([])
+  const [modelsData, setModelsData] = useState<any[]>([]);
 
   useEffect(() => {
     try {
-      const machineService = new MachineService()
+      const machineService = new MachineService();
       machineService.retrieveListModel().then((data) => {
-        console.log(data);
-        setModelsData(data)
-      })
+        // console.log(data);
+        if (data) {
+          setModelsData(data);
+        }
+      });
     } catch (error) {
       // console.error(error);
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Something went wrong!',
-      })
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      });
     }
 
     // fetchData()
-  }, [])
+  }, []);
 
-  // | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | 
-  // | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | Create 
-  // | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | Model 
+  // | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | |
+  // | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | Create
+  // | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | Model
   // | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | Function
-  // V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V 
+  // V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V
 
   const [formData, setFormData] = useState({
     model_name: "",
@@ -65,11 +84,9 @@ const ModelList = () => {
     class0: "",
     class1: "",
     class2: "",
-    admin_id: "",
-    model_path: "",
     train: null,
     test: null,
-    val: null
+    val: null,
   });
 
   const [formErrors, setFormErrors] = useState({
@@ -88,7 +105,9 @@ const ModelList = () => {
     }));
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLFormElement | HTMLSelectElement>) => {
+  const handleChange = (
+    event: React.ChangeEvent<HTMLFormElement | HTMLSelectElement>
+  ) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -96,21 +115,51 @@ const ModelList = () => {
     }));
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const errors = validateForm(formData)
+    const errors = validateForm(formData);
     if (Object.keys(errors).length > 0) {
-      setFormErrors(errors)
+      setFormErrors(errors);
       return;
     }
+
+    const fileInputTrain = document.getElementById("train") as HTMLInputElement;
+    const fileInputTest = document.getElementById("test") as HTMLInputElement;
+    const fileInputVal = document.getElementById("val") as HTMLInputElement;
+
+    if (
+      !fileInputTrain ||
+      !fileInputTest ||
+      !fileInputVal ||
+      !fileInputTrain.files ||
+      !fileInputTest.files ||
+      !fileInputVal.files ||
+      !fileInputTrain.files[0] ||
+      !fileInputTest.files[0] ||
+      !fileInputVal.files[0]
+    ) {
+      Swal.fire({
+        title: "Error!",
+        text: "Please upload all files.",
+        icon: "error",
+      });
+      return;
+    }
+
+    const formDataBody = new FormData();
+    formDataBody.append("modeljson", String(JSON.stringify(formData)));
+    formDataBody.append("train", fileInputTrain.files[0]);
+    formDataBody.append("test", fileInputTest.files[0]);
+    formDataBody.append("val", fileInputVal.files[0]);
 
     console.log("SUBMIT", formData);
 
     try {
       const machineService = new MachineService();
-      const response = await machineService.createModel(formData)
-      console.log(response)
+      console.log(formDataBody);
+      const response = await machineService.createModel(formDataBody);
+      console.log(response);
 
       Swal.fire({
         title: "Success!",
@@ -124,14 +173,12 @@ const ModelList = () => {
         class0: "",
         class1: "",
         class2: "",
-        admin_id: "",
-        model_path: "/folder/a",
         train: null,
         test: null,
-        val: null
+        val: null,
       });
       setTimeout(() => {
-        location.reload();
+        // location.reload();
       }, 2000);
     } catch (error) {
       Swal.fire({
@@ -145,7 +192,7 @@ const ModelList = () => {
 
   // Validate Function only fontend --------------------------------------------------------------------------------------
   // | | | | | | | | | | | | | | | | --------------------------------------------------------------------------------------
-  // V V V V V V V V V V V V V V V V 
+  // V V V V V V V V V V V V V V V V
   const validateForm = (data: typeof formData) => {
     const errors: any = {};
     if (!data.model_name) errors.model_name = "Required model name";
@@ -161,7 +208,7 @@ const ModelList = () => {
     if (files && files.length > 0) {
       const file = files[0];
       const validExtensions = ["zip", "rar", "7z"];
-      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const fileExtension = file.name.split(".").pop()?.toLowerCase();
       if (fileExtension && validExtensions.includes(fileExtension)) {
         setFormData((prevData) => ({
           ...prevData,
@@ -257,6 +304,9 @@ const ModelList = () => {
                   <th scope="col" className="px-4 py-3 text-gray-500">
                     Class 2
                   </th>
+                  <th scope="col" className="px-4 py-3 text-gray-500">
+                    Status
+                  </th>
                   <th scope="col" className="px-4 py-3 text-gray-500"></th>
                 </tr>
               </thead>
@@ -275,6 +325,7 @@ const ModelList = () => {
                       <td className="px-4 py-3">{model.class0}</td>
                       <td className="px-4 py-3">{model.class1}</td>
                       <td className="px-4 py-3">{model.class2}</td>
+                      <td className="px-4 py-3">{model.status}</td>
                       <td className="pr-4 py-3 flex items-center justify-center">
                         <button
                           id="apple-imac-27-dropdown-button"
@@ -333,7 +384,7 @@ const ModelList = () => {
                 ) : (
                   <tr className="bg-white border-b mt-2">
                     <td
-                      colSpan={6}
+                      colSpan={7}
                       className="w-full px-6 py-2 text-2xl text-center"
                     >
                       No models available
@@ -416,7 +467,7 @@ const ModelList = () => {
       {/*Modal for Create new model ------------------------------------------------------------------------------------------------ */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white shadow-md rounded-md p-8">
+          <div className="bg-white shadow-md rounded-md p-8 w-full m-32">
             <div className="flex flex-col items-center">
               <h1 className="font-bold text-3xl text-blue-600 lg:text-4xl">
                 Create Model
@@ -447,7 +498,7 @@ const ModelList = () => {
                       Select model category
                     </option>
                     <option value="numberic">Numeric</option>
-                    <option value="images">Images</option>
+                    <option value="image">Image</option>
                   </select>
                 </div>
                 <span className="text-red-500 text-sm mb-2 flex w-full">
@@ -455,7 +506,9 @@ const ModelList = () => {
                     <p className="absolute"> {formErrors.model_name} </p>
                   )}
                   {formErrors.model_category && (
-                    <p className="absolute left-1/2">{formErrors.model_category}</p>
+                    <p className="absolute left-1/2">
+                      {formErrors.model_category}
+                    </p>
                   )}
                 </span>
 
@@ -504,7 +557,9 @@ const ModelList = () => {
                   placeholder="Enter your class 2 name"
                 />
 
-                <h6 className="pt-4 font-medium">Upload Train Compress Folder:</h6>
+                <h6 className="pt-4 font-medium">
+                  Upload Train Compress Folder:
+                </h6>
                 <input
                   className="block mt-2 w-full text-sm border-gray-300 rounded-sm cursor-pointer"
                   id="train"
@@ -513,11 +568,16 @@ const ModelList = () => {
                   onChange={handleFileChange}
                   accept=".zip,.rar,.7zip"
                 />
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">
+                <p
+                  className="mt-1 text-sm text-gray-500 dark:text-gray-300"
+                  id="file_input_help"
+                >
                   Upload compress file only.
                 </p>
 
-                <h6 className="pt-4 font-medium">Upload Test Compress Folder:</h6>
+                <h6 className="pt-4 font-medium">
+                  Upload Test Compress Folder:
+                </h6>
                 <input
                   className="block mt-2 w-full text-sm border-gray-300 rounded-sm cursor-pointer"
                   id="test"
@@ -526,11 +586,16 @@ const ModelList = () => {
                   onChange={handleFileChange}
                   accept=".zip,.rar,.7zip"
                 />
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">
+                <p
+                  className="mt-1 text-sm text-gray-500 dark:text-gray-300"
+                  id="file_input_help"
+                >
                   Upload compress file only.
                 </p>
 
-                <h6 className="pt-4 font-medium">Upload Validation Compress Folder:</h6>
+                <h6 className="pt-4 font-medium">
+                  Upload Validation Compress Folder:
+                </h6>
                 <input
                   className="block mt-2 w-full text-sm border-gray-300 rounded-sm cursor-pointer"
                   id="val"
@@ -539,7 +604,10 @@ const ModelList = () => {
                   onChange={handleFileChange}
                   accept=".zip,.rar,.7zip"
                 />
-                <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">
+                <p
+                  className="mt-1 text-sm text-gray-500 dark:text-gray-300"
+                  id="file_input_help"
+                >
                   Upload compress file only.
                 </p>
 
@@ -616,9 +684,7 @@ const ModelList = () => {
         </div>
       )}
     </section>
+  );
+};
 
-
-  )
-}
-
-export default ModelList
+export default ModelList;

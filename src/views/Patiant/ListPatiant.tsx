@@ -144,14 +144,17 @@ export const ListPatient = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           const hospitalService = new HospitalService();
-          const response = await hospitalService.deletePatient(id);
-          console.log(response)
-          Swal.fire({
-            title: "Deleted!",
-            text: "Your file has been deleted.",
-            icon: "success",
+          await hospitalService.deletePatient(id).then((data) => {
+            if (data) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              }).then(() => {
+                window.location.reload();
+              });
+            }
           });
-          window.location.reload();
         }
       });
     } catch (error) {
