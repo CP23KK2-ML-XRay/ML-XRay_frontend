@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const SignUp = () => {
@@ -80,9 +81,10 @@ const SignUp = () => {
           title: "Added!",
           text: "You can see your patient in patients record.",
           icon: "success",
-        });
+        });        
         location.reload();
         // window.location.reload();
+        
       } catch (error) {
         Swal.fire({
           title: "error",
