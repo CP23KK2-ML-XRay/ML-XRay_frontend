@@ -1,10 +1,11 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Link, useParams } from "react-router-dom";
 import AuthenticationService from "@/service/AuthenticationService"
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 
 const handleLogout = () => {
   localStorage.removeItem("accessToken");
@@ -16,22 +17,22 @@ const handleLogout = () => {
   location.href = "/signin";
 };
 
-interface SidebarProps {}
+interface SidebarProps { }
 
-interface UserData{
+interface UserData {
   firstname: string;
   lastname: string;
   email: string;
   position: string;
 }
 
-  // THIS IS FUNCTION SECTOR NAJA
-  // | | | | | | | | | | | |
-  // | | | | | | | | | | | |
-  // V V V V V V V V V V V V
+// THIS IS FUNCTION SECTOR NAJA
+// | | | | | | | | | | | |
+// | | | | | | | | | | | |
+// V V V V V V V V V V V V
 
-const Sidebar: React.FC<SidebarProps> = () => {  
-  const { email } = useParams<{ email:string}>()
+const Sidebar: React.FC<SidebarProps> = () => {
+  const { email } = useParams<{ email: string }>()
   const userEmail = email ? email : "";
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -73,9 +74,9 @@ const Sidebar: React.FC<SidebarProps> = () => {
   };
 
 
-// | | | | | | | | | 
-// | | | | | | | | | 
-// V V V V V V V V V
+  // | | | | | | | | | 
+  // | | | | | | | | | 
+  // V V V V V V V V V
   const handlePopupOpen = () => {
     setIsPopupOpen(true);
     setIsEditing(false);
@@ -107,7 +108,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
   // | | | | | | | | | | | |
   // | | | | | | | | | | | |
   // V V V V V V V V V V V V
-  
+
   useEffect(() => {
 
     const fetchData = async () => {
@@ -120,13 +121,13 @@ const Sidebar: React.FC<SidebarProps> = () => {
         }
       } catch (error) {
         console.error("ERROR")
-      }      
-    }    
+      }
+    }
     fetchData();
     const role = localStorage.getItem("role");
     setUserRole(role)
-  }, [userEmail]  
-)
+  }, [userEmail]
+  )
   // UX UI Sidebar here 
   // | | | | | | | | | | | |
   // | | | | | | | | | | | |
@@ -148,17 +149,26 @@ const Sidebar: React.FC<SidebarProps> = () => {
             >
               <GroupsOutlinedIcon fontSize="small" />
               <p>Patients</p>
-            </Link>            
-              {userRole === "ADMIN" && (
+            </Link>
+            {userRole === "ADMIN" && (
                 <Link
                 to={"/createmodel"}
                 className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
               >
                 <AddBoxIcon fontSize="small" />
               <p>Create Model</p>
-            </Link>
-          )}
-              
+            </Link>            
+            )}
+            {userRole === "ADMIN" && (
+              <Link
+            to={"/model"}
+            className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
+          >
+            <ClearAllIcon fontSize="small" />
+            <p>Models</p>
+          </Link>
+            )}
+
             {/* <button className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300">
               <CalendarMonthOutlinedIcon fontSize="small" />
               <p>Calendar</p>
@@ -200,7 +210,7 @@ POP UP for USER INFO and EDIT USER INFO
             <div className="mb-4">
               {isEditing ? (
                 <>
-                <div>
+                  <div>
                     <label className="block text-sm font-medium text-gray-700">Old Password</label>
                     <input
                       type="password"

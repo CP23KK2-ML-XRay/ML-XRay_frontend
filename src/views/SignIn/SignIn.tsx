@@ -3,8 +3,6 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   FormControl,
   FormHelperText,
-  IconButton,
-  InputAdornment,
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
@@ -16,13 +14,17 @@ const SignIn: React.FC = () => {
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  // const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
+  const handleCheckboxChange = () => {
+    setShowPassword((prev) => !prev);
   };
+
+  // const handleMouseDownPassword = (
+  //   event: React.MouseEvent<HTMLButtonElement>
+  // ) => {
+  //   event.preventDefault();
+  // };
 
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
@@ -169,18 +171,6 @@ const SignIn: React.FC = () => {
               <OutlinedInput
                 id="outlined-adornment-password"
                 type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
                 label="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -189,6 +179,18 @@ const SignIn: React.FC = () => {
                 {errors.password}
               </FormHelperText>
             </FormControl>
+            <div className="flex mt-4">
+              <input data-hs-toggle-password='{ "target": "#hs-toggle-password-with-checkbox" }' 
+              name="show-pass"
+              id="show-pass"
+              type="checkbox" 
+              className="mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+              checked={showPassword}
+              onChange={handleCheckboxChange} />
+              <label className="text-sm text-gray-500 ms-3 dark:text-neutral-400 cursor-pointer" for="show-pass">
+                Show password
+              </label>
+            </div>
           </div>
           <div className="mt-4 flex justify-between font-semibold text-sm"></div>
           <div className="text-center md:text-left">

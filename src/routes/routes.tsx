@@ -7,6 +7,8 @@ import {CreateModel} from "@/views/ListModel/CreateModel";
 import { ListPatient } from "@/views/Patiant/ListPatient";
 import { DetailPatient } from "@/views/Patiant/DetailPatient";
 import { isAuthentication } from "@/utils/AuthenticationUtils";
+import ModelList from '@/views/ModelList/ModelList'
+
 
 const requireAuth = (element: React.ReactElement) => {
   return isAuthentication() ? element : <Navigate to="/signin" />;
@@ -19,6 +21,7 @@ export const routes = createBrowserRouter([
     children: [
       { path: "/", element: <ListPatient /> },
       { path: "/detail/:id", element: <DetailPatient /> },
+      { path: '/model', element: <ModelList /> },
     ],
   },
   {
