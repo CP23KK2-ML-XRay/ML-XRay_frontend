@@ -259,7 +259,7 @@ export const DetailPatient = () => {
                 <div>Height</div>
               </div>
               <div className="p-4 border-dashed border-2 border-gray-500 m-4 rounded-lg flex flex-col">
-                <div>{userData?.blood_type}</div>
+                <div>{userData?.bloodType}</div>
                 <div>Blood Type</div>
               </div>
             </div>

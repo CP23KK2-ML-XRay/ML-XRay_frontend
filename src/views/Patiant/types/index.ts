@@ -10,7 +10,7 @@ export type Patient = {
   weight: string,
   height: string,
   // b_pressure: string,
-  blood_type: string,
+  bloodType: string,
   // diagnosis: string,
   // created_date: string,
   // updated_date: string,
