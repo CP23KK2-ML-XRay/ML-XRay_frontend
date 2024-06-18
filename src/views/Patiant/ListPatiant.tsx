@@ -67,6 +67,15 @@ export const ListPatient = () => {
         [name]: "",
       }));
     }
+
+    const trimmedValue = name === 'firstname' || name === 'lastname'
+    ? value.trim()
+    : value;
+    
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: trimmedValue,
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -183,6 +192,29 @@ export const ListPatient = () => {
     //   setFilteredUsers(filtered);
     // }
   };
+
+  const resetFormat = () => {
+    setIsHidden(true)
+    setFormData({
+      firstname: "",
+      lastname: "",
+      dateOfBirth: "",
+      phone_number: "",
+      gender: "Male",
+      weight: "",
+      height: "",
+      bloodType: "",
+      medic_person: "",
+    })
+    setFormErrors({
+      firstname: "",
+      lastname: "",
+      dateOfBirth: "",
+      phone_number: "",
+      weight: "",
+      height: "",
+    })
+  }
 
   return (
     <div className="w-full pt-4">
@@ -331,7 +363,7 @@ export const ListPatient = () => {
                     stroke="currentColor"
                     aria-hidden="true"
                     onClick={() => {
-                      setIsHidden(true);
+                      resetFormat();
                     }}
                   >
                     <path d="M6 18L18 6M6 6l12 12" />

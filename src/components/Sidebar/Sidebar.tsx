@@ -106,6 +106,14 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
   const handlePopupClose = () => {
     setIsPopupOpen(false);
+    setFormErrors({    
+      oldPassword: "",
+      password: "",
+      newPassword: ""      
+    })
+    setOldPassword("")
+    setNewPassword("")
+    setPassword("")
   };
 
   const handleEditClick = () => {

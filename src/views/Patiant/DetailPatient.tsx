@@ -67,15 +67,20 @@ export const DetailPatient = () => {
     };
     fetchData();
     fetchDataModel();
-  }, []);
+  }, [patientId]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+
+    const trimmedValue = name === 'firstname' || name === 'lastname'
+    ? value.trim()
+    : value;
+    
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: trimmedValue,
     }));
   };
 
@@ -88,7 +93,6 @@ export const DetailPatient = () => {
       return;
     }
 
-    console.log("Data submitted successfully:", formData);
     try {
       const hospitalService = new HospitalService();
       await hospitalService.updatePatient(patientId, formData).then((data) => {
@@ -109,6 +113,7 @@ export const DetailPatient = () => {
               bloodType: "A+",
               medic_person: "", // Default value
             });
+            setIsEdit(false);
             location.reload();
           });
         } else {
@@ -127,6 +132,29 @@ export const DetailPatient = () => {
       });
     }
   };
+
+  const resetFormat = () => {
+    setIsEdit(false)
+    setFormData({
+      firstname: "",
+      lastname: "",
+      dateOfBirth: "",
+      phone_number: "",
+      gender: "Male",
+      weight: "",
+      height: "",
+      bloodType: "",
+      medic_person: "",
+    })
+    setFormErrors({
+      firstname: "",
+      lastname: "",
+      dateOfBirth: "",
+      phone_number: "",
+      weight: "",
+      height: "",
+    })
+  }
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -271,7 +299,7 @@ export const DetailPatient = () => {
               <div className="flex justify-end mb-4">
                 <div
                   className="cursor-pointer"
-                  onClick={() => setIsEdit(false)}
+                  onClick={() => resetFormat()}
                 >
                   <svg
                     className="h-6 w-6"
@@ -425,7 +453,7 @@ export const DetailPatient = () => {
                       value={formData.bloodType}
                       onChange={handleChange}
                     >
-                      <option selected hidden>
+                      <option hidden>
                         Select patient blood type
                       </option>
                       <option value="A+">A positive (A+)</option>
