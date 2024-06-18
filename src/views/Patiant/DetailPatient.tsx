@@ -21,7 +21,7 @@ export const DetailPatient = () => {
     gender: 'M',
     weight: '',
     height: '',
-    blood_type: 'A+',
+    bloodType: 'A+',
     medic_person: '',
   })
 
@@ -90,8 +90,6 @@ export const DetailPatient = () => {
       const hospitalService = new HospitalService()
       const response = await hospitalService.updatePatient(patientId, formData)
       console.log(response)
-      if (response) {
-      }
       Swal.fire({
         title: 'Updated!',
         text: 'You patient has been updated.',
@@ -261,7 +259,7 @@ export const DetailPatient = () => {
                 <div>Height</div>
               </div>
               <div className="p-4 border-dashed border-2 border-gray-500 m-4 rounded-lg flex flex-col">
-                <div>{userData?.bloodType}</div>
+                <div>{userData?.blood_type}</div>
                 <div>Blood Type</div>
               </div>
             </div>
