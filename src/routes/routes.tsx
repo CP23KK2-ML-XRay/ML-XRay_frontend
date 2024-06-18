@@ -34,6 +34,6 @@ export const routes = createBrowserRouter([
   },
   {
     path: "/createmodel",
-    element: <CreateModel />,
+    element: requireAuth(<CreateModel />),
   }
 ]);
