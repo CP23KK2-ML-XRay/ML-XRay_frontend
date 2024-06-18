@@ -67,12 +67,11 @@ export default class AuthenticationService {
     });
   }
 
-  updatePassword(email: string, resetPassword: any): Promise<void> {
+  updatePassword(resetPassword: any): Promise<void> {
     return fetch(`${API_URL}/auth/updatePassword`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "email": email,
         Authorization: ("Bearer " +
           localStorage.getItem("accessToken")) as string,
       },
