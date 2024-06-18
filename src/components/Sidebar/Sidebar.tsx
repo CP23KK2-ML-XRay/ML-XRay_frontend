@@ -59,6 +59,8 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
     if (!oldPassword.trim()) {
       newErrors.oldPassword = "Old password is required";
+    } else if (oldPassword.length < 8) {
+      newErrors.oldPassword = "Password must be at least 8 characters";
     }
 
     if (!password.trim()) {
@@ -123,6 +125,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
         }).then(() => {
           location.href ='/'
         });        
+        console.error("12345678")
       } catch (error) {
         console.error("Failed to update password:", error);
         Swal.fire({
