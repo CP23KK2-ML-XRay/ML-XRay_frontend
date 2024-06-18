@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-// import { Navigate } from "react-router-dom";
+import { useNavigate, Navigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 
 const SignUp = () => {
@@ -11,6 +11,8 @@ const SignUp = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const navigate = useNavigate();
 
   const validate = (): { [key: string]: string } => {
     const newErrors: { [key: string]: string } = {};
@@ -79,12 +81,13 @@ const SignUp = () => {
         });
         Swal.fire({
           title: "Added!",
-          text: "You can see your patient in patients record.",
+          text: "Account added.",
           icon: "success",
-        });        
-        location.reload();
+        }).then(() => {
+          navigate('/signin')
+        });
         // window.location.reload();
-        
+
       } catch (error) {
         Swal.fire({
           title: "error",
@@ -123,9 +126,8 @@ const SignUp = () => {
                     id="fname"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.firstName ? "border-red-500" : ""
-                    }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.firstName ? "border-red-500" : ""
+                      }`}
                     placeholder="Jack"
                   />
                   {errors.firstName && (
@@ -145,9 +147,8 @@ const SignUp = () => {
                     id="lname"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.lastName ? "border-red-500" : ""
-                    }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.lastName ? "border-red-500" : ""
+                      }`}
                     placeholder="Dawson"
                   />
                   {errors.lastName && (
@@ -165,9 +166,8 @@ const SignUp = () => {
                     id="position"
                     value={position}
                     onChange={(e) => setPosition(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.position ? "border-red-500" : ""
-                    }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.position ? "border-red-500" : ""
+                      }`}
                   >
                     <option value="" disabled selected>
                       Choose your position
@@ -192,9 +192,8 @@ const SignUp = () => {
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.email ? "border-red-500" : ""
-                    }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.email ? "border-red-500" : ""
+                      }`}
                     placeholder="dawson@mail.com"
                   />
                   {errors.email && (
@@ -214,9 +213,8 @@ const SignUp = () => {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.password ? "border-red-500" : ""
-                    }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.password ? "border-red-500" : ""
+                      }`}
                     placeholder="••••••••"
                   />
                   {errors.password && (
@@ -236,9 +234,8 @@ const SignUp = () => {
                     id="confirm-password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${
-                      errors.confirmPassword ? "border-red-500" : ""
-                    }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.confirmPassword ? "border-red-500" : ""
+                      }`}
                     placeholder="••••••••"
                   />
                   {errors.confirmPassword && (

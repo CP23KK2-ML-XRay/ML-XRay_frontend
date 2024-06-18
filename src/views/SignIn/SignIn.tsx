@@ -85,7 +85,7 @@ const SignIn: React.FC = () => {
             icon: "success",
           }).then(() => {
             // Redirect ไปยังหน้าหลักหรือที่ต้องการหลังจากที่ SweetAlert ถูกแสดง
-            location.href = "/";
+            location.href = "/"
           });
         })
         .catch((error) => {

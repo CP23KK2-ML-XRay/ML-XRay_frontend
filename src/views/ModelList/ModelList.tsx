@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import MachineService from '@/service/ManchineService'
+import MachineService from '@/service/MachineService'
 import Swal from 'sweetalert2'
 
 const ModelList = () => {
@@ -38,7 +38,7 @@ const ModelList = () => {
     try {
       const machineService = new MachineService()
       machineService.retrieveListModel().then((data) => {
-        // console.log(data);
+        console.log(data);
         setModelsData(data)
       })
     } catch (error) {
