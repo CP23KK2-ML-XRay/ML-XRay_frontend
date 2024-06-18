@@ -68,7 +68,7 @@ export default class AuthenticationService {
     });
   }
 
-  updatePassword(resetPassword: any): Promise<void> {
+  updatePassword(resetPassword: any): Promise<any> {
     return fetch(`${API_URL}/auth/updatePassword`, {
       method: "PATCH",
       headers: {
@@ -78,9 +78,11 @@ export default class AuthenticationService {
       },
       body: JSON.stringify(resetPassword),
     }).then((response) => {
-      if (!response.ok) {
-        return false;
-      }
+      // console.log(response);
+      // console.log(response.json());
+      // if (!response.ok) {
+      //   return false;
+      // }
       return response.json(); // return response data
     });
   }
