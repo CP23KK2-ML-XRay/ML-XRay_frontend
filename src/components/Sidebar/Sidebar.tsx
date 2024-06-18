@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
-import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Link, useParams } from "react-router-dom";
 import AuthenticationService from "@/service/AuthenticationService";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
@@ -148,7 +147,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
               <GroupsOutlinedIcon fontSize="small" />
               <p>Patients</p>
             </Link>
-            {userRole === "ADMIN" && (
+            {/* {userRole === "ADMIN" && (
               <Link
                 to={"/createmodel"}
                 className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
@@ -156,7 +155,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
                 <AddBoxIcon fontSize="small" />
                 <p>Create Model</p>
               </Link>
-            )}
+            )} */}
             {userRole === "ADMIN" && (
               <Link
                 to={"/model"}
