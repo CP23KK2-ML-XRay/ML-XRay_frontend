@@ -206,15 +206,15 @@ const ModelList = () => {
                       </td>
                     </tr>
                   ))
-                ) : (''
-                  // <tr className="bg-white border-b mt-2">
-                  //   <td
-                  //     colSpan={6}
-                  //     className="w-full px-6 py-2 text-2xl text-center"
-                  //   >
-                  //     No models available
-                  //   </td>
-                  // </tr>
+                ) : (
+                  <tr className="bg-white border-b mt-2">
+                    <td
+                      colSpan={6}
+                      className="w-full px-6 py-2 text-2xl text-center"
+                    >
+                      No models available
+                    </td>
+                  </tr>
                 )}
               </tbody>
             </table>
