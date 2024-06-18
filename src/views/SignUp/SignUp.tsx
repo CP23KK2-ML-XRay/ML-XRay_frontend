@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+// import { Navigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const SignUp = () => {

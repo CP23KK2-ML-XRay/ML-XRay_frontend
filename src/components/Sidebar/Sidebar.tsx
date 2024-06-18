@@ -93,8 +93,8 @@ const Sidebar: React.FC<SidebarProps> = () => {
   const handleSubmit = async () => {
     if (validateForm()) {
       try {
-        const authenticationService = new AuthenticationService
-        await authenticationService.updateUser(userEmail, password)
+        // const authenticationService = new AuthenticationService
+        // await authenticationService.updateUser(userEmail, password)
         console.log("Pass");
         setIsEditing(false);
         setIsPopupOpen(false);
