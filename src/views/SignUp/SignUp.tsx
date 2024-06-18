@@ -104,11 +104,11 @@ const SignUp = () => {
   };
 
   return (
-    <section className="h-screen w-screen bg-gray-50 dark:bg-gray-900">
+    <section className="h-screen w-screen bg-gray-50">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+        <div className="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-2xl xl:p-0 ">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
               Create an account
             </h1>
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
@@ -116,7 +116,7 @@ const SignUp = () => {
                 <div>
                   <label
                     htmlFor="fname"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
                   >
                     Firstname
                   </label>
@@ -126,8 +126,9 @@ const SignUp = () => {
                     id="fname"
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.firstName ? "border-red-500" : ""
-                      }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      errors.firstName ? "border-red-500" : ""
+                    }`}
                     placeholder="Jack"
                   />
                   {errors.firstName && (
@@ -137,7 +138,7 @@ const SignUp = () => {
                 <div>
                   <label
                     htmlFor="lname"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
                   >
                     Lastname
                   </label>
@@ -147,8 +148,9 @@ const SignUp = () => {
                     id="lname"
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.lastName ? "border-red-500" : ""
-                      }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      errors.lastName ? "border-red-500" : ""
+                    }`}
                     placeholder="Dawson"
                   />
                   {errors.lastName && (
@@ -158,7 +160,7 @@ const SignUp = () => {
                 <div>
                   <label
                     htmlFor="position"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
                   >
                     Position
                   </label>
@@ -166,8 +168,9 @@ const SignUp = () => {
                     id="position"
                     value={position}
                     onChange={(e) => setPosition(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.position ? "border-red-500" : ""
-                      }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
+                      errors.position ? "border-red-500" : ""
+                    }`}
                   >
                     <option value="" disabled selected>
                       Choose your position
@@ -182,7 +185,7 @@ const SignUp = () => {
                 <div>
                   <label
                     htmlFor="email"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
                   >
                     Email
                   </label>
@@ -192,8 +195,9 @@ const SignUp = () => {
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.email ? "border-red-500" : ""
-                      }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  ${
+                      errors.email ? "border-red-500" : ""
+                    }`}
                     placeholder="dawson@mail.com"
                   />
                   {errors.email && (
@@ -203,7 +207,7 @@ const SignUp = () => {
                 <div>
                   <label
                     htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
                   >
                     Password
                   </label>
@@ -213,8 +217,9 @@ const SignUp = () => {
                     id="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.password ? "border-red-500" : ""
-                      }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${
+                      errors.password ? "border-red-500" : ""
+                    }`}
                     placeholder="••••••••"
                   />
                   {errors.password && (
@@ -224,7 +229,7 @@ const SignUp = () => {
                 <div>
                   <label
                     htmlFor="confirm-password"
-                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
                   >
                     Confirm password
                   </label>
@@ -234,8 +239,9 @@ const SignUp = () => {
                     id="confirm-password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ${errors.confirmPassword ? "border-red-500" : ""
-                      }`}
+                    className={`bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5  ${
+                      errors.confirmPassword ? "border-red-500" : ""
+                    }`}
                     placeholder="••••••••"
                   />
                   {errors.confirmPassword && (
@@ -247,15 +253,15 @@ const SignUp = () => {
               </div>
               <button
                 type="submit"
-                className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
               >
                 Create an account
               </button>
-              <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+              <p className="text-sm font-light text-gray-500 ">
                 Already have an account?{" "}
                 <a
                   href="/signin"
-                  className="font-medium text-blue-600 hover:underline dark:text-blue-500"
+                  className="font-medium text-blue-600 hover:underline "
                 >
                   Login here
                 </a>

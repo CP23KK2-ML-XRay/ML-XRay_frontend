@@ -80,4 +80,21 @@ export default class HospitalService {
       return response.json(); // return response data
     });
   }
+  searchPatient(name: string) {
+    return fetch(`${API_URL}/hos/patients/search`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: ("Bearer " +
+          localStorage.getItem("accessToken")) as string,
+      },
+      body: JSON.stringify(name),
+    })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to retrieve list of patients");
+      }
+      return response.json(); // return response data
+    });
+  }
 }

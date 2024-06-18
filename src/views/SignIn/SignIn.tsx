@@ -1,8 +1,10 @@
 import AuthenticationService from "@/service/AuthenticationService";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 // import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   FormControl,
   FormHelperText,
+  IconButton,
   InputLabel,
   OutlinedInput,
 } from "@mui/material";
@@ -26,7 +28,9 @@ const SignIn: React.FC = () => {
   //   event.preventDefault();
   // };
 
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>(
+    {}
+  );
 
   const validateEmail = (email: string): boolean => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -94,7 +98,7 @@ const SignIn: React.FC = () => {
             icon: "error",
             title: "Oops...",
             text: "Something went wrong!",
-          })
+          });
         });
     }
   };
@@ -174,23 +178,37 @@ const SignIn: React.FC = () => {
                 label="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                endAdornment={
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleCheckboxChange}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                }
               />
               <FormHelperText id="component-error-text">
                 {errors.password}
               </FormHelperText>
             </FormControl>
-            <div className="flex mt-4">
-              <input data-hs-toggle-password='{ "target": "#hs-toggle-password-with-checkbox" }' 
-              name="show-pass"
-              id="show-pass"
-              type="checkbox" 
-              className="mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
-              checked={showPassword}
-              onChange={handleCheckboxChange} />
-              <label className="text-sm text-gray-500 ms-3 dark:text-neutral-400 cursor-pointer" htmlFor="show-pass">
+            {/* <div className="flex mt-4">
+              <input
+                data-hs-toggle-password='{ "target": "#hs-toggle-password-with-checkbox" }'
+                name="show-pass"
+                id="show-pass"
+                type="checkbox"
+                className="mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
+                checked={showPassword}
+                onChange={handleCheckboxChange}
+              />
+              <label
+                className="text-sm text-gray-500 ms-3 dark:text-neutral-400 cursor-pointer"
+                htmlFor="show-pass"
+              >
                 Show password
               </label>
-            </div>
+            </div> */}
           </div>
           <div className="mt-4 flex justify-between font-semibold text-sm"></div>
           <div className="text-center md:text-left">
