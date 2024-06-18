@@ -10,16 +10,29 @@ import { IconButton, InputLabel, OutlinedInput } from "@mui/material";
 import Swal from "sweetalert2";
 
 const handleLogout = () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("accessTokenExp");
-  localStorage.removeItem("refreshToken");
-  localStorage.removeItem("refreshTokenExp");
-  localStorage.removeItem("email");
-  localStorage.removeItem("role");
-  location.href = "/signin";
-};
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You will be logged out",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, logout",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Proceed with logout
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("accessTokenExp");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("refreshTokenExp");
+      localStorage.removeItem("email");
+      localStorage.removeItem("role");
+      location.href = "/signin";
+    }
+  });
+}
 
-interface SidebarProps {}
+interface SidebarProps { }
 
 interface UserData {
   firstname: string;
@@ -85,6 +98,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
   // | | | | | | | | |
   // | | | | | | | | |
   // V V V V V V V V V
+
   const handlePopupOpen = () => {
     setIsPopupOpen(true);
     setIsEditing(false);
@@ -125,7 +139,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
               title: "Failed!",
               text: "Invalid Password",
               icon: "error",
-            }).then(() => {});
+            }).then(() => { });
           }
         });
       } catch (error) {
@@ -134,7 +148,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
           title: "Failed!",
           text: "Something went wrong.",
           icon: "error",
-        }).then(() => {});
+        }).then(() => { });
       }
     }
   };
@@ -155,6 +169,8 @@ const Sidebar: React.FC<SidebarProps> = () => {
     const role = localStorage.getItem("role");
     setUserRole(role);
   }, [userEmail]);
+
+
   // UX UI Sidebar here
   // | | | | | | | | | | | |
   // | | | | | | | | | | | |

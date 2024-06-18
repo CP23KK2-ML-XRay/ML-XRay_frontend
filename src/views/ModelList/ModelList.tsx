@@ -21,7 +21,6 @@ const ModelList = () => {
     });
     setFormErrors({
       model_name: "",
-      model_category: "",
       class0: "",
       class1: "",
       class2: "",
@@ -29,15 +28,15 @@ const ModelList = () => {
     setIsModalOpen(false);
   };
 
-  const [isEditOpen, setIsEditOpen] = useState(false);
+  // const [isEditOpen, setIsEditOpen] = useState(false);
 
-  const openEdit = () => {
-    setIsEditOpen(true);
-  };
+  // const openEdit = () => {
+  //   setIsEditOpen(true);
+  // };
 
-  const closeEdit = () => {
-    setIsEditOpen(false);
-  };
+  // const closeEdit = () => {
+  //   setIsEditOpen(false);
+  // };
 
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
@@ -80,7 +79,7 @@ const ModelList = () => {
 
   const [formData, setFormData] = useState({
     model_name: "",
-    model_category: "",
+    model_category: "image",
     class0: "",
     class1: "",
     class2: "",
@@ -91,7 +90,6 @@ const ModelList = () => {
 
   const [formErrors, setFormErrors] = useState({
     model_name: "",
-    model_category: "",
     class0: "",
     class1: "",
     class2: "",
@@ -105,15 +103,15 @@ const ModelList = () => {
     }));
   };
 
-  const handleChange = (
-    event: React.ChangeEvent<HTMLFormElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
+  // const handleChange = (
+  //   event: React.ChangeEvent<HTMLFormElement | HTMLSelectElement>
+  // ) => {
+  //   const { name, value } = event.target;
+  //   setFormData((prevData) => ({
+  //     ...prevData,
+  //     [name]: value,
+  //   }));
+  // };
 
   const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -190,13 +188,13 @@ const ModelList = () => {
     }
   };
 
-  // Validate Function only fontend --------------------------------------------------------------------------------------
+  // Validate Function only create model fontend --------------------------------------------------------------------------------------
   // | | | | | | | | | | | | | | | | --------------------------------------------------------------------------------------
   // V V V V V V V V V V V V V V V V
   const validateForm = (data: typeof formData) => {
     const errors: any = {};
     if (!data.model_name) errors.model_name = "Required model name";
-    if (!data.model_category) errors.model_category = "Required model category";
+    // if (!data.model_category) errors.model_category = "Required model category";
     if (!data.class0) errors.class0 = "Required class 0 name";
     if (!data.class1) errors.class1 = "Required class 1 name";
     if (!data.class2) errors.class2 = "Required class 2 name";
@@ -327,7 +325,7 @@ const ModelList = () => {
                       <td className="px-4 py-3">{model.class2}</td>
                       <td className="px-4 py-3">{model.status}</td>
                       <td className="pr-4 py-3 flex items-center justify-center">
-                        <button
+                        {/* <button
                           id="apple-imac-27-dropdown-button"
                           data-dropdown-toggle="apple-imac-27-dropdown"
                           className="inline-flex items-center mx-2 p-0.5 text-sm font-medium text-center bg-blue-600 text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none"
@@ -351,7 +349,7 @@ const ModelList = () => {
                               d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
                             />
                           </svg>
-                        </button>
+                        </button> */}
 
                         <button
                           id="apple-imac-27-dropdown-button"
@@ -397,7 +395,7 @@ const ModelList = () => {
         </div>
       </div>
 
-      {/*Modal for EDIT MODEL _-----------------------------------------------------------------------------------*/}
+      {/*Modal for EDIT MODEL _-----------------------------------------------------------------------------------
       {isEditOpen && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -415,14 +413,13 @@ const ModelList = () => {
               &#8203;
             </span>
             <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              {/* Header */}
+
               <div className="bg-primary-500 px-4 py-3 sm:px-6">
                 <h3 className="text-2xl font-medium leading-6 text-black">
                   Edit Model Name
                 </h3>
               </div>
 
-              {/* Modal body */}
               <form className="space-y-4 md:space-y-6">
                 <div className="px-4 py-4 sm:p-6">
                   <div className="grid grid-cols-1 gap-6 w-full">
@@ -442,7 +439,6 @@ const ModelList = () => {
                   </div>
                 </div>
 
-                {/* Modal footer */}
                 <div className="bg-white dark:bg-gray-400 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                   <button
                     type="button"
@@ -462,8 +458,8 @@ const ModelList = () => {
             </div>
           </div>
         </div>
-      )}
-
+      )} 
+*/}
       {/*Modal for Create new model ------------------------------------------------------------------------------------------------ */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -488,7 +484,7 @@ const ModelList = () => {
                     placeholder="Enter your model name"
                   />
 
-                  <select
+                  {/* <select
                     className="bg-transparent border-l-2 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
                     value={formData.model_category}
                     onChange={handleChange}
@@ -499,9 +495,9 @@ const ModelList = () => {
                     </option>
                     <option value="numberic">Numeric</option>
                     <option value="image">Image</option>
-                  </select>
+                  </select> */}
                 </div>
-                <span className="text-red-500 text-sm mb-2 flex w-full">
+                {/* <span className="text-red-500 text-sm mb-2 flex w-full">
                   {formErrors.model_name && (
                     <p className="absolute"> {formErrors.model_name} </p>
                   )}
@@ -510,7 +506,7 @@ const ModelList = () => {
                       {formErrors.model_category}
                     </p>
                   )}
-                </span>
+                </span> */}
 
                 <h6 className="pt-4 font-medium">Class 0:</h6>
                 {formErrors.class0 && (

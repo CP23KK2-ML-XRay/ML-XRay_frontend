@@ -79,19 +79,6 @@ export const DetailPatient = () => {
     }));
   };
 
-  // const validateForm = () => {
-  //   let errors: any = {};
-  //   if (!formData.firstname) errors.firstname = "First Name is required";
-  //   if (!formData.lastname) errors.lastname = "Last Name is required";
-  //   if (!formData.dateOfBirth) errors.dateOfBirth = "Date of Birth is required";
-  //   if (!formData.phone_number) errors.phone_number = "Phone Number is required";
-  //   if (formData.phone_number && formData.phone_number.length > 10)
-  //     errors.phone_number = "Phone Number cannot exceed 10 characters";
-
-  //   setFormErrors(errors);
-  //   return Object.keys(errors).length === 0;
-  // };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -139,31 +126,6 @@ export const DetailPatient = () => {
         icon: "error",
       });
     }
-
-    // if (validateForm()) {
-    //   try {
-    //     const response = await axios.put(
-    //       `http://localhost:8082/api/hos/patients/${patientId}`,
-    //       formData,
-    //       {
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //           email: localStorage.getItem("email") as string,
-    //         },
-    //       }
-    //     );
-    //     console.log("Update response", response);
-    //     setUserData(response.data);
-    //     setIsEdit(false);
-    //     Swal.fire({
-    //       icon: "success",
-    //       title: "Success",
-    //       text: "Patient details updated successfully.",
-    //     });
-    //   } catch (error) {
-    //     console.error("Error updating patient details", error);
-    //   }
-    // }
   };
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -519,36 +481,7 @@ export const DetailPatient = () => {
                 </button>
               </div>
             )}
-            {/* <form className="max-w-sm">
-              <select
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                id="modelName"
-                name="modelName"
-              >
-                <option value="" selected disabled>
-                  Select Model
-                </option>
-                <option value="CA">2</option>
-                <option value="FR">3</option>
-                <option value="DE">4</option>
-              </select>
-            </form>
-
-            <div className="w-2/3">
-              <input
-                className="relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-neutral-300 bg-clip-padding px-3 py-[0.32rem] text-base font-normal text-neutral-700 transition duration-300 ease-in-out file:-mx-3 file:-my-[0.32rem] file:overflow-hidden file:rounded-none file:border-0 file:border-solid file:border-inherit file:bg-neutral-100 file:px-3 file:py-[0.32rem] file:text-neutral-700 file:transition file:duration-150 file:ease-in-out file:[border-inline-end-width:1px] file:[margin-inline-end:0.75rem] hover:file:bg-neutral-200 focus:border-primary focus:text-neutral-700 focus:shadow-te-primary focus:outline-none dark:border-neutral-600  dark:file:bg-neutral-700 dark:file:text-neutral-100 dark:focus:border-primary"
-                type="file"
-                id="formFile"
-                onChange={handleFileChange}
-              />
-            </div>
-            <button
-              type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded text-sm"
-              onClick={handleFileUpload}
-            >
-              Upload
-            </button> */}
+           
           </div>
         </div>
       </div>
