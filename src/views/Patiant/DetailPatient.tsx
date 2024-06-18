@@ -1,4 +1,3 @@
-import axios from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Patient } from "./types";
@@ -53,7 +52,7 @@ export const DetailPatient = () => {
     };
 
     fetchData();
-  }, []);
+  }, );
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;

@@ -11,7 +11,7 @@ export const CreateModel = () => {
         class1: "",
         class2: "",
         admin_id: "",
-        model_path: "/folder/a",
+        model_path: "",
         train: null,
         test: null,
         val: null
@@ -69,7 +69,7 @@ export const CreateModel = () => {
             });
             setTimeout(() => {
                 location.reload();
-              }, 2000);
+            }, 2000);
         } catch (error) {
             Swal.fire({
                 title: "Error!",
@@ -91,6 +91,27 @@ export const CreateModel = () => {
         if (!data.class1) errors.class1 = "Required class 1 name";
         if (!data.class2) errors.class2 = "Required class 2 name";
         return errors;
+    };
+
+    const handleFileChange = (e) => {
+        const { name, files } = e.target;
+        if (files.length > 0) {
+            const file = files[0];
+            const validExtensions = ["zip", "rar", "7z"];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            if (validExtensions.includes(fileExtension)) {
+                setFormData((prevData) => ({
+                    ...prevData,
+                    [name]: file,
+                }));
+            } else {
+                Swal.fire({
+                    title: "Invalid file type",
+                    text: "Please upload a ZIP file.",
+                    icon: "error",
+                });
+            }
+        }
     };
 
     return (
@@ -156,6 +177,15 @@ export const CreateModel = () => {
                                 name="class0"
                                 placeholder="Enter your class 0 name"
                             />
+                            <input className="block mt-2 w-full text-sm border border-gray-300 rounded-sm cursor-pointer" 
+                            id="class0_zip" 
+                            name="class0_zip"
+                            type="file"
+                            onChange={handleFileChange} 
+                            accept=".zip,.rar,.7zip"
+                            />
+                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Upload compress file for class 0.</p>
+
 
                             <h6 className="pt-4 font-medium">Class 1:</h6>
                             {formErrors.class1 && (
@@ -170,7 +200,16 @@ export const CreateModel = () => {
                                 onChange={handleChange}
                                 name="class1"
                                 placeholder="Enter your class 1 name"
-                            />   
+                            />
+                            <input className="block mt-2 w-full text-sm border border-gray-300 rounded-sm cursor-pointer" 
+                            id="class1_zip" 
+                            name="class1_zip"
+                            type="file" 
+                            onChange={handleFileChange}
+                            accept=".zip,.rar,.7zip"
+                            />
+                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Upload compress file for class 1.</p>
+
                             <h6 className="pt-4 font-medium">Class 2:</h6>
                             {formErrors.class2 && (
                                 <div className="text-red-500 text-sm flex absolute left-1/2 pt-8">
@@ -185,6 +224,15 @@ export const CreateModel = () => {
                                 name="class2"
                                 placeholder="Enter your class 2 name"
                             />
+                            <input className="block mt-2 w-full text-sm  border-gray-300 rounded-sm cursor-pointer" 
+                            id="class2_zip" 
+                            type="file" 
+                            name="class2_zip"
+                            onChange={handleFileChange}
+                            accept=".zip,.rar,.7zip"
+                            />
+                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Upload compress file for class 2.</p>
+
 
                             <div className="py-4 flex">
                                 <button
