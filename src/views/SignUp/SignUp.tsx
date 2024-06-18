@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-// import { Navigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 
 const SignUp = () => {
@@ -11,6 +11,8 @@ const SignUp = () => {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  const navigate = useNavigate();
 
   const validate = (): { [key: string]: string } => {
     const newErrors: { [key: string]: string } = {};
@@ -79,11 +81,13 @@ const SignUp = () => {
         });
         Swal.fire({
           title: "Added!",
-          text: "You can see your patient in patients record.",
+          text: "Account added.",
           icon: "success",
+        }).then(() => {
+          navigate('/signin')
         });
-        location.reload();
         // window.location.reload();
+
       } catch (error) {
         Swal.fire({
           title: "error",

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState, FormEvent  } from "react";
 import Swal from "sweetalert2";
-import MachineService from "@/service/ManchineService";
+import MachineService from "@/service/MachineService";
 
 export const CreateModel = () => {
     const [formData, setFormData] = useState({
@@ -253,7 +253,7 @@ export const CreateModel = () => {
                                 </button>
                                 <Link
                                     to="/"
-                                    className="px-6 py-2 rounded-md text-black-100 bg-white-400 border-black-100 border-2 border-black-200 hover:bg-gray-100 hover:border-gray-400 hover:text-gray-700"
+                                    className="px-6 py-2 rounded-md text-black-100 bg-white-400 border-black-100 border-2 border-black-200 hover:bg-gray-300 hover:text-gray-700"
                                 >
                                     Cancel
                                 </Link>
