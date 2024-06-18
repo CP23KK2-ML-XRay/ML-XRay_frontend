@@ -16,6 +16,7 @@ export const ListPatient = () => {
       hospitalService.retrieveListPatients().then((data) => {
         console.log(data)
         setUsersData(data)
+        setFilteredUsers(data);
       })
     } catch (error) {
       console.error(error)
@@ -167,7 +168,7 @@ export const ListPatient = () => {
     }
   }
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch =  (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value.toLowerCase()
     setSearchQuery(query)
     if (query === '') {
