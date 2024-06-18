@@ -51,7 +51,7 @@ export default class HospitalService {
   }
   updatePatient(id: string, data: any) {
     return fetch(`${API_URL}/hos/patients/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: ("Bearer " +

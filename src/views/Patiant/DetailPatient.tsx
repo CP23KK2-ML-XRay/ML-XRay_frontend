@@ -104,29 +104,34 @@ export const DetailPatient = () => {
     console.log("Data submitted successfully:", formData);
     try {
       const hospitalService = new HospitalService();
-      const response = await hospitalService.updatePatient(patientId, formData);
-      console.log(response);
-      Swal.fire({
-        title: "Updated!",
-        text: "You patient has been updated.",
-        icon: "success",
+      await hospitalService.updatePatient(patientId, formData).then((data) => {
+        if (data) {
+          Swal.fire({
+            title: "Updated!",
+            text: "You patient has been updated.",
+            icon: "success",
+          }).then(() => {
+            setFormData({
+              firstname: "",
+              lastname: "",
+              dateOfBirth: "",
+              phone_number: "",
+              gender: "Male", // Default value
+              weight: "",
+              height: "",
+              bloodType: "A+",
+              medic_person: "", // Default value
+            });
+            location.reload();
+          });
+        } else {
+          Swal.fire({
+            title: "error!",
+            text: "Can't edit patient. Please try again.",
+            icon: "error",
+          });
+        }
       });
-
-      setFormData({
-        firstname: "",
-        lastname: "",
-        dateOfBirth: "",
-        phone_number: "",
-        gender: "Male", // Default value
-        weight: "",
-        height: "",
-        bloodType: "A+",
-        medic_person: "", // Default value
-      });
-      setTimeout(() => {
-        location.reload();
-      }, 2000);
-      console.log("Data submitted successfully:", formData);
     } catch (error) {
       Swal.fire({
         title: "error!",
