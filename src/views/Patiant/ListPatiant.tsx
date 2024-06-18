@@ -82,6 +82,7 @@ export const ListPatient = () => {
       const hospitalService = new HospitalService();
       const response = await hospitalService.createPatient(formData);
       if (response) {
+        console.log("Pass")
       }
       Swal.fire({
         title: "Added!",
