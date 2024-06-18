@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Patient } from './types'
 import Swal from 'sweetalert2'
 import HospitalService from '@/service/HospitalService'
-import MachineService from '@/service/ManchineService'
+import MachineService from '@/service/MachineService'
 
 export const DetailPatient = () => {
   const { id } = useParams<{ id: string }>()
@@ -455,11 +455,11 @@ export const DetailPatient = () => {
           <div className="mb-3 flex justify-center items-center gap-3">
             <form className="max-w-sm">
               <select
-                id="countries"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                id="modelName"
+                name='modelName'
               >
-                <option selected>Select model</option>
-                <option value="US">1</option>
+                <option value="" selected disabled>Select Model</option>
                 <option value="CA">2</option>
                 <option value="FR">3</option>
                 <option value="DE">4</option>
