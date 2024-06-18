@@ -50,4 +50,20 @@ export default class AuthenticationService {
       return response.json(); // return response data
     });
   }
+
+  retrieveUser(email: string) {
+    return fetch(`${API_URL}/auth/info/${email}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: ("Bearer " +
+          localStorage.getItem("accessToken")) as string,
+      },
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to retrieveUserInfo");
+      }
+      return response.json(); // return response data
+    });
+  }
 }

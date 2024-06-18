@@ -1,62 +1,62 @@
-import { useEffect, useState } from "react";
-import MachineService from "@/service/ManchineService";
-import Swal from "sweetalert2";
+import { useEffect, useState } from 'react'
+import MachineService from '@/service/ManchineService'
+import Swal from 'sweetalert2'
 
 const ModelList = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const openModal = () => {
-    setIsModalOpen(true);
-  };
+    setIsModalOpen(true)
+  }
 
   const closeModal = () => {
-    setIsModalOpen(false);
-  };
+    setIsModalOpen(false)
+  }
 
-  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false)
 
   const openEdit = () => {
-    setIsEditOpen(true);
-  };
+    setIsEditOpen(true)
+  }
 
   const closeEdit = () => {
-    setIsEditOpen(false);
-  };
+    setIsEditOpen(false)
+  }
 
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false)
 
   const openDelete = () => {
-    setIsDeleteOpen(true);
-  };
+    setIsDeleteOpen(true)
+  }
 
   const closeDelete = () => {
-    setIsDeleteOpen(false);
-  };
+    setIsDeleteOpen(false)
+  }
 
-  const [modelsData, setModelsData] = useState<any[]>([]);
+  const [modelsData, setModelsData] = useState<any[]>([])
 
   useEffect(() => {
     try {
-      const machineService = new MachineService();
+      const machineService = new MachineService()
       machineService.retrieveListModel().then((data) => {
         // console.log(data);
-        setModelsData(data);
-      });
+        setModelsData(data)
+      })
     } catch (error) {
       // console.error(error);
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong!",
-      });
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+      })
     }
-    // fetchData();
-  }, []);
+
+    // fetchData()
+  }, [])
 
   return (
-    <section className="h-screen w-screen bg-gray-50 dark:bg-gray-900 p-3 sm:p-5">
+    <section className="h-screen w-screen bg-gray-300  p-3 sm:p-5">
       <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
-        <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+        <div className="bg-white relative shadow-md sm:rounded-lg overflow-hidden">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
             <div className="w-full md:w-1/2">
               <form className="flex items-center">
@@ -67,7 +67,7 @@ const ModelList = () => {
                   <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <svg
                       aria-hidden="true"
-                      className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                      className="w-5 h-5 text-gray-500"
                       fill="currentColor"
                       viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +82,7 @@ const ModelList = () => {
                   <input
                     type="text"
                     id="simple-search"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 "
                     placeholder="Search"
                   />
                 </div>
@@ -91,7 +91,7 @@ const ModelList = () => {
             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
               <button
                 type="button"
-                className="flex items-center justify-center bg-blue-600 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                className="flex items-center justify-center bg-blue-600 text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2"
                 onClick={openModal}
               >
                 <svg
@@ -112,101 +112,110 @@ const ModelList = () => {
             </div>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <table className="w-full text-sm text-left text-gray-500 ">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-200 text-center">
                 <tr>
-                  <th scope="col" className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3 text-gray-500">
                     #ID
                   </th>
-                  <th scope="col" className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3 text-gray-500">
                     Model Name
                   </th>
-                  <th scope="col" className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3 text-gray-500">
                     Category
                   </th>
-                  <th scope="col" className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3 text-gray-500">
                     Class 0
                   </th>
-                  <th scope="col" className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3 text-gray-500">
                     Class 1
                   </th>
-                  <th scope="col" className="px-4 py-3">
+                  <th scope="col" className="px-4 py-3 text-gray-500">
                     Class 2
                   </th>
-                  <th scope="col" className="px-4 py-3"></th>
+                  <th scope="col" className="px-4 py-3 text-gray-500"></th>
                 </tr>
               </thead>
               <tbody>
-                {modelsData.length > 0
-                  ? modelsData.map((model, index) => (
-                      <tr className="border-b dark:border-gray-700" key={index}>
-                        <th
-                          scope="row"
-                          className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                {modelsData.length > 0 ? (
+                  modelsData.map((model, index) => (
+                    <tr className="border-b" key={index}>
+                      <th
+                        scope="row"
+                        className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap"
+                      >
+                        {index + 1}
+                      </th>
+                      <td className="px-4 py-3">{model.model_name}</td>
+                      <td className="px-4 py-3">{model.model_category}</td>
+                      <td className="px-4 py-3">{model.class0}</td>
+                      <td className="px-4 py-3">{model.class1}</td>
+                      <td className="px-4 py-3">{model.class2}</td>
+                      <td className="pr-4 py-3 flex items-center justify-center">
+                        <button
+                          id="apple-imac-27-dropdown-button"
+                          data-dropdown-toggle="apple-imac-27-dropdown"
+                          className="inline-flex items-center mx-2 p-0.5 text-sm font-medium text-center bg-blue-600 text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none"
+                          type="button"
+                          onClick={openEdit}
                         >
-                          {index + 1}
-                        </th>
-                        <td className="px-4 py-3">{model.model_name}</td>
-                        <td className="px-4 py-3">{model.model_category}</td>
-                        <td className="px-4 py-3">{model.class0}</td>
-                        <td className="px-4 py-3">{model.class1}</td>
-                        <td className="px-4 py-3">{model.class2}</td>
-                        <td className="pr-4 py-3 flex items-center justify-center">
-                          <button
-                            id="apple-imac-27-dropdown-button"
-                            data-dropdown-toggle="apple-imac-27-dropdown"
-                            className="inline-flex items-center mx-2 p-0.5 text-sm font-medium text-center bg-blue-600 text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
-                            type="button"
-                            onClick={openEdit}
+                          <svg
+                            className="w-5 h-5 text-gray-800"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
                           >
-                            <svg
-                              className="w-5 h-5 text-gray-800 dark:text-white"
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
-                              />
-                            </svg>
-                          </button>
+                            <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"
+                            />
+                          </svg>
+                        </button>
 
-                          <button
-                            id="apple-imac-27-dropdown-button"
-                            data-dropdown-toggle="apple-imac-27-dropdown"
-                            className="inline-flex items-center mx-2 p-0.5 text-sm font-medium text-center bg-red-600 text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100"
-                            type="button"
-                            onClick={openDelete}
+                        <button
+                          id="apple-imac-27-dropdown-button"
+                          data-dropdown-toggle="apple-imac-27-dropdown"
+                          className="inline-flex items-center mx-2 p-0.5 text-sm font-medium text-center bg-red-600 text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none"
+                          type="button"
+                          onClick={openDelete}
+                        >
+                          <svg
+                            className="w-5 h-5 text-gray-800 "
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
                           >
-                            <svg
-                              className="w-5 h-5 text-gray-800 dark:text-white"
-                              aria-hidden="true"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                stroke="currentColor"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
-                              />
-                            </svg>
-                          </button>
-                        </td>
-                      </tr>
-                    ))
-                  : ""}
+                            <path
+                              stroke="currentColor"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"
+                            />
+                          </svg>
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr className="bg-white border-b mt-2">
+                    <td
+                      colSpan={6}
+                      className="w-full px-6 py-2 text-2xl text-center"
+                    >
+                      No models available
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -214,21 +223,17 @@ const ModelList = () => {
             className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
             aria-label="Table navigation"
           >
-            <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
+            <span className="text-sm font-normal text-gray-500">
               Showing
-              <span className="font-semibold text-gray-900 dark:text-white">
-                1-10
-              </span>
+              <span className="font-semibold text-gray-500 p-1">1-10</span>
               of
-              <span className="font-semibold text-gray-900 dark:text-white">
-                1000
-              </span>
+              <span className="font-semibold text-gray-500 p-1">1000</span>
             </span>
             <ul className="inline-flex items-stretch -space-x-px">
               <li>
                 <a
                   href="#"
-                  className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  className="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
                 >
                   <span className="sr-only">Previous</span>
                   <svg
@@ -249,7 +254,7 @@ const ModelList = () => {
               <li>
                 <a
                   href="#"
-                  className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
                 >
                   1
                 </a>
@@ -257,7 +262,7 @@ const ModelList = () => {
               <li>
                 <a
                   href="#"
-                  className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
                 >
                   2
                 </a>
@@ -266,7 +271,7 @@ const ModelList = () => {
                 <a
                   href="#"
                   aria-current="page"
-                  className="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white"
+                  className="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700"
                 >
                   3
                 </a>
@@ -274,7 +279,7 @@ const ModelList = () => {
               <li>
                 <a
                   href="#"
-                  className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
                 >
                   ...
                 </a>
@@ -282,7 +287,7 @@ const ModelList = () => {
               <li>
                 <a
                   href="#"
-                  className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  className="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 "
                 >
                   100
                 </a>
@@ -290,7 +295,7 @@ const ModelList = () => {
               <li>
                 <a
                   href="#"
-                  className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                  className="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700"
                 >
                   <span className="sr-only">Next</span>
                   <svg
@@ -554,7 +559,7 @@ const ModelList = () => {
         </div>
       )}
     </section>
-  );
-};
+  )
+}
 
-export default ModelList;
+export default ModelList

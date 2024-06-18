@@ -109,7 +109,7 @@ export const DetailPatient = () => {
             <div className="pa_normal flex">
               <p className="m-4">Gender: {userData?.gender}</p>
               {/* <p className="m-4">Age: 21</p> */}
-              <p className="m-4">Date of Birth: {userData?.date_of_birth}</p>
+              <p className="m-4">Date of Birth: {userData?.dateOfBirth}</p>
             </div>
             <div className="pa_medic flex">
               {/* <div className="p-4 border-dashed border-2 border-gray-500 m-4 rounded-lg">

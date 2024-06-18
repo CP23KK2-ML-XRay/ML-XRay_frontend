@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
-import { Link } from "react-router-dom";
-
-interface SidebarProps {
-  // Define the props for your sidebar component here
-}
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import { Link, useParams } from "react-router-dom";
+import AuthenticationService from "@/service/AuthenticationService"
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 
 const handleLogout = () => {
   localStorage.removeItem("accessToken");
@@ -18,16 +17,66 @@ const handleLogout = () => {
   location.href = "/signin";
 };
 
-  // THIS IS FUNCTION SECTOR NAJA
-  // | | | | | | | | | | | |
-  // | | | | | | | | | | | |
-  // V V V V V V V V V V V V
+interface SidebarProps { }
 
-const Sidebar: React.FC<SidebarProps> = () => {  
+interface UserData {
+  firstname: string;
+  lastname: string;
+  email: string;
+  position: string;
+}
+
+// THIS IS FUNCTION SECTOR NAJA
+// | | | | | | | | | | | |
+// | | | | | | | | | | | |
+// V V V V V V V V V V V V
+
+const Sidebar: React.FC<SidebarProps> = () => {
+  const { email } = useParams<{ email: string }>()
+  const userEmail = email ? email : "";
+
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [userInfo, setUserInfo] = useState({ firstname: 'John', lastname: 'Doe' });
+  const [oldPassword, setOldPassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [formErrors, setFormErrors] = useState({
+    oldPassword: "",
+    password: "",
+    confirmPassword: ""
+  });
 
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  const validateForm = () => {
+    const newErrors = { oldPassword: "", password: "", confirmPassword: "" };
+
+    if (!oldPassword.trim()) {
+      newErrors.oldPassword = "Old password is required";
+    }
+
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+    } else if (password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    }
+
+    if (!confirmPassword.trim()) {
+      newErrors.confirmPassword = "Confirm password is required";
+    } else if (confirmPassword !== password) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    setFormErrors(newErrors);
+
+    return !newErrors.oldPassword && !newErrors.password && !newErrors.confirmPassword;
+  };
+
+
+  // | | | | | | | | | 
+  // | | | | | | | | | 
+  // V V V V V V V V V
   const handlePopupOpen = () => {
     setIsPopupOpen(true);
     setIsEditing(false);
@@ -41,18 +90,44 @@ const Sidebar: React.FC<SidebarProps> = () => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
-    setIsEditing(false);
+  const handleSubmit = async () => {
+    if (validateForm()) {
+      try {
+        const authenticationService = new AuthenticationService
+        await authenticationService.updateUser(userEmail, password)
+        console.log("Pass");
+        setIsEditing(false);
+        setIsPopupOpen(false);
+      } catch (error) {
+        console.error("Failed to update user info:", error);
+      }
+    }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserInfo({
-      ...userInfo,
-      [name]: value,
-    });
-  };
 
+  // | | | | | | | | | | | |
+  // | | | | | | | | | | | |
+  // V V V V V V V V V V V V
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+      try {
+        const authenticationService = new AuthenticationService
+        const data = await authenticationService.retrieveUser(userEmail)
+        if (data) {
+          setUserData(data)
+          console.log(data)
+        }
+      } catch (error) {
+        console.error("ERROR")
+      }
+    }
+    fetchData();
+    const role = localStorage.getItem("role");
+    setUserRole(role)
+  }, [userEmail]
+  )
   // UX UI Sidebar here 
   // | | | | | | | | | | | |
   // | | | | | | | | | | | |
@@ -75,6 +150,25 @@ const Sidebar: React.FC<SidebarProps> = () => {
               <GroupsOutlinedIcon fontSize="small" />
               <p>Patients</p>
             </Link>
+            {userRole === "ADMIN" && (
+                <Link
+                to={"/createmodel"}
+                className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
+              >
+                <AddBoxIcon fontSize="small" />
+              <p>Create Model</p>
+            </Link>            
+            )}
+            {userRole === "ADMIN" && (
+              <Link
+            to={"/model"}
+            className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
+          >
+            <ClearAllIcon fontSize="small" />
+            <p>Models</p>
+          </Link>
+            )}
+
             {/* <button className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300">
               <CalendarMonthOutlinedIcon fontSize="small" />
               <p>Calendar</p>
@@ -117,40 +211,59 @@ POP UP for USER INFO and EDIT USER INFO
               {isEditing ? (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Firstname</label>
+                    <label className="block text-sm font-medium text-gray-700">Old Password</label>
                     <input
-                      type="text"
-                      name="firstname"
+                      type="password"
+                      name="oldPassword"
                       className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
-                      value={userInfo.firstname}
-                      onChange={handleChange}
+                      value={oldPassword}
+                      onChange={(e) => setOldPassword(e.target.value)}
                     />
+                    {formErrors.oldPassword && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.oldPassword}</p>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">New Password</label>
+                    <input
+                      type="password"
+                      name="password"
+                      className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                    {formErrors.password && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.password}</p>
+                    )}
                   </div>
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700">Lastname</label>
+                    <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
                     <input
-                      type="text"
-                      name="lastname"
+                      type="password"
+                      name="confirmPassword"
                       className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
-                      value={userInfo.lastname}
-                      onChange={handleChange}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                     />
+                    {formErrors.confirmPassword && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.confirmPassword}</p>
+                    )}
                   </div>
                 </>
               ) : (
-                <>
-                  <p>Firstname: {userInfo.firstname}</p>
-                  <p>Lastname: {userInfo.lastname}</p>
-                  <p>Email: </p>
-                  <p>Role:</p>
-                </>
+                <div>
+                  Firstname: {userData?.firstname}
+                  <p>Lastname: {userData?.lastname}</p>
+                  <p>Email: {userData?.email}</p>
+                  <p>Role: {userData?.position}</p>
+                </div>
               )}
             </div>
             <div className="flex justify-end">
               {isEditing ? (
                 <button
                   className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-700"
-                  onClick={handleSaveClick}
+                  onClick={handleSubmit}
                 >
                   Save
                 </button>
@@ -159,7 +272,7 @@ POP UP for USER INFO and EDIT USER INFO
                   className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
                   onClick={handleEditClick}
                 >
-                  Edit
+                  Change Password
                 </button>
               )}
               <button
