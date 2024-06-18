@@ -108,17 +108,22 @@ const Sidebar: React.FC<SidebarProps> = () => {
       };
       try {
         const authenticationService = new AuthenticationService();
-        authenticationService.updatePassword(data).then((response) => {
-          if (response) {
-            setIsEditing(false);
-            setIsPopupOpen(false);
+        await authenticationService.updatePassword(data).then((data) => {
+          console.log(data);
+          if (data.status != 401) {
             Swal.fire({
               title: "Success!",
-              text: "Password Changed.",
+              text: "Password has been updated.",
               icon: "success",
             }).then(() => {
-              location.href = "/";
+              handlePopupClose();
             });
+          } else {
+            Swal.fire({
+              title: "Failed!",
+              text: "Invalid Password",
+              icon: "error",
+            }).then(() => {});
           }
         });
       } catch (error) {
