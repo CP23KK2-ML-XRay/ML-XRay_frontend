@@ -81,16 +81,14 @@ export default class HospitalService {
     });
   }
   searchPatient(name: string) {
-    return fetch(`${API_URL}/hos/patients/search`, {
-      method: "POST",
+    return fetch(`${API_URL}/hos/patients/search?name=${name}`, {
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: ("Bearer " +
           localStorage.getItem("accessToken")) as string,
       },
-      body: JSON.stringify(name),
-    })
-    .then((response) => {
+    }).then((response) => {
       if (!response.ok) {
         throw new Error("Failed to retrieve list of patients");
       }

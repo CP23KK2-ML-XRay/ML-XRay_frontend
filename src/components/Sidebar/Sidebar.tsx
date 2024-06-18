@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
-import AccountBoxRoundedIcon from '@mui/icons-material/AccountBoxRounded';
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import AccountBoxRoundedIcon from "@mui/icons-material/AccountBoxRounded";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import { Link, useParams } from "react-router-dom";
-import AuthenticationService from "@/service/AuthenticationService"
-import ClearAllIcon from '@mui/icons-material/ClearAll';
+import AuthenticationService from "@/service/AuthenticationService";
+import ClearAllIcon from "@mui/icons-material/ClearAll";
 
 const handleLogout = () => {
   localStorage.removeItem("accessToken");
@@ -17,7 +17,7 @@ const handleLogout = () => {
   location.href = "/signin";
 };
 
-interface SidebarProps { }
+interface SidebarProps {}
 
 interface UserData {
   firstname: string;
@@ -32,7 +32,7 @@ interface UserData {
 // V V V V V V V V V V V V
 
 const Sidebar: React.FC<SidebarProps> = () => {
-  const { email } = useParams<{ email: string }>()
+  const { email } = useParams<{ email: string }>();
   const userEmail = email ? email : "";
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -43,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
   const [formErrors, setFormErrors] = useState({
     oldPassword: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   });
 
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -70,12 +70,15 @@ const Sidebar: React.FC<SidebarProps> = () => {
 
     setFormErrors(newErrors);
 
-    return !newErrors.oldPassword && !newErrors.password && !newErrors.confirmPassword;
+    return (
+      !newErrors.oldPassword &&
+      !newErrors.password &&
+      !newErrors.confirmPassword
+    );
   };
 
-
-  // | | | | | | | | | 
-  // | | | | | | | | | 
+  // | | | | | | | | |
+  // | | | | | | | | |
   // V V V V V V V V V
   const handlePopupOpen = () => {
     setIsPopupOpen(true);
@@ -95,7 +98,6 @@ const Sidebar: React.FC<SidebarProps> = () => {
       try {
         // const authenticationService = new AuthenticationService
         // await authenticationService.updateUser(userEmail, password)
-        console.log("Pass");
         setIsEditing(false);
         setIsPopupOpen(false);
       } catch (error) {
@@ -104,31 +106,27 @@ const Sidebar: React.FC<SidebarProps> = () => {
     }
   };
 
-
   // | | | | | | | | | | | |
   // | | | | | | | | | | | |
   // V V V V V V V V V V V V
 
   useEffect(() => {
-
     const fetchData = async () => {
       try {
-        const authenticationService = new AuthenticationService
-        const data = await authenticationService.retrieveUser(userEmail)
+        const authenticationService = new AuthenticationService();
+        const data = await authenticationService.retrieveUser(userEmail);
         if (data) {
-          setUserData(data)
-          console.log(data)
+          setUserData(data);
         }
       } catch (error) {
-        console.error("ERROR")
+        console.error("ERROR");
       }
-    }
+    };
     fetchData();
     const role = localStorage.getItem("role");
-    setUserRole(role)
-  }, [userEmail]
-  )
-  // UX UI Sidebar here 
+    setUserRole(role);
+  }, [userEmail]);
+  // UX UI Sidebar here
   // | | | | | | | | | | | |
   // | | | | | | | | | | | |
   // V V V V V V V V V V V V
@@ -151,22 +149,22 @@ const Sidebar: React.FC<SidebarProps> = () => {
               <p>Patients</p>
             </Link>
             {userRole === "ADMIN" && (
-                <Link
+              <Link
                 to={"/createmodel"}
                 className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
               >
                 <AddBoxIcon fontSize="small" />
-              <p>Create Model</p>
-            </Link>            
+                <p>Create Model</p>
+              </Link>
             )}
             {userRole === "ADMIN" && (
               <Link
-            to={"/model"}
-            className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
-          >
-            <ClearAllIcon fontSize="small" />
-            <p>Models</p>
-          </Link>
+                to={"/model"}
+                className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
+              >
+                <ClearAllIcon fontSize="small" />
+                <p>Models</p>
+              </Link>
             )}
 
             {/* <button className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300">
@@ -192,7 +190,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
             className="flex justify-start items-center py-3 pl-3 mx-4 gap-3 rounded-lg hover:bg-gray-200 text-red-500 "
             onClick={handleLogout}
           >
-            <ExitToAppOutlinedIcon fontSize="small" style={{ color: 'red' }} />
+            <ExitToAppOutlinedIcon fontSize="small" style={{ color: "red" }} />
             <p>Logout</p>
           </button>
         </div>
@@ -211,7 +209,9 @@ POP UP for USER INFO and EDIT USER INFO
               {isEditing ? (
                 <>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">Old Password</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Old Password
+                    </label>
                     <input
                       type="password"
                       name="oldPassword"
@@ -220,11 +220,15 @@ POP UP for USER INFO and EDIT USER INFO
                       onChange={(e) => setOldPassword(e.target.value)}
                     />
                     {formErrors.oldPassword && (
-                      <p className="text-red-500 text-sm mt-1">{formErrors.oldPassword}</p>
+                      <p className="text-red-500 text-sm mt-1">
+                        {formErrors.oldPassword}
+                      </p>
                     )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700">New Password</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      New Password
+                    </label>
                     <input
                       type="password"
                       name="password"
@@ -233,11 +237,15 @@ POP UP for USER INFO and EDIT USER INFO
                       onChange={(e) => setPassword(e.target.value)}
                     />
                     {formErrors.password && (
-                      <p className="text-red-500 text-sm mt-1">{formErrors.password}</p>
+                      <p className="text-red-500 text-sm mt-1">
+                        {formErrors.password}
+                      </p>
                     )}
                   </div>
                   <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                    <label className="block text-sm font-medium text-gray-700">
+                      Confirm Password
+                    </label>
                     <input
                       type="password"
                       name="confirmPassword"
@@ -246,7 +254,9 @@ POP UP for USER INFO and EDIT USER INFO
                       onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                     {formErrors.confirmPassword && (
-                      <p className="text-red-500 text-sm mt-1">{formErrors.confirmPassword}</p>
+                      <p className="text-red-500 text-sm mt-1">
+                        {formErrors.confirmPassword}
+                      </p>
                     )}
                   </div>
                 </>
