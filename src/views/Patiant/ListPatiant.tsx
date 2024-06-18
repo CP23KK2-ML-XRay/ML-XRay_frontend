@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export const ListPatient = () => {
-  const [usersData, setUsersData] = useState<any[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -83,6 +82,7 @@ export const ListPatient = () => {
       const hospitalService = new HospitalService();
       const response = await hospitalService.createPatient(formData);
       if (response) {
+        console.log("Pass")
       }
       Swal.fire({
         title: "Added!",
@@ -145,6 +145,7 @@ export const ListPatient = () => {
         if (result.isConfirmed) {
           const hospitalService = new HospitalService();
           const response = await hospitalService.deletePatient(id);
+          console.log(response)
           Swal.fire({
             title: "Deleted!",
             text: "Your file has been deleted.",
