@@ -52,7 +52,7 @@ export const DetailPatient = () => {
     };
 
     fetchData();
-  }, );
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
