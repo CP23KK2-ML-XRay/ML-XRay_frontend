@@ -46,6 +46,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
   });
 
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   const validateForm = () => {
     const newErrors = { oldPassword: "", password: "", confirmPassword: "" };
@@ -114,14 +115,16 @@ const Sidebar: React.FC<SidebarProps> = () => {
         const authenticationService = new AuthenticationService
         const data = await authenticationService.retrieveUser(userEmail)
         if (data) {
-          console.log(data)
           setUserData(data)
+          console.log(data)
         }
       } catch (error) {
         console.error("ERROR")
       }      
     }    
-    fetchData()
+    fetchData();
+    const role = localStorage.getItem("role");
+    setUserRole(role)
   }, [userEmail]  
 )
   // UX UI Sidebar here 
@@ -145,14 +148,17 @@ const Sidebar: React.FC<SidebarProps> = () => {
             >
               <GroupsOutlinedIcon fontSize="small" />
               <p>Patients</p>
-            </Link>
-            <Link
-              to={"/createmodel"}
-              className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
-            >
-              <AddBoxIcon fontSize="small" />
+            </Link>            
+              {userRole === "ADMIN" && (
+                <Link
+                to={"/createmodel"}
+                className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300"
+              >
+                <AddBoxIcon fontSize="small" />
               <p>Create Model</p>
             </Link>
+          )}
+              
             {/* <button className="flex items-center w-full py-3 pl-4 gap-3 rounded-l-lg text-gray-500 hover:bg-gray-300">
               <CalendarMonthOutlinedIcon fontSize="small" />
               <p>Calendar</p>

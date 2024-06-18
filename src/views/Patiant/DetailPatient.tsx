@@ -41,7 +41,6 @@ export const DetailPatient = () => {
         const hospitalService = new HospitalService();
         const data = await hospitalService.retrievePatient(patientId);
         if (data) {
-          console.log(data);
           setUserData(data);
         } else {
           // Navigate("/404");
@@ -50,7 +49,6 @@ export const DetailPatient = () => {
         console.error("Error fetching data:", error);
       }
     };
-
     fetchData();
   }, []);
 
@@ -87,7 +85,7 @@ export const DetailPatient = () => {
     console.log("Data submitted successfully:", formData);
     try {
       const hospitalService = new HospitalService();
-      const response = await hospitalService.updatePatient(patientId,formData);
+      const response = await hospitalService.updatePatient(patientId, formData);
       console.log(response);
       if (response) {
       }
