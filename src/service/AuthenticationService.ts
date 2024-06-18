@@ -10,7 +10,7 @@ export default class AuthenticationService {
       body: JSON.stringify(data),
     }).then((response) => {
       if (!response.ok) {
-        throw new Error("Failed to sign in.");
+        return false;
       }
       return response.json(); // return response data
     });
@@ -26,8 +26,9 @@ export default class AuthenticationService {
     }).then((response) => {
       console.log(response);
       if (!response.ok) {
-        throw new Error("Failed to sign up.");
+        return false;
       }
+      return response.json();
     });
   }
 
@@ -45,7 +46,7 @@ export default class AuthenticationService {
       },
     }).then((response) => {
       if (!response.ok) {
-        throw new Error("Failed to refresh token.");
+        return false;
       }
       return response.json(); // return response data
     });
@@ -61,7 +62,7 @@ export default class AuthenticationService {
       },
     }).then((response) => {
       if (!response.ok) {
-        throw new Error("Failed to retrieveUserInfo");
+        return false;
       }
       return response.json(); // return response data
     });
@@ -78,8 +79,9 @@ export default class AuthenticationService {
       body: JSON.stringify(resetPassword),
     }).then((response) => {
       if (!response.ok) {
-        throw new Error("Failed to update password.");
+        return false;
       }
+      return response.json(); // return response data
     });
   }
 }

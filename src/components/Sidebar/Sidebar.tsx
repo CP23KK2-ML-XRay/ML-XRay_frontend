@@ -47,7 +47,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
     password: "",
     newPassword: "",
   });
-  
+
   const [userData, setUserData] = useState<UserData | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -73,13 +73,10 @@ const Sidebar: React.FC<SidebarProps> = () => {
       newErrors.newPassword = "Passwords do not match";
     }
 
-
     setFormErrors(newErrors);
 
     return (
-      !newErrors.oldPassword &&
-      !newErrors.password &&
-      !newErrors.newPassword
+      !newErrors.oldPassword && !newErrors.password && !newErrors.newPassword
     );
   };
 
@@ -99,43 +96,41 @@ const Sidebar: React.FC<SidebarProps> = () => {
     setIsEditing(true);
   };
 
-  
   // | | | | | | | | | | | |
   // | | | | | | | | | | | | Change Password
   // V V V V V V V V V V V V
 
   const handleSubmit = async () => {
     if (validateForm()) {
-      const data ={
+      const data = {
         password: oldPassword,
-        newPassword: newPassword
-      }
+        newPassword: newPassword,
+      };
       try {
         const authenticationService = new AuthenticationService();
-        authenticationService.updatePassword(data)
-        setIsEditing(false);
-        setIsPopupOpen(false);
-
-        Swal.fire({
-          title: "Success!",
-          text: "Password Changed.",
-          icon: "success",
-        }).then(() => {
-          location.href ='/'
-        });        
+        authenticationService.updatePassword(data).then((response) => {
+          if (response) {
+            setIsEditing(false);
+            setIsPopupOpen(false);
+            Swal.fire({
+              title: "Success!",
+              text: "Password Changed.",
+              icon: "success",
+            }).then(() => {
+              location.href = "/";
+            });
+          }
+        });
       } catch (error) {
         console.error("Failed to update password:", error);
         Swal.fire({
           title: "Failed!",
           text: "Something went wrong.",
           icon: "error",
-        }).then(() => {
-        });
-
+        }).then(() => {});
       }
     }
   };
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -236,9 +231,7 @@ POP UP for USER INFO and EDIT USER INFO
               {isEditing ? (
                 <>
                   <div className="mt-4">
-                    <InputLabel>
-                      Old Password
-                    </InputLabel>
+                    <InputLabel>Old Password</InputLabel>
                     <OutlinedInput
                       type={showOldPassword ? "text" : "password"}
                       name="oldPassword"
@@ -248,11 +241,12 @@ POP UP for USER INFO and EDIT USER INFO
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={() => setShowOldPassword((prev) => !prev)}
-                          edge="end">
-                             {showOldPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
+                          edge="end"
+                        >
+                          {showOldPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
                       }
-                      sx={{width: '300px', height: '50px'}}
+                      sx={{ width: "300px", height: "50px" }}
                     />
                     {formErrors.oldPassword && (
                       <p className="text-red-500 text-sm mt-1">
@@ -260,10 +254,8 @@ POP UP for USER INFO and EDIT USER INFO
                       </p>
                     )}
                   </div>
-                  <div  className="mt-4">
-                    <InputLabel>
-                      New Password                      
-                    </InputLabel>
+                  <div className="mt-4">
+                    <InputLabel>New Password</InputLabel>
                     <OutlinedInput
                       type={showPassword ? "text" : "password"}
                       name="password"
@@ -273,11 +265,12 @@ POP UP for USER INFO and EDIT USER INFO
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={() => setShowPassword((prev) => !prev)}
-                          edge="end">
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
                       }
-                      sx={{width: '300px', height: '50px'}}
+                      sx={{ width: "300px", height: "50px" }}
                     />
                     {formErrors.password && (
                       <p className="text-red-500 text-sm mt-1">
@@ -286,9 +279,7 @@ POP UP for USER INFO and EDIT USER INFO
                     )}
                   </div>
                   <div className="mt-4">
-                    <InputLabel>
-                      Confirm Password
-                    </InputLabel>
+                    <InputLabel>Confirm Password</InputLabel>
                     <OutlinedInput
                       id="outlined-adornment-password"
                       type={showNewPassword ? "text" : "password"}
@@ -299,11 +290,12 @@ POP UP for USER INFO and EDIT USER INFO
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={() => setShowNewPassword((prev) => !prev)}
-                          edge="end">
-                            {showNewPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
+                          edge="end"
+                        >
+                          {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
                       }
-                      sx={{width: '300px', height: '50px'}}
+                      sx={{ width: "300px", height: "50px" }}
                     />
                     {formErrors.newPassword && (
                       <p className="text-red-500 text-sm mt-1">
