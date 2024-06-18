@@ -136,7 +136,6 @@ export const CreateModel = () => {
                                     type="text"
                                     name="model_name"
                                     placeholder="Enter your model name"
-                                    aria-label="modelname"
                                 />
 
                                 <select
@@ -177,15 +176,6 @@ export const CreateModel = () => {
                                 name="class0"
                                 placeholder="Enter your class 0 name"
                             />
-                            <input className="block mt-2 w-full text-sm border border-gray-300 rounded-sm cursor-pointer" 
-                            id="class0_zip" 
-                            name="class0_zip"
-                            type="file"
-                            onChange={handleFileChange} 
-                            accept=".zip,.rar,.7zip"
-                            />
-                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Upload compress file for class 0.</p>
-
 
                             <h6 className="pt-4 font-medium">Class 1:</h6>
                             {formErrors.class1 && (
@@ -201,14 +191,6 @@ export const CreateModel = () => {
                                 name="class1"
                                 placeholder="Enter your class 1 name"
                             />
-                            <input className="block mt-2 w-full text-sm border border-gray-300 rounded-sm cursor-pointer" 
-                            id="class1_zip" 
-                            name="class1_zip"
-                            type="file" 
-                            onChange={handleFileChange}
-                            accept=".zip,.rar,.7zip"
-                            />
-                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Upload compress file for class 1.</p>
 
                             <h6 className="pt-4 font-medium">Class 2:</h6>
                             {formErrors.class2 && (
@@ -224,15 +206,35 @@ export const CreateModel = () => {
                                 name="class2"
                                 placeholder="Enter your class 2 name"
                             />
-                            <input className="block mt-2 w-full text-sm  border-gray-300 rounded-sm cursor-pointer" 
-                            id="class2_zip" 
-                            type="file" 
-                            name="class2_zip"
-                            onChange={handleFileChange}
-                            accept=".zip,.rar,.7zip"
-                            />
-                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Upload compress file for class 2.</p>
 
+                            <h6 className="pt-4 font-medium">UPLOAD TRAIN COMPRESS FOLDER:</h6>                            
+                            <input className="block mt-2 w-full text-sm  border-gray-300 rounded-sm cursor-pointer"
+                                id="train"
+                                type="file"
+                                name="train"
+                                onChange={handleFileChange}
+                                accept=".zip,.rar,.7zip"
+                            />
+                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Upload compress file only.</p>
+                            <h6 className="pt-4 font-medium">UPLOAD TEST COMPRESS FOLDER:</h6>
+                            <input className="block mt-2 w-full text-sm  border-gray-300 rounded-sm cursor-pointer"
+                                id="test"
+                                type="file"
+                                name="test"
+                                onChange={handleFileChange}
+                                accept=".zip,.rar,.7zip"
+                            />
+                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Upload compress file only.</p>
+
+                            <h6 className="pt-4 font-medium">UPLOAD VALIDATION COMPRESS FOLDER:</h6>
+                            <input className="block mt-2 w-full text-sm  border-gray-300 rounded-sm cursor-pointer"
+                                id="val"
+                                type="file"
+                                name="val"
+                                onChange={handleFileChange}
+                                accept=".zip,.rar,.7zip"
+                            />
+                            <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">Upload compress file only.</p>
 
                             <div className="py-4 flex">
                                 <button
