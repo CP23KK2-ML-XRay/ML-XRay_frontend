@@ -7,6 +7,7 @@ import AuthenticationService from "@/service/AuthenticationService";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputLabel, OutlinedInput } from "@mui/material";
+import Swal from "sweetalert2";
 
 const handleLogout = () => {
   localStorage.removeItem("accessToken");
@@ -40,21 +41,21 @@ const Sidebar: React.FC<SidebarProps> = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
   const [formErrors, setFormErrors] = useState({
     oldPassword: "",
     password: "",
-    confirmPassword: "",
+    newPassword: "",
   });
-
+  
   const [userData, setUserData] = useState<UserData | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validateForm = () => {
-    const newErrors = { oldPassword: "", password: "", confirmPassword: "" };
+    const newErrors = { oldPassword: "", password: "", newPassword: "" };
 
     if (!oldPassword.trim()) {
       newErrors.oldPassword = "Old password is required";
@@ -66,10 +67,10 @@ const Sidebar: React.FC<SidebarProps> = () => {
       newErrors.password = "Password must be at least 8 characters";
     }
 
-    if (!confirmPassword.trim()) {
-      newErrors.confirmPassword = "Confirm password is required";
-    } else if (confirmPassword !== password) {
-      newErrors.confirmPassword = "Passwords do not match";
+    if (!newPassword.trim()) {
+      newErrors.newPassword = "Confirm password is required";
+    } else if (newPassword !== password) {
+      newErrors.newPassword = "Passwords do not match";
     }
 
 
@@ -78,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
     return (
       !newErrors.oldPassword &&
       !newErrors.password &&
-      !newErrors.confirmPassword
+      !newErrors.newPassword
     );
   };
 
@@ -98,22 +99,43 @@ const Sidebar: React.FC<SidebarProps> = () => {
     setIsEditing(true);
   };
 
+  
+  // | | | | | | | | | | | |
+  // | | | | | | | | | | | | Change Password
+  // V V V V V V V V V V V V
+
   const handleSubmit = async () => {
     if (validateForm()) {
+      const data ={
+        password: oldPassword,
+        newPassword: newPassword
+      }
       try {
-        // const authenticationService = new AuthenticationService
-        // await authenticationService.updateUser(userEmail, password)
+        const authenticationService = new AuthenticationService();
+        authenticationService.updatePassword(data)
         setIsEditing(false);
         setIsPopupOpen(false);
+
+        Swal.fire({
+          title: "Success!",
+          text: "Password Changed.",
+          icon: "success",
+        }).then(() => {
+          location.href ='/'
+        });        
       } catch (error) {
-        console.error("Failed to update user info:", error);
+        console.error("Failed to update password:", error);
+        Swal.fire({
+          title: "Failed!",
+          text: "Something went wrong.",
+          icon: "error",
+        }).then(() => {
+        });
+
       }
     }
   };
 
-  // | | | | | | | | | | | |
-  // | | | | | | | | | | | |
-  // V V V V V V V V V V V V
 
   useEffect(() => {
     const fetchData = async () => {
@@ -213,14 +235,13 @@ POP UP for USER INFO and EDIT USER INFO
             <div className="mb-4">
               {isEditing ? (
                 <>
-                  <div  className="mt-4">
+                  <div className="mt-4">
                     <InputLabel>
                       Old Password
                     </InputLabel>
                     <OutlinedInput
                       type={showOldPassword ? "text" : "password"}
                       name="oldPassword"
-                      className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
                       value={oldPassword}
                       onChange={(e) => setOldPassword(e.target.value)}
                       endAdornment={
@@ -244,17 +265,16 @@ POP UP for USER INFO and EDIT USER INFO
                       New Password                      
                     </InputLabel>
                     <OutlinedInput
-                      type={showNewPassword ? "text" : "password"}
+                      type={showPassword ? "text" : "password"}
                       name="password"
-                      className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       endAdornment={
                         <IconButton
                           aria-label="toggle password visibility"
-                          onClick={() => setShowNewPassword((prev) => !prev)}
+                          onClick={() => setShowPassword((prev) => !prev)}
                           edge="end">
-                            {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
                       }
                       sx={{width: '300px', height: '50px'}}
@@ -271,23 +291,23 @@ POP UP for USER INFO and EDIT USER INFO
                     </InputLabel>
                     <OutlinedInput
                       id="outlined-adornment-password"
-                      type={showConfirmPassword ? "text" : "password"}
-                      name="confirmPassword"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      type={showNewPassword ? "text" : "password"}
+                      name="newPassword"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
                       endAdornment={
                         <IconButton
                           aria-label="toggle password visibility"
-                          onClick={() => setShowConfirmPassword((prev) => !prev)}
+                          onClick={() => setShowNewPassword((prev) => !prev)}
                           edge="end">
-                            {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                            {showNewPassword ? <VisibilityOff /> : <Visibility />}
                           </IconButton>
                       }
                       sx={{width: '300px', height: '50px'}}
                     />
-                    {formErrors.confirmPassword && (
+                    {formErrors.newPassword && (
                       <p className="text-red-500 text-sm mt-1">
-                        {formErrors.confirmPassword}
+                        {formErrors.newPassword}
                       </p>
                     )}
                   </div>
