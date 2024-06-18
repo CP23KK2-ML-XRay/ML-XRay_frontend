@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, FormEvent  } from "react";
 import Swal from "sweetalert2";
 import MachineService from "@/service/ManchineService";
 
@@ -25,16 +25,24 @@ export const CreateModel = () => {
         class2: "",
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target;
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleChange = (event: React.ChangeEvent<HTMLFormElement | HTMLSelectElement>) => {
+        const { name, value } = event.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
 
         const errors = validateForm(formData)
         if (Object.keys(errors).length > 0) {
@@ -93,13 +101,13 @@ export const CreateModel = () => {
         return errors;
     };
 
-    const handleFileChange = (e) => {
-        const { name, files } = e.target;
-        if (files.length > 0) {
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, files } = event.target;
+        if (files && files.length > 0) {
             const file = files[0];
             const validExtensions = ["zip", "rar", "7z"];
-            const fileExtension = file.name.split('.').pop().toLowerCase();
-            if (validExtensions.includes(fileExtension)) {
+            const fileExtension = file.name.split('.').pop()?.toLowerCase();
+            if (fileExtension && validExtensions.includes(fileExtension)) {
                 setFormData((prevData) => ({
                     ...prevData,
                     [name]: file,
@@ -132,7 +140,7 @@ export const CreateModel = () => {
                                 <input
                                     className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
                                     value={formData.model_name}
-                                    onChange={handleChange}
+                                    onChange={handleInputChange}
                                     type="text"
                                     name="model_name"
                                     placeholder="Enter your model name"
@@ -172,7 +180,7 @@ export const CreateModel = () => {
                                 className="appearance-none bg-transparent border-b border-gray-400 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
                                 type="text"
                                 value={formData.class0}
-                                onChange={handleChange}
+                                onChange={handleInputChange}
                                 name="class0"
                                 placeholder="Enter your class 0 name"
                             />
@@ -187,7 +195,7 @@ export const CreateModel = () => {
                                 className="appearance-none bg-transparent border-b border-gray-400 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
                                 type="text"
                                 value={formData.class1}
-                                onChange={handleChange}
+                                onChange={handleInputChange}
                                 name="class1"
                                 placeholder="Enter your class 1 name"
                             />
@@ -202,7 +210,7 @@ export const CreateModel = () => {
                                 className="appearance-none bg-transparent border-b border-gray-400 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
                                 type="text"
                                 value={formData.class2}
-                                onChange={handleChange}
+                                onChange={handleInputChange}
                                 name="class2"
                                 placeholder="Enter your class 2 name"
                             />

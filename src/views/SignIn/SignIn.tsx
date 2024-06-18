@@ -187,7 +187,7 @@ const SignIn: React.FC = () => {
               className="mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500 dark:bg-neutral-800 dark:border-neutral-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800"
               checked={showPassword}
               onChange={handleCheckboxChange} />
-              <label className="text-sm text-gray-500 ms-3 dark:text-neutral-400 cursor-pointer" for="show-pass">
+              <label className="text-sm text-gray-500 ms-3 dark:text-neutral-400 cursor-pointer" htmlFor="show-pass">
                 Show password
               </label>
             </div>
