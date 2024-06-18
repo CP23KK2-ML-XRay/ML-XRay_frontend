@@ -66,4 +66,21 @@ export default class AuthenticationService {
       return response.json(); // return response data
     });
   }
+
+  updatePassword(email: string, resetPassword: any): Promise<void> {
+    return fetch(`${API_URL}/auth/updatePassword`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "email": email,
+        Authorization: ("Bearer " +
+          localStorage.getItem("accessToken")) as string,
+      },
+      body: JSON.stringify(resetPassword),
+    }).then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to update password.");
+      }
+    });
+  }
 }

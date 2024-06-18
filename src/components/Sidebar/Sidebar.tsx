@@ -8,6 +8,7 @@ import AuthenticationService from "@/service/AuthenticationService";
 import ClearAllIcon from "@mui/icons-material/ClearAll";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { IconButton, InputLabel, OutlinedInput } from "@mui/material";
+import Swal from "sweetalert2";
 
 const handleLogout = () => {
   localStorage.removeItem("accessToken");
@@ -47,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = () => {
     password: "",
     confirmPassword: "",
   });
-
+  
   const [userData, setUserData] = useState<UserData | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [showOldPassword, setShowOldPassword] = useState(false);
@@ -99,22 +100,43 @@ const Sidebar: React.FC<SidebarProps> = () => {
     setIsEditing(true);
   };
 
+  
+  // | | | | | | | | | | | |
+  // | | | | | | | | | | | | Change Password
+  // V V V V V V V V V V V V
+
   const handleSubmit = async () => {
     if (validateForm()) {
+      
       try {
-        // const authenticationService = new AuthenticationService
-        // await authenticationService.updateUser(userEmail, password)
+        const authenticationService = new AuthenticationService();
+        await authenticationService.updatePassword(userEmail, {
+          oldPassword,
+          password,
+        });
         setIsEditing(false);
         setIsPopupOpen(false);
+
+        Swal.fire({
+          title: "Success!",
+          text: "Password Changed.",
+          icon: "success",
+        }).then(() => {
+          location.href ='/'
+        });        
       } catch (error) {
-        console.error("Failed to update user info:", error);
+        console.error("Failed to update password:", error);
+        Swal.fire({
+          title: "Failed!",
+          text: "Something went wrong.",
+          icon: "error",
+        }).then(() => {
+        });
+
       }
     }
   };
 
-  // | | | | | | | | | | | |
-  // | | | | | | | | | | | |
-  // V V V V V V V V V V V V
 
   useEffect(() => {
     const fetchData = async () => {
@@ -214,14 +236,13 @@ POP UP for USER INFO and EDIT USER INFO
             <div className="mb-4">
               {isEditing ? (
                 <>
-                  <div  className="mt-4">
+                  <div className="mt-4">
                     <InputLabel>
                       Old Password
                     </InputLabel>
                     <OutlinedInput
                       type={showOldPassword ? "text" : "password"}
                       name="oldPassword"
-                      className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
                       value={oldPassword}
                       onChange={(e) => setOldPassword(e.target.value)}
                       endAdornment={
@@ -247,7 +268,6 @@ POP UP for USER INFO and EDIT USER INFO
                     <OutlinedInput
                       type={showNewPassword ? "text" : "password"}
                       name="password"
-                      className="mt-1 p-2 border border-gray-300 rounded-lg w-full"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       endAdornment={
