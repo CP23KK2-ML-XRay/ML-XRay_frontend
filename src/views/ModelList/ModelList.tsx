@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from "react-router-dom";
 import MachineService from '@/service/MachineService'
 import Swal from 'sweetalert2'
 
@@ -53,8 +54,132 @@ const ModelList = () => {
     // fetchData()
   }, [])
 
+  // | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | 
+  // | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | Create 
+  // | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | Model 
+  // | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | | Function
+  // V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V 
+
+  const [formData, setFormData] = useState({
+    model_name: "",
+    model_category: "",
+    class0: "",
+    class1: "",
+    class2: "",
+    admin_id: "",
+    model_path: "",
+    train: null,
+    test: null,
+    val: null
+  });
+
+  const [formErrors, setFormErrors] = useState({
+    model_name: "",
+    model_category: "",
+    class0: "",
+    class1: "",
+    class2: "",
+  });
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLFormElement | HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const errors = validateForm(formData)
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors)
+      return;
+    }
+
+    console.log("SUBMIT", formData);
+
+    try {
+      const machineService = new MachineService();
+      const response = await machineService.createModel(formData)
+      console.log(response)
+
+      Swal.fire({
+        title: "Success!",
+        text: "Your model has been created.",
+        icon: "success",
+      });
+
+      setFormData({
+        model_name: "",
+        model_category: "",
+        class0: "",
+        class1: "",
+        class2: "",
+        admin_id: "",
+        model_path: "/folder/a",
+        train: null,
+        test: null,
+        val: null
+      });
+      setTimeout(() => {
+        location.reload();
+      }, 2000);
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: "There was an error creating your model. Please try again.",
+        icon: "error",
+      });
+      console.error("Error submitting data:", error);
+    }
+  };
+
+  // Validate Function only fontend --------------------------------------------------------------------------------------
+  // | | | | | | | | | | | | | | | | --------------------------------------------------------------------------------------
+  // V V V V V V V V V V V V V V V V 
+  const validateForm = (data: typeof formData) => {
+    const errors: any = {};
+    if (!data.model_name) errors.model_name = "Required model name";
+    if (!data.model_category) errors.model_category = "Required model category";
+    if (!data.class0) errors.class0 = "Required class 0 name";
+    if (!data.class1) errors.class1 = "Required class 1 name";
+    if (!data.class2) errors.class2 = "Required class 2 name";
+    return errors;
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = event.target;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const validExtensions = ["zip", "rar", "7z"];
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      if (fileExtension && validExtensions.includes(fileExtension)) {
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: file,
+        }));
+      } else {
+        Swal.fire({
+          title: "Invalid file type",
+          text: "Please upload a ZIP file.",
+          icon: "error",
+        });
+      }
+    }
+  };
+
   return (
-    <section className="h-screen w-screen bg-gray-300  p-3 sm:p-5">
+    <section className="w-full bg-gray-300  p-3 sm:p-5">
       <div className="mx-auto max-w-screen-xl px-4 lg:px-12">
         <div className="bg-white relative shadow-md sm:rounded-lg overflow-hidden">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
@@ -291,117 +416,146 @@ const ModelList = () => {
 
       {/*Modal for Create new model ------------------------------------------------------------------------------------------------ */}
       {isModalOpen && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-            >
-              <div className="absolute inset-0 bg-gray-400 opacity-25"></div>
-            </div>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white shadow-md rounded-md p-8">
+            <div className="flex flex-col items-center">
+              <h1 className="font-bold text-3xl text-blue-600 lg:text-4xl">
+                Create Model
+              </h1>
 
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-            <div className="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              {/* Header */}
-              <div className="bg-primary-500 px-4 py-3 sm:px-6">
-                <h3 className="text-2xl font-medium leading-6 text-black">
-                  Create Model
-                </h3>
-              </div>
+              <h6 className="mb-2 text-xl font-bold text-center text-gray-800 md:text-2xl">
+                <span className="text-gray-500">Enter your model details</span>
+              </h6>
 
-              {/* Modal body */}
-              <form action="" className="space-y-4 md:space-y-6">
-                <div className="px-4 py-4 sm:p-6">
-                  <div className="grid grid-cols-1 gap-6 w-full">
-                    <label
-                      htmlFor="name"
-                      className="text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Model Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-700 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    <label
-                      htmlFor="category"
-                      className="text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Model Category
-                    </label>
-                    <select
-                      id="category"
-                      name="category"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >
-                      <option value="" selected disabled hidden>
-                        Choose here
-                      </option>
-                      <option value="image">Images classifying model</option>
-                      <option value="numeric">
-                        Numeric and categorical features model
-                      </option>
-                    </select>
-                    <label
-                      htmlFor="class0"
-                      className="text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Identify class 0:
-                    </label>
-                    <input
-                      type="text"
-                      id="class0"
-                      name="class0"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    <label
-                      htmlFor="class1"
-                      className="text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Identify class 1:
-                    </label>
-                    <input
-                      type="text"
-                      id="class1"
-                      name="class1"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    <label
-                      htmlFor="class2"
-                      className="text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Identify class 2:
-                    </label>
-                    <input
-                      type="text"
-                      id="class2"
-                      name="class2"
-                      className="bg-white-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                  </div>
-                </div>
+              <form className="w-full max-w-lg py-8" onSubmit={handleSubmit}>
+                <div className="flex items-center border-b border-gray-400 py-2">
+                  <input
+                    className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                    value={formData.model_name}
+                    onChange={handleInputChange}
+                    type="text"
+                    name="model_name"
+                    placeholder="Enter your model name"
+                  />
 
-                {/* Modal footer */}
-                <div className="bg-white dark:bg-gray-400 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="button"
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-black hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={closeModal}
+                  <select
+                    className="bg-transparent border-l-2 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                    value={formData.model_category}
+                    onChange={handleChange}
+                    name="model_category"
                   >
-                    Cancel
-                  </button>
+                    <option value="" disabled>
+                      Select model category
+                    </option>
+                    <option value="numberic">Numeric</option>
+                    <option value="images">Images</option>
+                  </select>
+                </div>
+                <span className="text-red-500 text-sm mb-2 flex w-full">
+                  {formErrors.model_name && (
+                    <p className="absolute"> {formErrors.model_name} </p>
+                  )}
+                  {formErrors.model_category && (
+                    <p className="absolute left-1/2">{formErrors.model_category}</p>
+                  )}
+                </span>
+
+                <h6 className="pt-4 font-medium">Class 0:</h6>
+                {formErrors.class0 && (
+                  <div className="text-red-500 text-sm flex absolute left-1/2 pt-8">
+                    {formErrors.class0}
+                  </div>
+                )}
+                <input
+                  className="appearance-none bg-transparent border-b border-gray-400 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                  type="text"
+                  value={formData.class0}
+                  onChange={handleInputChange}
+                  name="class0"
+                  placeholder="Enter your class 0 name"
+                />
+
+                <h6 className="pt-4 font-medium">Class 1:</h6>
+                {formErrors.class1 && (
+                  <div className="text-red-500 text-sm flex absolute left-1/2 pt-8">
+                    {formErrors.class1}
+                  </div>
+                )}
+                <input
+                  className="appearance-none bg-transparent border-b border-gray-400 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                  type="text"
+                  value={formData.class1}
+                  onChange={handleInputChange}
+                  name="class1"
+                  placeholder="Enter your class 1 name"
+                />
+
+                <h6 className="pt-4 font-medium">Class 2:</h6>
+                {formErrors.class2 && (
+                  <div className="text-red-500 text-sm flex absolute left-1/2 pt-8">
+                    {formErrors.class2}
+                  </div>
+                )}
+                <input
+                  className="appearance-none bg-transparent border-b border-gray-400 w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                  type="text"
+                  value={formData.class2}
+                  onChange={handleInputChange}
+                  name="class2"
+                  placeholder="Enter your class 2 name"
+                />
+
+                <h6 className="pt-4 font-medium">Upload Train Compress Folder:</h6>
+                <input
+                  className="block mt-2 w-full text-sm border-gray-300 rounded-sm cursor-pointer"
+                  id="train"
+                  type="file"
+                  name="train"
+                  onChange={handleFileChange}
+                  accept=".zip,.rar,.7zip"
+                />
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">
+                  Upload compress file only.
+                </p>
+
+                <h6 className="pt-4 font-medium">Upload Test Compress Folder:</h6>
+                <input
+                  className="block mt-2 w-full text-sm border-gray-300 rounded-sm cursor-pointer"
+                  id="test"
+                  type="file"
+                  name="test"
+                  onChange={handleFileChange}
+                  accept=".zip,.rar,.7zip"
+                />
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">
+                  Upload compress file only.
+                </p>
+
+                <h6 className="pt-4 font-medium">Upload Validation Compress Folder:</h6>
+                <input
+                  className="block mt-2 w-full text-sm border-gray-300 rounded-sm cursor-pointer"
+                  id="val"
+                  type="file"
+                  name="val"
+                  onChange={handleFileChange}
+                  accept=".zip,.rar,.7zip"
+                />
+                <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">
+                  Upload compress file only.
+                </p>
+
+                <div className="py-4 flex">
                   <button
+                    className="bg-blue-600 text-white py-2 px-6 rounded-md mr-4 hover:bg-blue-500 hover:border-gray-400"
                     type="submit"
-                    className="w-1/3 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                   >
                     Submit
+                  </button>
+                  <button
+                    onClick={closeModal}
+                    className="px-6 py-2 rounded-md text-black-100 bg-white-400 border-black-100 border-2 border-black-200 hover:bg-gray-300 hover:text-gray-700"
+                  >
+                    Cancel
                   </button>
                 </div>
               </form>
@@ -463,6 +617,8 @@ const ModelList = () => {
         </div>
       )}
     </section>
+
+
   )
 }
 
