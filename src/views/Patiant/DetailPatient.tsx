@@ -21,7 +21,7 @@ export const DetailPatient = () => {
     gender: 'M',
     weight: '',
     height: '',
-    bloodType: 'A+',
+    blood_type: 'A+',
     medic_person: '',
   })
 
@@ -42,6 +42,7 @@ export const DetailPatient = () => {
         const data = await hospitalService.retrievePatient(patientId)
         if (data) {
           setUserData(data)
+          console.log(data)
         } else {
           // Navigate("/404");
         }
@@ -260,7 +261,7 @@ export const DetailPatient = () => {
                 <div>Height</div>
               </div>
               <div className="p-4 border-dashed border-2 border-gray-500 m-4 rounded-lg flex flex-col">
-                <div>{userData?.blood_type}</div>
+                <div>{userData?.bloodType}</div>
                 <div>Blood Type</div>
               </div>
             </div>
