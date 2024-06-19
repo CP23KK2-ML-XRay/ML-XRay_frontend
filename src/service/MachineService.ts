@@ -45,11 +45,9 @@ export default class MachineService {
       },
       body: data,
     }).then((response) => {
-      if (!response.ok) {
-        return false
-        // throw new Error('Failed to createModel')
-      }
-      return response.json() // return response data
+      return response.json().then((data) => {
+        return { status: response.ok, data };  // Return success status and response data
+      }); // return response data
     })
   }
 }

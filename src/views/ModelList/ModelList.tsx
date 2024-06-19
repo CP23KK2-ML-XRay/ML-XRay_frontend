@@ -3,8 +3,10 @@ import MachineService from "@/service/MachineService";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
+import { Backdrop, CircularProgress } from "@mui/material";
 
 const ModelList = () => {
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate()
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,7 +17,7 @@ const ModelList = () => {
   const closeModal = () => {
     setFormData({
       model_name: "",
-      model_category: "",
+      model_category: "image",
       class0: "",
       class1: "",
       class2: "",
@@ -67,9 +69,11 @@ const ModelList = () => {
 
   useEffect(() => {
     try {
+      setOpen(true);
       const machineService = new MachineService();
       machineService.retrieveListModel().then((data) => {
         // console.log(data);
+        setOpen(false);
         if (data) {
           setModelsData(data);
         }
@@ -169,30 +173,55 @@ const ModelList = () => {
     console.log("SUBMIT", formData);
 
     try {
+      setOpen(true);
       const machineService = new MachineService();
       console.log(formDataBody);
-      const response = await machineService.createModel(formDataBody);
-      console.log(response);
+      await machineService.createModel(formDataBody).then((data) => {
+        console.log(data);
+        // console.log(status);
 
-      Swal.fire({
-        title: "Success!",
-        text: "Your model has been created.",
-        icon: "success",
+        setOpen(false);
+        if (data["status"]) {
+          Swal.fire({
+            title: "Success!",
+            text: "Your model has been created.",
+            icon: "success",
+          }).then(() => {
+            location.reload();
+          });
+        } else {
+          if (data["data"]["error"].length < 50) {
+            Swal.fire({
+              title: "Error!",
+              text: `${data["data"]["error"]}`,
+              icon: "error",
+            });
+          } else {
+            Swal.fire({
+              title: "Error!",
+              text: "There was an error creating your model. Please try again.",
+              icon: "error",
+            });
+          }
+        }
       });
 
-      setFormData({
-        model_name: "",
-        model_category: "",
-        class0: "",
-        class1: "",
-        class2: "",
-        train: null,
-        test: null,
-        val: null,
-      });
-      setTimeout(() => {
-        // location.reload();
-      }, 2000);
+      // Swal.fire({
+      //   title: "Success!",
+      //   text: "Your model has been created.",
+      //   icon: "success",
+      // });
+
+      // setFormData({
+      //   model_name: "",
+      //   model_category: "",
+      //   class0: "",
+      //   class1: "",
+      //   class2: "",
+      //   train: null,
+      //   test: null,
+      //   val: null,
+      // });
     } catch (error) {
       Swal.fire({
         title: "Error!",
@@ -695,6 +724,15 @@ const ModelList = () => {
           </div>
         </div>
       )}
+      <div>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={open}
+          // onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </div>
     </section>
   );
 };

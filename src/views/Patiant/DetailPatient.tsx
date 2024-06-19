@@ -4,8 +4,10 @@ import { Patient } from "./types";
 import Swal from "sweetalert2";
 import HospitalService from "@/service/HospitalService";
 import MachineService from "@/service/MachineService";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 export const DetailPatient = () => {
+  const [open, setOpen] = useState(false);
   const { id } = useParams<{ id: string }>();
 
   const patientId = id ? id : "0";
@@ -41,9 +43,11 @@ export const DetailPatient = () => {
     // Fetch data when the component mounts
     const fetchData = async () => {
       try {
+        setOpen(true);
         const hospitalService = new HospitalService();
         const data = await hospitalService.retrievePatient(patientId);
         if (data) {
+          setOpen(false);
           setUserData(data);
           // console.log(data);
         } else {
@@ -55,9 +59,11 @@ export const DetailPatient = () => {
     };
     const fetchDataModel = async () => {
       try {
+        setOpen(true);
         const machineservice = new MachineService();
         await machineservice.retrieveListModel().then((data) => {
           if (data) {
+            setOpen(false);
             setModelList(data);
           }
         });
@@ -73,23 +79,23 @@ export const DetailPatient = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-  
+
     // Function to check if the value contains operators
     const containsOperator = (inputValue: string): boolean => {
       return /[+\-*\/]/.test(inputValue);
     };
-  
+
     // Update form data state
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  
+
     // Validate specific fields
     if (name === "dateOfBirth") {
       const selectedDate = new Date(value);
       const today = new Date();
-  
+
       if (selectedDate > today) {
         setFormErrors((prevErrors) => ({
           ...prevErrors,
@@ -122,7 +128,9 @@ export const DetailPatient = () => {
       if (containsOperator(value)) {
         setFormErrors((prevErrors) => ({
           ...prevErrors,
-          [name]: `${name.charAt(0).toUpperCase() + name.slice(1)} cannot contain operators (+, -, *, /)`,
+          [name]: `${
+            name.charAt(0).toUpperCase() + name.slice(1)
+          } cannot contain operators (+, -, *, /)`,
         }));
       } else {
         setFormErrors((prevErrors) => ({
@@ -139,7 +147,6 @@ export const DetailPatient = () => {
       }));
     }
   };
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -191,7 +198,7 @@ export const DetailPatient = () => {
   };
 
   const resetFormat = () => {
-    setIsEdit(false)
+    setIsEdit(false);
     setFormData({
       firstname: "",
       lastname: "",
@@ -202,7 +209,7 @@ export const DetailPatient = () => {
       height: "",
       bloodType: "",
       medic_person: "",
-    })
+    });
     setFormErrors({
       firstname: "",
       lastname: "",
@@ -210,8 +217,8 @@ export const DetailPatient = () => {
       phone_number: "",
       weight: "",
       height: "",
-    })
-  }
+    });
+  };
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -354,10 +361,7 @@ export const DetailPatient = () => {
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-50">
             <div className="bg-white rounded-lg p-8 relative w-1/3">
               <div className="flex justify-end mb-4">
-                <div
-                  className="cursor-pointer"
-                  onClick={() => resetFormat()}
-                >
+                <div className="cursor-pointer" onClick={() => resetFormat()}>
                   <svg
                     className="h-6 w-6"
                     fill="none"
@@ -510,9 +514,7 @@ export const DetailPatient = () => {
                       value={formData.bloodType}
                       onChange={handleChange}
                     >
-                      <option hidden>
-                        Select patient blood type
-                      </option>
+                      <option hidden>Select patient blood type</option>
                       <option value="A+">A positive (A+)</option>
                       <option value="A-">A negative (A-)</option>
                       <option value="B+">B positive (B+)</option>
@@ -566,9 +568,17 @@ export const DetailPatient = () => {
                 </button>
               </div>
             )}
-           
           </div>
         </div>
+      </div>
+      <div>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={open}
+          // onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </div>
     </div>
   );

@@ -2,28 +2,31 @@ import HospitalService from "@/service/HospitalService";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import { Backdrop, CircularProgress } from "@mui/material";
 
 const newDate = new Date();
 
 export const ListPatient = () => {
+  const [open, setOpen] = useState(false);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-const dateToString = (date: Date): string => {
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
+  const dateToString = (date: Date): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    };
+    return date.toLocaleDateString("en-US", options);
   };
-  return date.toLocaleDateString('en-US', options);
-};
- 
+
   useEffect(() => {
     // Fetch data when the component mounts
-
+    setOpen(true);
     try {
       const hospitalService = new HospitalService();
       hospitalService.retrieveListPatients().then((data) => {
+        setOpen(false);
         setFilteredUsers(data);
       });
     } catch (error) {
@@ -56,30 +59,30 @@ const dateToString = (date: Date): string => {
     phone_number: "",
     weight: "",
     height: "",
-    bloodType: ""
+    bloodType: "",
   });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-  
+
     // Function to check if the value contains operators
     const containsOperator = (inputValue: string): boolean => {
       return /[+\-*\/]/.test(inputValue);
     };
-  
+
     // Update form data state
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-  
+
     // Validate specific fields
     if (name === "dateOfBirth") {
       const selectedDate = new Date(value);
       const today = new Date();
-  
+
       if (selectedDate > today) {
         setFormErrors((prevErrors) => ({
           ...prevErrors,
@@ -112,7 +115,9 @@ const dateToString = (date: Date): string => {
       if (containsOperator(value)) {
         setFormErrors((prevErrors) => ({
           ...prevErrors,
-          [name]: `${name.charAt(0).toUpperCase() + name.slice(1)} cannot contain operators (+, -, *, /)`,
+          [name]: `${
+            name.charAt(0).toUpperCase() + name.slice(1)
+          } cannot contain operators (+, -, *, /)`,
         }));
       } else {
         setFormErrors((prevErrors) => ({
@@ -129,7 +134,6 @@ const dateToString = (date: Date): string => {
       }));
     }
   };
-  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -144,7 +148,7 @@ const dateToString = (date: Date): string => {
       const hospitalService = new HospitalService();
       const response = await hospitalService.createPatient(formData);
       if (response) {
-        console.log("Pass")
+        console.log("Pass");
       }
       Swal.fire({
         title: "Added!",
@@ -182,7 +186,7 @@ const dateToString = (date: Date): string => {
     if (!data.lastname) errors.lastname = "Last name is required";
     if (!data.dateOfBirth) {
       errors.dateOfBirth = "Date of birth is required";
-    } 
+    }
     if (!data.phone_number) {
       errors.phone_number = "Phone number is required";
     } else if (data.phone_number.length != 10) {
@@ -250,7 +254,7 @@ const dateToString = (date: Date): string => {
   };
 
   const resetFormat = () => {
-    setIsHidden(true)
+    setIsHidden(true);
     setFormData({
       firstname: "",
       lastname: "",
@@ -261,7 +265,7 @@ const dateToString = (date: Date): string => {
       height: "",
       bloodType: "",
       medic_person: "",
-    })
+    });
     setFormErrors({
       firstname: "",
       lastname: "",
@@ -269,10 +273,10 @@ const dateToString = (date: Date): string => {
       phone_number: "",
       weight: "",
       height: "",
-      bloodType: ""
-    })
-    console.log(Date)
-  }
+      bloodType: "",
+    });
+    console.log(Date);
+  };
 
   return (
     <div className="w-full pt-4">
@@ -638,7 +642,7 @@ const dateToString = (date: Date): string => {
                         name="bloodType"
                         value={formData.bloodType}
                         onChange={handleChange}
-                      >                        
+                      >
                         <option selected hidden>
                           Select patient blood type
                         </option>
@@ -651,10 +655,10 @@ const dateToString = (date: Date): string => {
                         <option value="O-">O negative (O-)</option>
                       </select>
                       {formErrors.bloodType && (
-                      <p className="text-red-500 text-xs italic">
-                        {formErrors.bloodType}
-                      </p>
-                    )}
+                        <p className="text-red-500 text-xs italic">
+                          {formErrors.bloodType}
+                        </p>
+                      )}
                       <div className="absolute inset-y-0 right-1 pointer-events-none flex items-center text-gray-700">
                         <svg
                           className="fill-current h-4 w-4"
@@ -681,6 +685,15 @@ const dateToString = (date: Date): string => {
           </div>
         </div>
       )}
+      <div>
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={open}
+          // onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      </div>
     </div>
   );
 };
