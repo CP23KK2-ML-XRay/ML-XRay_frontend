@@ -3,10 +3,21 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
+const newDate = new Date();
+
 export const ListPatient = () => {
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
+const dateToString = (date: Date): string => {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+  return date.toLocaleDateString('en-US', options);
+};
+ 
   useEffect(() => {
     // Fetch data when the component mounts
 
@@ -45,38 +56,80 @@ export const ListPatient = () => {
     phone_number: "",
     weight: "",
     height: "",
+    bloodType: ""
   });
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
+  
+    // Function to check if the value contains operators
+    const containsOperator = (inputValue: string): boolean => {
+      return /[+\-*\/]/.test(inputValue);
+    };
+  
+    // Update form data state
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-
-    if (name === "phone_number" && value.length > 10) {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: "Phone number cannot exceed 10 characters",
-      }));
+  
+    // Validate specific fields
+    if (name === "dateOfBirth") {
+      const selectedDate = new Date(value);
+      const today = new Date();
+  
+      if (selectedDate > today) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "Date of birth cannot be a future date",
+        }));
+      } else {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+      }
+    } else if (name === "phone_number") {
+      if (value.length > 10) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "Phone number cannot exceed 10 characters",
+        }));
+      } else if (containsOperator(value)) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "Phone number cannot contain operators (+, -, *, /)",
+        }));
+      } else {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+      }
+    } else if (name === "height" || name === "weight") {
+      if (containsOperator(value)) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: `${name.charAt(0).toUpperCase() + name.slice(1)} cannot contain operators (+, -, *, /)`,
+        }));
+      } else {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+      }
     } else {
-      setFormErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: "",
+      // For other fields, trim whitespace from value before updating state
+      const trimmedValue = value.trim();
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: trimmedValue,
       }));
     }
-
-    const trimmedValue = name === 'firstname' || name === 'lastname'
-    ? value.trim()
-    : value;
-    
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: trimmedValue,
-    }));
   };
+  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -127,7 +180,9 @@ export const ListPatient = () => {
     const errors: any = {};
     if (!data.firstname) errors.firstname = "First name is required";
     if (!data.lastname) errors.lastname = "Last name is required";
-    if (!data.dateOfBirth) errors.dateOfBirth = "Date of birth is required";
+    if (!data.dateOfBirth) {
+      errors.dateOfBirth = "Date of birth is required";
+    } 
     if (!data.phone_number) {
       errors.phone_number = "Phone number is required";
     } else if (data.phone_number.length != 10) {
@@ -135,6 +190,7 @@ export const ListPatient = () => {
     }
     if (!data.weight) errors.weight = "Weight is required";
     if (!data.height) errors.height = "Height is required";
+    if (!data.bloodType) errors.bloodType = "Blood type is required";
     return errors;
   };
 
@@ -213,7 +269,9 @@ export const ListPatient = () => {
       phone_number: "",
       weight: "",
       height: "",
+      bloodType: ""
     })
+    console.log(Date)
   }
 
   return (
@@ -436,9 +494,9 @@ export const ListPatient = () => {
                       value={formData.lastname}
                       onChange={handleChange}
                     />
-                    {formErrors.dateOfBirth && (
+                    {formErrors.lastname && (
                       <p className="text-red-500 text-xs italic">
-                        {formErrors.dateOfBirth}
+                        {formErrors.lastname}
                       </p>
                     )}
                   </div>
@@ -459,6 +517,7 @@ export const ListPatient = () => {
                       name="dateOfBirth"
                       value={formData.dateOfBirth}
                       onChange={handleChange}
+                      max={dateToString(newDate)}
                     />
                     {formErrors.dateOfBirth && (
                       <p className="text-red-500 text-xs italic">
@@ -579,7 +638,7 @@ export const ListPatient = () => {
                         name="bloodType"
                         value={formData.bloodType}
                         onChange={handleChange}
-                      >
+                      >                        
                         <option selected hidden>
                           Select patient blood type
                         </option>
@@ -591,6 +650,11 @@ export const ListPatient = () => {
                         <option value="O+">O positive (O+)</option>
                         <option value="O-">O negative (O-)</option>
                       </select>
+                      {formErrors.bloodType && (
+                      <p className="text-red-500 text-xs italic">
+                        {formErrors.bloodType}
+                      </p>
+                    )}
                       <div className="absolute inset-y-0 right-1 pointer-events-none flex items-center text-gray-700">
                         <svg
                           className="fill-current h-4 w-4"

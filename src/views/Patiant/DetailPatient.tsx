@@ -70,19 +70,76 @@ export const DetailPatient = () => {
   }, [patientId]);
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
-    const trimmedValue = name === 'firstname' || name === 'lastname'
-    ? value.trim()
-    : value;
-    
+  
+    // Function to check if the value contains operators
+    const containsOperator = (inputValue: string): boolean => {
+      return /[+\-*\/]/.test(inputValue);
+    };
+  
+    // Update form data state
     setFormData((prevData) => ({
       ...prevData,
-      [name]: trimmedValue,
+      [name]: value,
     }));
+  
+    // Validate specific fields
+    if (name === "dateOfBirth") {
+      const selectedDate = new Date(value);
+      const today = new Date();
+  
+      if (selectedDate > today) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "Date of birth cannot be a future date",
+        }));
+      } else {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+      }
+    } else if (name === "phone_number") {
+      if (value.length > 10) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "Phone number cannot exceed 10 characters",
+        }));
+      } else if (containsOperator(value)) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "Phone number cannot contain operators (+, -, *, /)",
+        }));
+      } else {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+      }
+    } else if (name === "height" || name === "weight") {
+      if (containsOperator(value)) {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: `${name.charAt(0).toUpperCase() + name.slice(1)} cannot contain operators (+, -, *, /)`,
+        }));
+      } else {
+        setFormErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+      }
+    } else {
+      // For other fields, trim whitespace from value before updating state
+      const trimmedValue = value.trim();
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: trimmedValue,
+      }));
+    }
   };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
