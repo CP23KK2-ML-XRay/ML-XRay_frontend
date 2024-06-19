@@ -1,8 +1,12 @@
 import { useEffect, useState } from "react";
 import MachineService from "@/service/MachineService";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+
 
 const ModelList = () => {
+  const navigate = useNavigate()
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
     setIsModalOpen(true);
@@ -47,6 +51,17 @@ const ModelList = () => {
   const closeDelete = () => {
     setIsDeleteOpen(false);
   };
+
+  const okDelete = () => {
+    Swal.fire({
+      icon: "success",
+      title: "Deleted",
+      text: "Model Deleted!"
+    }).then(() => { 
+      navigate("/")     
+    })
+  }
+
 
   const [modelsData, setModelsData] = useState<any[]>([]);
 
@@ -671,6 +686,7 @@ const ModelList = () => {
                 <button
                   type="button"
                   className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                  onClick={okDelete}
                 >
                   Yes
                 </button>
